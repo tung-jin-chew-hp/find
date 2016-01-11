@@ -171,12 +171,57 @@ define([
                 this.formatResult(model, false);
             });
 
-            this.listenTo(this.documentsCollection, 'sync', function() {
+            this.listenTo(this.documentsCollection, 'sync', function(model, resp, opts) {
                 this.resultsFinished = true;
                 this.clearLoadingSpinner();
 
+                if (this.searchMoreCollection) {
+                    this.searchMoreCollection.destroy && this.searchMoreCollection.destroy();
+                    this.searchMoreCollection = null;
+                }
+
                 if (this.documentsCollection.isEmpty()) {
-                    this.$('.main-results-content .results').append(this.messageTemplate({message: i18n["search.noResults"]}));
+                    var params = opts.data;
+                    var extra = _.reject(this.indexesCollection.pluck('id'), function(val){ return _.contains(params.index, val)});
+
+                    var msg = extra.length ? i18n["search.noResults.searchMore"] : i18n["search.noResults"];
+                    var $resultsEl = $(this.messageTemplate({message: msg})).appendTo(this.$('.main-results-content .results'));
+
+                    if (extra.length) {
+                        var sc = this.searchMoreCollection = this.documentsCollection.clone();
+                        var messages = [];
+
+                        var recursiveFetch = _.bind(function(){
+                            var nextIndex = extra.pop();
+
+                            nextIndex && this.searchMoreCollection.fetch({
+                                data: _.extend({}, params, {
+                                    auto_correct: false,
+                                    summary: 'off',
+                                    index: nextIndex,
+                                    count_only: true
+                                }),
+                                success: _.bind(function(models, resp){
+                                    if (sc === this.searchMoreCollection) {
+                                        resp.totalResults && messages.push(i18n["search.noResults.searchIndex"](nextIndex.replace( /.*:/, ''), resp.totalResults));
+
+                                        var $newEl = $(this.messageTemplate({
+                                            message: messages.length ? i18n["search.noResults.searchFound"](
+                                                messages.join(', '),
+                                                extra.length ? ' ...' : ''
+                                            ): extra.length ? i18n["search.noResults.searchMore"] : i18n["search.noResults"]}
+                                        ));
+                                        $resultsEl.replaceWith($newEl);
+                                        $resultsEl = $newEl;
+
+                                        extra.length && recursiveFetch();
+                                    }
+                                }, this)
+                            })
+                        }, this);
+
+                        recursiveFetch()
+                    }
                 }
             });
 

@@ -109,10 +109,11 @@ public class HodDocumentsService implements DocumentsService<ResourceIdentifier,
                 .setMinDate(findQueryParams.getMinDate())
                 .setMaxDate(findQueryParams.getMaxDate())
                 .setPromotions(fetchPromotions)
-                .setPrint(Print.fields)
+                .setPrint(findQueryParams.isCountOnly() ? Print.no_results : Print.fields)
                 .setPrintFields(new ArrayList<>(FindDocument.ALL_FIELDS))
                 .setHighlight(Highlight.terms)
                 .setStartTag(HIGHLIGHT_START_TAG)
+                .setTotalResults(findQueryParams.isCountOnly())
                 .setEndTag(HIGHLIGHT_END_TAG);
 
         if (findQueryParams.isAutoCorrect()) {

@@ -39,6 +39,7 @@ public abstract class DocumentsController<S extends Serializable, D extends Find
     public static final String REFERENCE_PARAM = "reference";
     public static final String INDEXES_PARAM = "indexes";
     public static final String AUTOCORRECT_PARAM = "auto_correct";
+    public static final String COUNT_ONLY_PARAM = "count_only";
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
@@ -57,9 +58,10 @@ public abstract class DocumentsController<S extends Serializable, D extends Find
         @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
         @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
         @RequestParam(value = HIGHLIGHT_PARAM, required = false, defaultValue = "true") final boolean highlight,
-        @RequestParam(value = AUTOCORRECT_PARAM, required = false, defaultValue = "true") final boolean autoCorrect
+        @RequestParam(value = AUTOCORRECT_PARAM, required = false, defaultValue = "true") final boolean autoCorrect,
+        @RequestParam(value = COUNT_ONLY_PARAM, required = false, defaultValue = "false") final boolean countOnly
     ) throws E {
-        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, fieldText, sort, minDate, maxDate, highlight, autoCorrect);
+        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, fieldText, sort, minDate, maxDate, highlight, autoCorrect, countOnly);
         return documentsService.queryTextIndex(findQueryParams);
     }
 
@@ -76,9 +78,10 @@ public abstract class DocumentsController<S extends Serializable, D extends Find
         @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
         @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
         @RequestParam(value = HIGHLIGHT_PARAM, required = false, defaultValue = "true") final boolean highlight,
-        @RequestParam(value = AUTOCORRECT_PARAM, required = false, defaultValue = "true") final boolean autoCorrect
+        @RequestParam(value = AUTOCORRECT_PARAM, required = false, defaultValue = "true") final boolean autoCorrect,
+        @RequestParam(value = COUNT_ONLY_PARAM, required = false, defaultValue = "false") final boolean countOnly
     ) throws E {
-        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, fieldText, sort, minDate, maxDate, highlight, autoCorrect);
+        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, fieldText, sort, minDate, maxDate, highlight, autoCorrect, countOnly);
         return documentsService.queryTextIndexForPromotions(findQueryParams);
     }
 

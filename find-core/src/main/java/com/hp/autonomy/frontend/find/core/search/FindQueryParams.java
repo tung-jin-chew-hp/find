@@ -25,4 +25,5 @@ public class FindQueryParams<S extends Serializable> implements Serializable {
     private final DateTime maxDate;
     private final boolean highlight;
     private final boolean autoCorrect;
+    private final boolean countOnly;
 }
