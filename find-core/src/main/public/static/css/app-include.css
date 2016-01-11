@@ -582,6 +582,19 @@ input.find-input {
     max-height: 41px;
 }
 
+.result-thumbnail {
+    text-align: justify;
+    overflow: hidden;
+    text-overflow: clip;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.result-thumbnail > img {
+    max-height: 600px;
+}
+
 .related-concepts-list {
     padding-left: 0;
 }

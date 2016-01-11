@@ -34,6 +34,7 @@ public class FindDocument implements Serializable {
     public static final String CREATED_DATE_FIELD = "created_date";
     public static final String DATE_MODIFIED_FIELD = "date_modified";
     public static final String MODIFIED_DATE_FIELD = "modified_date";
+    public static final String THUMBNAIL_URL_FIELD = "thumbnail_url";
 
     public static final ImmutableSet<String> ALL_FIELDS = ImmutableSet.of(
             CONTENT_TYPE_FIELD,
@@ -45,7 +46,8 @@ public class FindDocument implements Serializable {
             DATE_CREATED_FIELD,
             CREATED_DATE_FIELD,
             DATE_MODIFIED_FIELD,
-            MODIFIED_DATE_FIELD
+            MODIFIED_DATE_FIELD,
+            THUMBNAIL_URL_FIELD
     );
 
     private static final long serialVersionUID = 7647398627476128115L;
@@ -58,6 +60,7 @@ public class FindDocument implements Serializable {
     private final String contentType;
     private final String url;
     private final String offset;
+    private final String thumbnailUrl;
 
     private final List<String> authors;
     private final List<String> categories;
@@ -75,6 +78,8 @@ public class FindDocument implements Serializable {
         contentType = builder.contentType;
         url = builder.url;
         offset = builder.offset;
+
+        thumbnailUrl = builder.thumbnailUrl;
 
         // LinkedList so we can guarantee Serializable
         authors = builder.authors == null ? Collections.<String>emptyList() : new LinkedList<>(builder.authors);
@@ -102,6 +107,8 @@ public class FindDocument implements Serializable {
         private String url;
         private String offset;
 
+        private String thumbnailUrl;
+
         @JsonProperty(AUTHOR_FIELD)
         private List<String> authors;
 
@@ -120,6 +127,7 @@ public class FindDocument implements Serializable {
             contentType = document.contentType;
             url = document.url;
             offset = document.offset;
+            thumbnailUrl = document.thumbnailUrl;
             authors = document.authors;
             categories = document.categories;
             date = document.date;
@@ -149,6 +157,15 @@ public class FindDocument implements Serializable {
         public Builder setOffset(final List<String> offsets) {
             if (offsets != null && !offsets.isEmpty()) {
                 offset = offsets.get(0);
+            }
+
+            return this;
+        }
+
+        @JsonProperty(THUMBNAIL_URL_FIELD)
+        public Builder setThumbnailUrl(final List<String> thumbnailUrls) {
+            if (thumbnailUrls != null && !thumbnailUrls.isEmpty()) {
+                thumbnailUrl = thumbnailUrls.get(0);
             }
 
             return this;

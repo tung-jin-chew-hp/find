@@ -292,6 +292,7 @@ define([
                 href: href,
                 summary: summary,
                 promotion: isPromotion,
+                thumbnailUrl: model.get('thumbnailUrl'),
                 date: model.has('date') ? model.get('date').fromNow() : null,
                 contentType: getContentTypeClass(model)
             }));

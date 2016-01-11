@@ -18,6 +18,11 @@
         </span>
         </a>
         <span class="document-reference"><%-reference %></span>
+        <% if (thumbnailUrl) { %>
+        <span class="result-thumbnail">
+            <img src="<%- thumbnailUrl %>">
+        </span>
+        <% } %>
         <p class="result-summary">
             <%= summary %>
         </p>
