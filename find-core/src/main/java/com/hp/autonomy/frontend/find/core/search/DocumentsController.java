@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,9 +60,10 @@ public abstract class DocumentsController<S extends Serializable, D extends Find
         @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
         @RequestParam(value = HIGHLIGHT_PARAM, required = false, defaultValue = "true") final boolean highlight,
         @RequestParam(value = AUTOCORRECT_PARAM, required = false, defaultValue = "true") final boolean autoCorrect,
-        @RequestParam(value = COUNT_ONLY_PARAM, required = false, defaultValue = "false") final boolean countOnly
+        @RequestParam(value = COUNT_ONLY_PARAM, required = false, defaultValue = "false") final boolean countOnly,
+        @CookieValue(value = "fieldtext", required = false) final String implicitFieldText
     ) throws E {
-        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, fieldText, sort, minDate, maxDate, highlight, autoCorrect, countOnly);
+        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, FieldTextMerge.mergeFieldText(fieldText, implicitFieldText), sort, minDate, maxDate, highlight, autoCorrect, countOnly);
         return documentsService.queryTextIndex(findQueryParams);
     }
 
@@ -79,9 +81,10 @@ public abstract class DocumentsController<S extends Serializable, D extends Find
         @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
         @RequestParam(value = HIGHLIGHT_PARAM, required = false, defaultValue = "true") final boolean highlight,
         @RequestParam(value = AUTOCORRECT_PARAM, required = false, defaultValue = "true") final boolean autoCorrect,
-        @RequestParam(value = COUNT_ONLY_PARAM, required = false, defaultValue = "false") final boolean countOnly
+        @RequestParam(value = COUNT_ONLY_PARAM, required = false, defaultValue = "false") final boolean countOnly,
+        @CookieValue(value = "fieldtext", required = false) final String implicitFieldText
     ) throws E {
-        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, fieldText, sort, minDate, maxDate, highlight, autoCorrect, countOnly);
+        final FindQueryParams<S> findQueryParams = new FindQueryParams<>(text, maxResults, summary, index, FieldTextMerge.mergeFieldText(fieldText, implicitFieldText), sort, minDate, maxDate, highlight, autoCorrect, countOnly);
         return documentsService.queryTextIndexForPromotions(findQueryParams);
     }
 

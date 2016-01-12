@@ -12,6 +12,10 @@
         </select>
         <input name="databases" value="" size="100">
     </div>
+    <div>
+        Specify extra fieldtext
+        <input name="fieldtext" value="" size="100">
+    </div>
 </form>
 
 <script src="bower_components/jquery/jquery.js"></script>
@@ -19,6 +23,10 @@
     $(function(){
         function setDbCookie(){
             document.cookie = 'indexes=' + encodeURIComponent($db.val())  +'; path=/';
+        }
+
+        function setFieldTextCookie() {
+            document.cookie = 'fieldtext=' + encodeURIComponent($fieldtext.val()) + '; path=/';
         }
 
         var $form = $('#cookie').submit(function(){
@@ -34,10 +42,18 @@
             setDbCookie()
         });
 
+        var $fieldtext = $form.find('input[name=fieldtext]').keyup(function(){
+            setFieldTextCookie();
+        });
+
         $.each(document.cookie.split(';'), function(idx, str){
             var match = /^indexes=(.*)/.exec($.trim(str));
             if (match) {
                 $db.val(decodeURIComponent(match[1]))
+            }
+            match = /^fieldtext=(.*)/.exec($.trim(str));
+            if (match) {
+                $fieldtext.val(decodeURIComponent(match[1]))
             }
         })
     })

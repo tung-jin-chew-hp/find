@@ -8,6 +8,7 @@ package com.hp.autonomy.frontend.find.core.search;
 import com.hp.autonomy.types.requests.idol.actions.query.QuerySummaryElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +29,9 @@ public abstract class RelatedConceptsController<Q extends QuerySummaryElement, S
     public List<Q> findRelatedConcepts(
             @RequestParam("text") final String text,
             @RequestParam("index") final List<S> index,
-            @RequestParam("field_text") final String fieldText
+            @RequestParam("field_text") final String fieldText,
+            @CookieValue(value = "fieldtext", required = false) final String implicitFieldText
     ) throws E {
-        return relatedConceptsService.findRelatedConcepts(text, index, fieldText);
+        return relatedConceptsService.findRelatedConcepts(text, index, FieldTextMerge.mergeFieldText(fieldText, implicitFieldText));
     }
 }

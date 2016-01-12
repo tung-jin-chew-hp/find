@@ -40,7 +40,7 @@ public abstract class AbstractRelatedConceptsControllerTest<Q extends QuerySumma
     @Test
     public void query() throws E {
         final String text = "Some query text";
-        relatedConceptsController.findRelatedConcepts(text, Collections.<S>emptyList(), null);
+        relatedConceptsController.findRelatedConcepts(text, Collections.<S>emptyList(), null, null);
         verify(relatedConceptsService).findRelatedConcepts(eq(text), anyListOf(databaseType), anyString());
     }
 }

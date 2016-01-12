@@ -9,6 +9,7 @@ import com.hp.autonomy.core.parametricvalues.ParametricRequest;
 import com.hp.autonomy.core.parametricvalues.ParametricValuesService;
 import com.hp.autonomy.types.requests.idol.actions.tags.QueryTagInfo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +30,9 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Set<QueryTagInfo> getParametricValues(final R parametricRequest) throws E {
+    public Set<QueryTagInfo> getParametricValues(final R parametricRequest,
+             @CookieValue(value = "fieldtext", required = false) final String implicitFieldText) throws E {
+        // we would merge in the implicitFieldText if we could, but we can't, since we cna't edit the signature of parametricRequest
         return parametricValuesService.getAllParametricValues(parametricRequest);
     }
 }

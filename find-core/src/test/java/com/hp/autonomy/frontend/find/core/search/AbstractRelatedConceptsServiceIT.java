@@ -32,7 +32,7 @@ public abstract class AbstractRelatedConceptsServiceIT<Q extends QuerySummaryEle
 
     @Test
     public void findRelatedConcepts() throws E {
-        final List<Q> results = relatedConceptsController.findRelatedConcepts("*", indexes, "");
+        final List<Q> results = relatedConceptsController.findRelatedConcepts("*", indexes, "", null);
         assertThat(results, is(not(empty())));
     }
 }

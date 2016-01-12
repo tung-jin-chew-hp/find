@@ -8,6 +8,7 @@ package com.hp.autonomy.frontend.find.hod.parametricfields;
 import com.hp.autonomy.core.parametricvalues.ParametricValuesService;
 import com.hp.autonomy.frontend.configuration.ConfigService;
 import com.hp.autonomy.frontend.find.core.parametricfields.ParametricValuesController;
+import com.hp.autonomy.frontend.find.core.search.FieldTextMerge;
 import com.hp.autonomy.frontend.find.hod.configuration.HodFindConfig;
 import com.hp.autonomy.hod.client.api.resource.ResourceIdentifier;
 import com.hp.autonomy.hod.client.error.HodErrorException;
@@ -17,6 +18,7 @@ import com.hp.autonomy.types.requests.idol.actions.tags.QueryTagInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Set;
@@ -33,11 +35,15 @@ public class HodParametricValuesController extends ParametricValuesController<Ho
     }
 
     @Override
-    public Set<QueryTagInfo> getParametricValues(final HodParametricRequest parametricRequest) throws HodErrorException {
+    public Set<QueryTagInfo> getParametricValues(
+            final HodParametricRequest parametricRequest,
+            @CookieValue(value = "fieldtext", required = false) final String implicitFieldText
+    ) throws HodErrorException {
         final String profileName = configService.getConfig().getQueryManipulation().getProfile();
         final String domain = ((HodAuthentication) SecurityContextHolder.getContext().getAuthentication()).getPrincipal().getApplication().getDomain();
         parametricRequest.setQueryProfile(new ResourceIdentifier(domain, profileName));
 
-        return super.getParametricValues(parametricRequest);
+        parametricRequest.setFieldText(FieldTextMerge.mergeFieldText(parametricRequest.getFieldText(), implicitFieldText));
+        return super.getParametricValues(parametricRequest, null);
     }
 }
