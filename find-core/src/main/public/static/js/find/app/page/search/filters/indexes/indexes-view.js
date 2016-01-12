@@ -94,6 +94,10 @@ define([
             else {
                 setInitialSelection();
             }
+
+            options.indexesCollection.on('userSetIndex', function(index, domain){
+                this.selectDatabase(index, domain, true);
+            }, this)
         },
 
         check: function($input) {

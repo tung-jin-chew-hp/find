@@ -532,6 +532,7 @@ input.find-input {
 
 .results-alternative-name {
     color: #00b388;
+    cursor: pointer;
 }
 
 .result-alternative-count {

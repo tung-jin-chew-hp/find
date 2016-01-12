@@ -77,6 +77,12 @@ define([
                 var $target = $(e.target);
                 var queryText = $target.attr('data-title');
                 this.queryModel.set('queryText', queryText);
+            },
+            'click .results-alternative-name': function(e) {
+                var $target = $(e.target);
+                var index = $target.attr('data-index');
+                var split = index.split(':');
+                this.indexesCollection.trigger('userSetIndex', split[1], split[0]);
             }
         },
 
