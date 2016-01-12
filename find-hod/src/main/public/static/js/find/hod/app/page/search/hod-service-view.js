@@ -23,9 +23,19 @@ define([
         },
 
         constructIndexesView: function (queryModel, indexesCollection, selectedIndexesCollection) {
+            var initialSelection;
+
+            _.each(document.cookie.split(';'), function(str, idx) {
+                var match = /^indexes=(.*)/.exec($.trim(str));
+                if (match) {
+                    initialSelection = match[1].split(',')
+                }
+            });
+
             return new IndexesView({
                 queryModel: queryModel,
                 indexesCollection: indexesCollection,
+                initialSelection: initialSelection,
                 selectedDatabasesCollection: selectedIndexesCollection
             });
         },
