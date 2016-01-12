@@ -1,41 +1,43 @@
 <form id="cookie">
-    Select initial database:
-    <select name="dbselect">
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_usa">philips_usa</option>
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:achieversclub">achieversclub</option>
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:default_index">default_index</option>
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_cn">philips_cn</option>
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:meethue">meethue</option>
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_uk">philips_uk</option>
-        <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_nl">philips_nl</option>
-    </select>
-    <input name="databases" value="" size="100">
+    <div>
+        Select initial database:
+        <select name="dbselect">
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_usa">philips_usa</option>
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:achieversclub">achieversclub</option>
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:default_index">default_index</option>
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_cn">philips_cn</option>
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:meethue">meethue</option>
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_uk">philips_uk</option>
+            <option value="b498d1af-eba1-4b59-ac0b-672abdeeab61:philips_nl">philips_nl</option>
+        </select>
+        <input name="databases" value="" size="100">
+    </div>
 </form>
 
 <script src="bower_components/jquery/jquery.js"></script>
 <script>
     $(function(){
-        function setCookie(){
-            document.cookie = 'indexes=' + $db.val()  +';path=/';
+        function setDbCookie(){
+            document.cookie = 'indexes=' + encodeURIComponent($db.val())  +'; path=/';
         }
 
         var $form = $('#cookie').submit(function(){
-            setCookie();
+            setDbCookie();
             return false;
         });
-        var $db = $form.find('input[name=databases]').change(function(){
-            setCookie();
+        var $db = $form.find('input[name=databases]').keyup(function(){
+            setDbCookie();
         });
 
         $form.find('select').change(function(){
             $db.val(this.value);
-            setCookie()
+            setDbCookie()
         });
 
         $.each(document.cookie.split(';'), function(idx, str){
             var match = /^indexes=(.*)/.exec($.trim(str));
             if (match) {
-                $db.val(match[1])
+                $db.val(decodeURIComponent(match[1]))
             }
         })
     })

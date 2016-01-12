@@ -76,14 +76,21 @@ define([
             var setInitialSelection = _.bind(function() {
                 var privateIndexes = options.indexesCollection.reject({domain: 'PUBLIC_INDEXES'});
 
+                var selectDefaults = true;
+
                 if (options.initialSelection) {
-                    _.each(options.indexesCollection.filter(function(index){
+                    var toSelect = options.indexesCollection.filter(function (index) {
                         return _.contains(options.initialSelection, index.get('domain') + ':' + index.get('name'));
-                    }), function (index) {
+                    });
+                    _.each(toSelect, function (index) {
                         this.selectDatabase(index.get('name'), index.get('domain'), true);
                     }, this);
 
-                } else {
+                    selectDefaults = toSelect.length === 0;
+
+                }
+
+                if (selectDefaults) {
                     if (privateIndexes.length > 0) {
                         _.each(privateIndexes, function (index) {
                             this.selectDatabase(index.get('name'), index.get('domain'), true);

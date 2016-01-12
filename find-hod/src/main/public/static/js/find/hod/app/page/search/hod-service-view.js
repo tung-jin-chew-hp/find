@@ -28,7 +28,7 @@ define([
             _.each(document.cookie.split(';'), function(str, idx) {
                 var match = /^indexes=(.*)/.exec($.trim(str));
                 if (match) {
-                    initialSelection = match[1].split(',')
+                    initialSelection = decodeURIComponent(match[1]).split(',')
                 }
             });
 
