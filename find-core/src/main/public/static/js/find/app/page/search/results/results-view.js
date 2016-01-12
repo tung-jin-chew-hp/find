@@ -237,7 +237,7 @@ define([
                             })
                         }, this);
 
-                        $.when.apply($, this.noResultsAjax).done(function(){
+                        $.when.apply($, this.noResultsAjax).always(function(){
                             searching = false;
                             render()
                         });
