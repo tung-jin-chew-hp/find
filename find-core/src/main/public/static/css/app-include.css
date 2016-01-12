@@ -604,6 +604,12 @@ input.find-input {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    float: left;
+    margin: 0 5px 0 0;
+}
+
+.clear-both {
+    clear: both;
 }
 
 .result-thumbnail > img {
