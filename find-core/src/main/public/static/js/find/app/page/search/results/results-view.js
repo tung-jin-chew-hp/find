@@ -11,6 +11,7 @@ define([
     'js-whatever/js/escape-regex',
     'text!find/templates/app/page/search/results-popover.html',
     'text!find/templates/app/page/search/popover-message.html',
+    'text!find/templates/app/page/search/search-noresults.html',
     'text!find/templates/app/page/search/results/results-view.html',
     'text!find/templates/app/page/search/results/results-container.html',
     'text!find/templates/app/page/colorbox-controls.html',
@@ -23,7 +24,7 @@ define([
     'i18n!find/nls/indexes',
     'colorbox'
 ], function(Backbone, $, _, DocumentModel, PromotionsCollection, SimilarDocumentsCollection, popover,
-            viewClient, documentMimeTypes, escapeRegex, popoverTemplate, popoverMessageTemplate, template, resultsTemplate,
+            viewClient, documentMimeTypes, escapeRegex, popoverTemplate, popoverMessageTemplate, noResultsTemplate, template, resultsTemplate,
             colorboxControlsTemplate, loadingSpinnerTemplate, mediaPlayerTemplate, viewDocumentTemplate, entityTemplate,
             moment, i18n, i18n_indexes) {
 
@@ -64,6 +65,7 @@ define([
         resultsTemplate: _.template(resultsTemplate),
         popoverMessageTemplate: _.template(popoverMessageTemplate),
         messageTemplate: _.template('<div class="result-message span10"><%-message%> </div>'),
+        noResultsTemplate: _.template(noResultsTemplate),
         errorTemplate: _.template('<li class="error-message span10"><span><%-feature%>: </span><%-error%></li>'),
         mediaPlayerTemplate: _.template(mediaPlayerTemplate),
         popoverTemplate: _.template(popoverTemplate),
@@ -175,34 +177,39 @@ define([
                 this.resultsFinished = true;
                 this.clearLoadingSpinner();
 
-                this.lastDeferred = null;
+                if (this.noResultsAjax) {
+                    _.each(this.noResultsAjax, function(ajax){
+                        ajax.abort()
+                    });
+
+                    this.noResultsAjax = null;
+                }
 
                 if (this.documentsCollection.isEmpty()) {
                     var params = opts.data;
                     var extra = _.reject(this.indexesCollection.pluck('id'), function(val){ return _.contains(params.index, val)});
 
-                    var msg = extra.length ? i18n["search.noResults.searchMore"] : i18n["search.noResults"];
-                    var $resultsEl = $(this.messageTemplate({message: msg})).appendTo(this.$('.main-results-content .results'));
+                    var populatedIndexes = [];
+                    var searching = extra.length > 0;
+
+                    var $resultsEl = $(this.noResultsTemplate({
+                        searching: searching,
+                        populatedIndexes: populatedIndexes,
+                        i18n: i18n
+                    })).appendTo(this.$('.main-results-content .results'));
 
                     if (extra.length) {
-                        var messages = [];
-                        var fetching = true;
-                        var check = this.lastDeferred = Math.random();
-
                         var render = _.bind(function(){
-                            if (check === this.lastDeferred) {
-                                var $newEl = $(this.messageTemplate({
-                                        message: messages.length ? i18n["search.noResults.searchFound"](
-                                            messages.join(', '),
-                                            fetching ? ' ...' : ''
-                                        ): fetching ? i18n["search.noResults.searchMore"] : i18n["search.noResults"]}
-                                ));
-                                $resultsEl.replaceWith($newEl);
-                                $resultsEl = $newEl;
-                            }
+                            var $newEl = $(this.noResultsTemplate({
+                                searching: searching,
+                                populatedIndexes: populatedIndexes,
+                                i18n: i18n
+                            }));
+                            $resultsEl.replaceWith($newEl);
+                            $resultsEl = $newEl;
                         }, this);
 
-                        $.when.apply($, _.map(extra, function(index){
+                        this.noResultsAjax = _.map(extra, function(index){
                             return this.documentsCollection.clone().fetch({
                                 data: _.extend({}, params, {
                                     auto_correct: false,
@@ -212,13 +219,20 @@ define([
                                 }),
                                 success: function(models, resp){
                                     if (resp.totalResults) {
-                                        messages.push(i18n["search.noResults.searchIndex"](index.replace( /.*:/, ''), resp.totalResults));
+                                        var toAdd = {
+                                            id: index,
+                                            name: index.replace(/.*:/, ''),
+                                            count: resp.totalResults
+                                        };
+                                        populatedIndexes.splice(_.sortedIndex(populatedIndexes, toAdd, function(a){return -a.count;}), 0, toAdd);
                                         render();
                                     }
                                 }
                             })
-                        }, this)).done(function(){
-                            fetching = false;
+                        }, this);
+
+                        $.when.apply($, this.noResultsAjax).done(function(){
+                            searching = false;
                             render()
                         });
                     }

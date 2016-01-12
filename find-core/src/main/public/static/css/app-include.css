@@ -526,6 +526,20 @@ input.find-input {
     color: #425563;
 }
 
+.result-alternatives {
+    font-size: 20px;
+}
+
+.results-alternative-name {
+    color: #00b388;
+}
+
+.result-alternative-count {
+    color: #8c8c8c;
+    font-size: smaller;
+    margin-left: 5px;
+}
+
 .results-contents {
     display: block;
     overflow: hidden;

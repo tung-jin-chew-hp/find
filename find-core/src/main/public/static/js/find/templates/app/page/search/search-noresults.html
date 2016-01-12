@@ -1,0 +1,23 @@
+<div class="result-message span10">
+<% if(populatedIndexes.length) { %>
+    <%- i18n["search.noResults.searchFound"] %>
+    <ul class="result-alternatives">
+        <% _.each(populatedIndexes, function(index){ %>
+            <li><span class="results-alternative-name" data-index="<%-index.id%>"><%- index.name %></span><span class="result-alternative-count"><%- index.count %></span></li>
+        <% })%>
+    </ul>
+
+    <% if (searching) { %>
+    <div class="loading-spinner">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <% } %>
+<% } else if (searching) { %>
+    <%- i18n["search.noResults.searchMore"] %>
+    <div class="loading-spinner">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
+<% } else { %>
+    <%- i18n["search.noResults"] %>
+<% } %>
+</div>
