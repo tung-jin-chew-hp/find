@@ -175,10 +175,7 @@ define([
                 this.resultsFinished = true;
                 this.clearLoadingSpinner();
 
-                if (this.searchMoreCollection) {
-                    this.searchMoreCollection.destroy && this.searchMoreCollection.destroy();
-                    this.searchMoreCollection = null;
-                }
+                this.lastDeferred = null;
 
                 if (this.documentsCollection.isEmpty()) {
                     var params = opts.data;
@@ -188,39 +185,42 @@ define([
                     var $resultsEl = $(this.messageTemplate({message: msg})).appendTo(this.$('.main-results-content .results'));
 
                     if (extra.length) {
-                        var sc = this.searchMoreCollection = this.documentsCollection.clone();
                         var messages = [];
+                        var fetching = true;
+                        var check = this.lastDeferred = Math.random();
 
-                        var recursiveFetch = _.bind(function(){
-                            var nextIndex = extra.pop();
+                        var render = _.bind(function(){
+                            if (check === this.lastDeferred) {
+                                var $newEl = $(this.messageTemplate({
+                                        message: messages.length ? i18n["search.noResults.searchFound"](
+                                            messages.join(', '),
+                                            fetching ? ' ...' : ''
+                                        ): fetching ? i18n["search.noResults.searchMore"] : i18n["search.noResults"]}
+                                ));
+                                $resultsEl.replaceWith($newEl);
+                                $resultsEl = $newEl;
+                            }
+                        }, this);
 
-                            nextIndex && this.searchMoreCollection.fetch({
+                        $.when.apply($, _.map(extra, function(index){
+                            return this.documentsCollection.clone().fetch({
                                 data: _.extend({}, params, {
                                     auto_correct: false,
                                     summary: 'off',
-                                    index: nextIndex,
+                                    index: index,
                                     count_only: true
                                 }),
-                                success: _.bind(function(models, resp){
-                                    if (sc === this.searchMoreCollection) {
-                                        resp.totalResults && messages.push(i18n["search.noResults.searchIndex"](nextIndex.replace( /.*:/, ''), resp.totalResults));
-
-                                        var $newEl = $(this.messageTemplate({
-                                            message: messages.length ? i18n["search.noResults.searchFound"](
-                                                messages.join(', '),
-                                                extra.length ? ' ...' : ''
-                                            ): extra.length ? i18n["search.noResults.searchMore"] : i18n["search.noResults"]}
-                                        ));
-                                        $resultsEl.replaceWith($newEl);
-                                        $resultsEl = $newEl;
-
-                                        extra.length && recursiveFetch();
+                                success: function(models, resp){
+                                    if (resp.totalResults) {
+                                        messages.push(i18n["search.noResults.searchIndex"](index.replace( /.*:/, ''), resp.totalResults));
+                                        render();
                                     }
-                                }, this)
+                                }
                             })
-                        }, this);
-
-                        recursiveFetch()
+                        }, this)).done(function(){
+                            fetching = false;
+                            render()
+                        });
                     }
                 }
             });
