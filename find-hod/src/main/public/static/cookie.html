@@ -53,7 +53,9 @@
         $.each(document.cookie.split(';'), function(idx, str){
             var match = /^indexes=(.*)/.exec($.trim(str));
             if (match) {
-                $db.val(decodeURIComponent(match[1]))
+                var db = decodeURIComponent(match[1]);
+                $db.val(db);
+                $dbSelect[0].value = db;
             }
             match = /^fieldtext=(.*)/.exec($.trim(str));
             if (match) {
@@ -64,10 +66,13 @@
 
         $.ajax('../api/public/search/list-indexes').done(function(resp){
             var values = [];
+            var curVal = $db.val();
             for (var ii = 0; ii < resp.length; ++ii) {
                 var index = resp[ii];
                 if (!index.public) {
-                    values.push('<option value="'+index.domain+':'+index.name+'">'+index.name+'</option>');
+                    var value = index.domain + ':' + index.name;
+                    var selected = curVal === value ? ' selected' : '';
+                    values.push('<option value="' + value+'"' + selected + '>'+index.name+'</option>');
                 }
             }
             if (values.length) {
