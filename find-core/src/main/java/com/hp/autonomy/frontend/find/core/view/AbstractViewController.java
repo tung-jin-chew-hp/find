@@ -8,6 +8,7 @@ package com.hp.autonomy.frontend.find.core.view;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,9 @@ public class AbstractViewController {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Value("${application.commit}")
+    private String commit;
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -68,6 +72,8 @@ public class AbstractViewController {
         modelAndView.addObject("subMessage", subMessage);
         modelAndView.addObject("baseUrl", getBaseUrl(request));
         modelAndView.addObject("contactSupport", contactSupport);
+        modelAndView.addObject("commit", contactSupport);
+
 
         return modelAndView;
     }
