@@ -614,6 +614,7 @@ input.find-input {
 
 .result-thumbnail > img {
     max-height: 600px;
+    max-width: 100%;
 }
 
 .related-concepts-list {
