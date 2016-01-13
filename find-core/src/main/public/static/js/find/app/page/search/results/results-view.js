@@ -341,12 +341,16 @@ define([
         formatResult: function(model, isPromotion) {
             var reference = model.get('reference');
             var summary = this.addLinksToSummary(model.get('summary'));
+            var contentTypeClass = getContentTypeClass(model);
 
             var href;
 
             if (model.get('promotionType') === 'STATIC_CONTENT_PROMOTION') {
                 href = viewClient.getStaticContentPromotionHref(reference);
-            } else {
+            } else if (contentTypeClass === 'image' && /^https?:/.test(reference)) {
+                href = reference
+            }
+            else {
                 href = viewClient.getHref(reference, model.get('index'), model.get('domain'));
             }
 
@@ -359,7 +363,7 @@ define([
                 promotion: isPromotion,
                 thumbnailUrl: model.get('thumbnailUrl'),
                 date: model.has('date') ? model.get('date').fromNow() : null,
-                contentType: getContentTypeClass(model)
+                contentType: contentTypeClass
             }));
 
             if (isPromotion) {
