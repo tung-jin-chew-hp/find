@@ -89,6 +89,7 @@ define([
         'search.relatedConcepts.topResults.none': 'No top results found',
         'search.relatedConcepts.notLoading': 'The list of indexes has not yet been retrieved',
         'search.relatedConcepts.none': 'There are no related concepts',
+        'search.result.pageCount': 'Pages: {0}',
         'search.resultsSort': 'Sort',
         'search.resultsSort.date': 'by date',
         'search.resultsSort.relevance': 'by relevance',

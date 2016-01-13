@@ -360,6 +360,7 @@ define([
                 reference: reference,
                 href: href,
                 summary: summary,
+                pageCount: model.get('pageCount'),
                 promotion: isPromotion,
                 thumbnailUrl: model.get('thumbnailUrl'),
                 date: model.has('date') ? model.get('date').fromNow() : null,

@@ -29,6 +29,11 @@
         <p class="result-summary">
             <%= summary %>
         </p>
+        <% if (pageCount) { %>
+        <span class="result-pagecount">
+            <%- i18n["search.result.pageCount"](pageCount) %>
+        </span>
+        <% } %>
         <p class="text-right clear-both">
             <a class="similar-documents-trigger result-container-control <%-hideForImage%>" role="button" tabindex="-1"><%-i18n['search.similarDocuments']%></a>
         </p>

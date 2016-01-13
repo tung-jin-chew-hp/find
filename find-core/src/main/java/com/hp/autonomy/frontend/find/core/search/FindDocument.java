@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang.math.NumberUtils;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class FindDocument implements Serializable {
     public static final String DATE_MODIFIED_FIELD = "date_modified";
     public static final String MODIFIED_DATE_FIELD = "modified_date";
     public static final String THUMBNAIL_URL_FIELD = "thumbnail_url";
+    public static final String PAGE_COUNT_FIELD = "page_count";
 
     public static final ImmutableSet<String> ALL_FIELDS = ImmutableSet.of(
             CONTENT_TYPE_FIELD,
@@ -47,7 +49,8 @@ public class FindDocument implements Serializable {
             CREATED_DATE_FIELD,
             DATE_MODIFIED_FIELD,
             MODIFIED_DATE_FIELD,
-            THUMBNAIL_URL_FIELD
+            THUMBNAIL_URL_FIELD,
+            PAGE_COUNT_FIELD
     );
 
     private static final long serialVersionUID = 7647398627476128115L;
@@ -61,6 +64,7 @@ public class FindDocument implements Serializable {
     private final String url;
     private final String offset;
     private final String thumbnailUrl;
+    private final Integer pageCount;
 
     private final List<String> authors;
     private final List<String> categories;
@@ -80,6 +84,7 @@ public class FindDocument implements Serializable {
         offset = builder.offset;
 
         thumbnailUrl = builder.thumbnailUrl;
+        pageCount = builder.pageCount;
 
         // LinkedList so we can guarantee Serializable
         authors = builder.authors == null ? Collections.<String>emptyList() : new LinkedList<>(builder.authors);
@@ -109,6 +114,8 @@ public class FindDocument implements Serializable {
 
         private String thumbnailUrl;
 
+        private Integer pageCount;
+
         @JsonProperty(AUTHOR_FIELD)
         private List<String> authors;
 
@@ -128,6 +135,7 @@ public class FindDocument implements Serializable {
             url = document.url;
             offset = document.offset;
             thumbnailUrl = document.thumbnailUrl;
+            pageCount = document.pageCount;
             authors = document.authors;
             categories = document.categories;
             date = document.date;
@@ -166,6 +174,16 @@ public class FindDocument implements Serializable {
         public Builder setThumbnailUrl(final List<String> thumbnailUrls) {
             if (thumbnailUrls != null && !thumbnailUrls.isEmpty()) {
                 thumbnailUrl = thumbnailUrls.get(0);
+            }
+
+            return this;
+        }
+
+        @JsonProperty(PAGE_COUNT_FIELD)
+        public Builder setPageCount(final List<String> pageCounts) {
+            if (pageCounts != null && !pageCounts.isEmpty()) {
+                final int parsed = NumberUtils.toInt(pageCounts.get(0), -1);
+                pageCount = parsed >= 0 ? parsed : null;
             }
 
             return this;

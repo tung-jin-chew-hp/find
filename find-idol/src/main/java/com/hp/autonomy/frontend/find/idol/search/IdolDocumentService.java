@@ -178,7 +178,8 @@ public class IdolDocumentService implements DocumentsService<String, FindDocumen
                         .setCreatedDate(parseFields(docContent, FindDocument.CREATED_DATE_FIELD))
                         .setModifiedDate(parseFields(docContent, FindDocument.MODIFIED_DATE_FIELD))
                         .setDateModified(parseFields(docContent, FindDocument.DATE_MODIFIED_FIELD))
-                        .setThumbnailUrl(parseFields(docContent, FindDocument.THUMBNAIL_URL_FIELD));
+                        .setThumbnailUrl(parseFields(docContent, FindDocument.THUMBNAIL_URL_FIELD))
+                        .setPageCount(parseFields(docContent, FindDocument.PAGE_COUNT_FIELD));
             }
             results.add(findDocumentBuilder.build());
         }

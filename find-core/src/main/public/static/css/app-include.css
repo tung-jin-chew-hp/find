@@ -597,6 +597,10 @@ input.find-input {
     max-height: 41px;
 }
 
+.result-pagecount {
+    color: #aeaeae;
+}
+
 .result-thumbnail {
     text-align: justify;
     overflow: hidden;
