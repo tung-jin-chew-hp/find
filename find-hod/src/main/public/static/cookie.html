@@ -21,12 +21,16 @@
 <script src="bower_components/jquery/jquery.js"></script>
 <script>
     $(function(){
+        function setCookie(name, val) {
+            document.cookie = name + '=' + encodeURIComponent(val)  +'; expires='+(new Date(+(new Date()) + 365 * 86400e3)).toUTCString()+'; path=/';
+        }
+
         function setDbCookie(){
-            document.cookie = 'indexes=' + encodeURIComponent($db.val())  +'; path=/';
+            setCookie('indexes', $db.val());
         }
 
         function setFieldTextCookie() {
-            document.cookie = 'fieldtext=' + encodeURIComponent($fieldtext.val()) + '; path=/';
+            setCookie('fieldtext', $fieldtext.val());
         }
 
         var $form = $('#cookie').submit(function(){
@@ -37,7 +41,7 @@
             setDbCookie();
         });
 
-        $form.find('select').change(function(){
+        var $dbSelect = $form.find('select').change(function(){
             $db.val(this.value);
             setDbCookie()
         });
@@ -54,6 +58,22 @@
             match = /^fieldtext=(.*)/.exec($.trim(str));
             if (match) {
                 $fieldtext.val(decodeURIComponent(match[1]))
+            }
+        });
+
+
+        $.ajax('../api/public/search/list-indexes').done(function(resp){
+            var values = [];
+            for (var ii = 0; ii < resp.length; ++ii) {
+                var index = resp[ii];
+                if (!index.public) {
+                    values.push('<option value="'+index.domain+':'+index.name+'">'+index.name+'</option>');
+                }
+            }
+            if (values.length) {
+                values.sort();
+                $dbSelect.html(values.join(''));
+
             }
         })
     })
