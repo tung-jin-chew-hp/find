@@ -18,9 +18,10 @@
         </span>
         </a>
         <span class="document-reference"><%-reference %></span>
-        <% if (thumbnailUrl) { %>
+        <% var image = thumbnailUrl || (contentType === 'image' && /^https?/.exec(reference) ? reference : null) %>
+        <% if (image) { %>
         <span class="result-thumbnail">
-            <img src="<%- thumbnailUrl %>">
+            <img src="<%- image %>">
         </span>
         <% } %>
         <p class="result-summary">
