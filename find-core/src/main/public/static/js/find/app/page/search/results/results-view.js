@@ -343,12 +343,13 @@ define([
             var summary = this.addLinksToSummary(model.get('summary'));
             var contentTypeClass = getContentTypeClass(model);
 
-            var href;
+            var href, target;
 
             if (model.get('promotionType') === 'STATIC_CONTENT_PROMOTION') {
                 href = viewClient.getStaticContentPromotionHref(reference);
-            } else if (contentTypeClass === 'image' && /^https?:/.test(reference)) {
-                href = reference
+            } else if ((contentTypeClass === 'image' || contentTypeClass === 'video') && /^https?:/.test(reference)) {
+                href = reference;
+                target = '_blank'
             }
             else {
                 href = viewClient.getHref(reference, model.get('index'), model.get('domain'));
@@ -363,6 +364,7 @@ define([
                 pageCount: model.get('pageCount'),
                 promotion: isPromotion,
                 thumbnailUrl: model.get('thumbnailUrl'),
+                target: target,
                 date: model.has('date') ? model.get('date').fromNow() : null,
                 contentType: contentTypeClass
             }));
@@ -373,7 +375,7 @@ define([
                 this.$('.main-results-content .results').append($newResult);
             }
 
-            $newResult.find('.result-header').colorbox(this.colorboxArguments({model: model, href: href}));
+            $newResult.find('.result-header:not([target=_blank])').colorbox(this.colorboxArguments({model: model, href: href}));
 
             $newResult.find('.dots').click(function (e) {
                 e.preventDefault();
