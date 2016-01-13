@@ -22,7 +22,7 @@
 <script>
     $(function(){
         function setCookie(name, val) {
-            document.cookie = name + '=' + encodeURIComponent(val)  +'; expires='+(new Date(+(new Date()) + 365 * 86400e3)).toUTCString()+'; path=/';
+            document.cookie = name + '=' + encodeURIComponent(val).replace(/[()]/g, function(a){return '%' + a.charCodeAt(0).toString(16)})  +'; expires='+(new Date(+(new Date()) + 365 * 86400e3)).toUTCString()+'; path=/';
         }
 
         function setDbCookie(){
