@@ -388,7 +388,7 @@ define([
             }
 
             // Protect us from XSS (but leave injected highlight tags alone)
-            var otherText = summary.split(/<Find-IOD-QueryText-Placeholder>.*?<\/Find-IOD-QueryText-Placeholder>/);
+            var otherText = summary ? summary.split(/<Find-IOD-QueryText-Placeholder>.*?<\/Find-IOD-QueryText-Placeholder>/) : '';
             var escapedSummaryElements = [];
             escapedSummaryElements.push(_.escape(otherText[0]));
             for (var i = 0; i < queryText.length; i++) {
