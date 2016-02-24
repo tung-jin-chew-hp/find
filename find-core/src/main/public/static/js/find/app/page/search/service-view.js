@@ -21,13 +21,14 @@ define([
     'find/app/page/search/saved-searches/saved-search-control-view',
     'find/app/page/search/results/topic-map-view',
     'find/app/page/search/results/sunburst-view',
+    'find/app/page/search/results/cluster2d-view',
     'find/app/page/search/compare-modal',
     'i18n!find/nls/bundle',
     'i18n!find/nls/indexes',
     'text!find/templates/app/page/search/service-view.html'
 ], function(Backbone, $, _, DatesFilterModel, IndexesCollection, EntityCollection, QueryModel, SearchFiltersCollection,
             ParametricView, ParametricCollection, FilterDisplayView, DateView, ResultsViewContainer, ResultsViewSelection, RelatedConceptsView, SpellCheckView,
-            Collapsible, addChangeListener, SelectedParametricValuesCollection, SavedSearchControlView, TopicMapView, SunburstView, CompareModal, i18n, i18nIndexes, template) {
+            Collapsible, addChangeListener, SelectedParametricValuesCollection, SavedSearchControlView, TopicMapView, SunburstView, Cluster2dView, CompareModal, i18n, i18nIndexes, template) {
 
     'use strict';
 
@@ -152,6 +153,14 @@ define([
                 selector: {
                     displayNameKey: 'sunburst',
                     icon: 'hp-favorite'
+                }
+            }, {
+                content: new Cluster2dView(constructorArguments),
+                id: 'cluster2d',
+                uniqueId: _.uniqueId('results-view-item-'),
+                selector: {
+                    displayNameKey: 'cluster2d',
+                    icon: 'hp-circular-view'
                 }
             }];
 
