@@ -196,8 +196,8 @@ define([
                             $tooltip.html(html)
                         }
                         $tooltip.css({
-                            top: item.pageY - $tooltip.height() - 10,
-                            left: item.pageX - $tooltip.width() / 2
+                            top: pos.pageY - $tooltip.height() - 10,
+                            left: pos.pageX - $tooltip.width() / 2
                         })
                     }
                     else if ($tooltip){
