@@ -170,10 +170,16 @@ define([
                     }
                 }
 
-                $.plot($el, [seriesData], {
+                $.plot($el, [ {
+                    color: '#018f6e',
+                    data: seriesData
+                }], {
                     xaxis: { mode: 'time' },
                     points: {
-                        radius: 5
+                        radius: 3
+                    },
+                    grid: {
+                        hoverable: true
                     }
                 })
             }
