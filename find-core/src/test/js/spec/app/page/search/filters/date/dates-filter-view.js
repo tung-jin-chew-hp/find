@@ -13,6 +13,7 @@ define([
             this.twoMonthsAgo = moment(this.now).subtract(2, 'months');
             this.datesFilterModel = new Backbone.Model();
             this.savedSearchModel = new Backbone.Model();
+            this.parametricCollection = new Backbone.Collection();
 
             spyOn(this.savedSearchModel, 'sync');
             spyOn(this.savedSearchModel, 'isNew');
@@ -24,7 +25,8 @@ define([
 
                 this.view = new DatesFilterView({
                     datesFilterModel: this.datesFilterModel,
-                    savedSearchModel: this.savedSearchModel
+                    savedSearchModel: this.savedSearchModel,
+                    parametricCollection: this.parametricCollection
                 });
             });
 
@@ -43,7 +45,8 @@ define([
 
                 this.view = new DatesFilterView({
                     datesFilterModel: this.datesFilterModel,
-                    savedSearchModel: this.savedSearchModel
+                    savedSearchModel: this.savedSearchModel,
+                    parametricCollection: this.parametricCollection
                 });
                 this.view.render();
             });
@@ -88,7 +91,8 @@ define([
 
                 this.view = new DatesFilterView({
                     datesFilterModel: this.datesFilterModel,
-                    savedSearchModel: this.savedSearchModel
+                    savedSearchModel: this.savedSearchModel,
+                    parametricCollection: this.parametricCollection
                 });
                 this.view.render();
             });
@@ -129,7 +133,8 @@ define([
 
                 this.view = new DatesFilterView({
                     datesFilterModel: this.datesFilterModel,
-                    savedSearchModel: this.savedSearchModel
+                    savedSearchModel: this.savedSearchModel,
+                    parametricCollection: this.parametricCollection
                 });
                 this.view.render();
             });
