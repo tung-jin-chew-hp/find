@@ -19,6 +19,9 @@
         <% if(thumbnail) { %>
             <img class="document-thumbnail m-r-sm pull-left" src="data:image/jpeg;base64,<%=thumbnail%>"/>
         <% } %>
+        <% if(thumbnailUrl) { %>
+            <img class="document-thumbnail m-r-sm pull-left" src="<%-thumbnailUrl%>"/>
+        <% } %>
         <p class="result-summary">
             <%= summary %>
         </p>

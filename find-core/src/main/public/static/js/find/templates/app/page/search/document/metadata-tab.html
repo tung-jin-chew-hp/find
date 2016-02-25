@@ -1,9 +1,13 @@
 <table class="table table-hover">
-    <% if(model.get('thumbnail')) { %>
+    <% if(model.get('thumbnail') || model.get('thumbnailUrl')) { %>
         <tr>
             <td class="font-bold"><%-i18n['search.document.thumbnail']%></td>
             <td class="break-all p-l-sm">
+                <% if(model.get('thumbnail')) { %>
                 <img class="document-thumbnail m-r-sm pull-left" src="data:image/jpeg;base64,<%=model.get('thumbnail')%>"/>
+                <% } else if (model.get('thumbnailUrl')) { %>
+                <img class="document-thumbnail m-r-sm pull-left" src="<%-model.get('thumbnailUrl')%>"/>
+                <% } %>
             </td>
         </tr>
     <% } %>

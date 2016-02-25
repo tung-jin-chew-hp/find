@@ -101,6 +101,11 @@
       "names": [
         "HPSW_APP_NOINDEX_PREVIEWTHBNAILBASE64"
       ]
+    },
+    "thumbnailUrl": {
+      "names": [
+        "THUMBNAIL_URL"
+      ]
     }
   }
 }

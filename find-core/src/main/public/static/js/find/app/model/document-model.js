@@ -58,6 +58,7 @@ define([
             }
 
             response.thumbnail = getFieldValue(response.fieldMap.thumbnail);
+            response.thumbnailUrl = getFieldValue(response.fieldMap.thumbnailUrl);
             response.contentType = getFieldValue(response.fieldMap.contentType);
             response.media = getMediaType(response.contentType);
             response.url = getFieldValue(response.fieldMap.url);
