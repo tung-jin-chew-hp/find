@@ -64,6 +64,7 @@ define([
         'search.compare.selectSearchToCompare': 'Choose another saved search to compare',
         'search.databases': 'Databases',
         'search.dates': 'Dates',
+        'search.datechart.tooltipHtml': '{1}\u00a0results',
         'search.dates.timeInterval.CUSTOM': 'Custom',
         'search.dates.timeInterval.WEEK': 'Last Week',
         'search.dates.timeInterval.MONTH': 'Last Month',

@@ -1226,6 +1226,13 @@ h4.similar-dates-message {
     height: 300px;
 }
 
+.date-chart-tooltip {
+    display: block;
+    padding: 2px;
+    text-align: center;
+    color: white;
+}
+
 .after-slider-div .slider.slider-horizontal .slider-track .slider-selection.tick-slider-selection,
 .after-slider-div .slider.slider-horizontal .slider-track .in-selection,
 .before-slider-div .slider.slider-horizontal .slider-track .slider-track-high,

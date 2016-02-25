@@ -182,6 +182,28 @@ define([
                         hoverable: true
                     }
                 })
+
+                var $tooltip;
+
+                $el.bind('plothover', function(evt, pos, item) {
+                    if (item && item.datapoint[1] > 0) {
+                        var html = i18n['search.datechart.tooltipHtml'](new Date(item.datapoint[0]), item.datapoint[1]);
+                        if (!$tooltip) {
+                            $tooltip = $('<div class="popover date-chart-tooltip">'+ html +'</div>').appendTo('body');
+                        }
+                        else {
+                            $tooltip.html(html)
+                        }
+                        $tooltip.css({
+                            top: item.pageY - $tooltip.height() - 10,
+                            left: item.pageX - $tooltip.width() / 2
+                        })
+                    }
+                    else if ($tooltip){
+                        $tooltip.remove()
+                        $tooltip = null
+                    }
+                })
             }
 
         },
