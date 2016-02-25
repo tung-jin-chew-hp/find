@@ -33,9 +33,10 @@ public class IdolParametricValuesController extends ParametricValuesController<I
     }
 
     @Override
-    protected IdolParametricRequest buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<String> queryRestrictions) {
+    protected IdolParametricRequest buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<String> queryRestrictions, final String datePeriod) {
         return new IdolParametricRequest.Builder()
                 .setFieldNames(fieldNames)
+                .setDatePeriod(datePeriod)
                 .setQueryRestrictions(queryRestrictions)
                 .build();
     }
@@ -53,7 +54,7 @@ public class IdolParametricValuesController extends ParametricValuesController<I
     ) throws AciErrorException, InterruptedException {
 
         final QueryRestrictions<String> queryRestrictions = queryRestrictionsBuilder.build(queryText, fieldText, databases, minDate, maxDate, Collections.<String>emptyList(), Collections.<String>emptyList());
-        final IdolParametricRequest parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions);
+        final IdolParametricRequest parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions, null);
         return parametricValuesService.getDependentParametricValues(parametricRequest);
     }
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
     public static final String DATABASES_PARAM = "databases";
     public static final String MIN_DATE_PARAM = "minDate";
     public static final String MAX_DATE_PARAM = "maxDate";
+    public static final String DATE_PERIOD_PARAM = "datePeriod";
     public static final String SECOND_PARAMETRIC_PARAM = "second-parametric";
 
     protected final ParametricValuesService<R, S, E> parametricValuesService;
@@ -54,11 +56,24 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
                                                  @RequestParam(value = FIELD_TEXT_PARAM, defaultValue = "") final String fieldText,
                                                  @RequestParam(DATABASES_PARAM) final List<S> databases,
                                                  @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
-                                                 @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate) throws E {
+                                                 @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
+                                                 @RequestParam(value = DATE_PERIOD_PARAM, required = false) final String datePeriod) throws E {
         final QueryRestrictions<S> queryRestrictions = queryRestrictionsBuilder.build(queryText, fieldText, databases, minDate, maxDate, Collections.<String>emptyList(), Collections.<String>emptyList());
-        final R parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions);
+        final List<String> fields = new ArrayList<>();
+
+        if (fieldNames != null) {
+            fields.addAll(fieldNames);
+        }
+        if (fields.isEmpty()) {
+            fields.addAll(parametricValuesService.getDefaultFields(null));
+        }
+        if (datePeriod != null) {
+            fields.add("autn_date");
+        }
+
+        final R parametricRequest = buildParametricRequest(fields, queryRestrictions, datePeriod);
         return parametricValuesService.getAllParametricValues(parametricRequest);
     }
 
-    protected abstract R buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<S> queryRestrictions);
+    protected abstract R buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<S> queryRestrictions, final String datePeriod);
 }
