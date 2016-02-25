@@ -50,7 +50,12 @@ define([
             this.listenTo(this.model, 'change:error', this.updateError);
 
             this.displayCollection = new DisplayCollection([], {
-                parametricCollection: this.parametricCollection,
+                parametricCollection: new FilteringCollection([], {
+                    collection: this.parametricCollection,
+                    modelFilter: function(model, filters){
+                        return model.get('name') !== 'autn_date';
+                    }
+                }),
                 selectedParametricValues: this.selectedParametricValues
             });
 
