@@ -179,13 +179,14 @@ define([
                         radius: 3
                     },
                     grid: {
+                        clickable: true,
                         hoverable: true
                     }
                 })
 
                 var $tooltip;
 
-                $el.bind('plothover', function(evt, pos, item) {
+                $el.on('plothover', function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
                         var html = i18n['search.datechart.tooltipHtml'](new Date(item.datapoint[0]), item.datapoint[1]);
                         if (!$tooltip) {
@@ -203,7 +204,14 @@ define([
                         $tooltip.remove()
                         $tooltip = null
                     }
-                })
+                }).on('plotclick', _.bind(function(evt, pos, item) {
+                    if (item && item.datapoint[1] > 0) {
+                        var epoch = item.datapoint[0];
+                        this.datesFilterModel.set('dateRange', DatesFilterModel.DateRange.CUSTOM);
+                        this.datesFilterModel.set('customMinDate', moment(epoch));
+                        this.datesFilterModel.set('customMaxDate', moment(epoch + step));
+                    }
+                }, this))
             }
 
         },
