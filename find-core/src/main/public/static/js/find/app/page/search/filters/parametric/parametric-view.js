@@ -80,7 +80,7 @@ define([
                             fieldText: this.queryModel.get('fieldText'),
                             minDate: this.queryModel.getIsoDate('minDate'),
                             maxDate: this.queryModel.getIsoDate('maxDate'),
-                            datePeriod: 'hour'
+                            datePeriod: this.queryModel.get('datePeriod')
                         },
                         error: _.bind(function (collection, xhr) {
                             if (xhr.status !== 0) {

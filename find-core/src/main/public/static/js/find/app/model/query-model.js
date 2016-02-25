@@ -28,6 +28,7 @@ define([
     return Backbone.Model.extend({
         defaults: {
             autoCorrect: true,
+            datePeriod: 'hour',
             queryText: '',
             indexes: [],
             fieldText: null,

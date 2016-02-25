@@ -6,10 +6,11 @@ define([
     'i18n!find/nls/bundle',
     'find/app/model/dates-filter-model',
     'find/app/model/saved-searches/saved-search-model',
+    'js-whatever/js/filtering-collection',
     'js-whatever/js/list-view',
     'text!find/templates/app/page/search/filters/date/dates-filter-view.html',
     'bootstrap-datetimepicker'
-], function(Backbone, $, _, moment, i18n, DatesFilterModel, SavedSearchModel, ListView, template) {
+], function(Backbone, $, _, moment, i18n, DatesFilterModel, SavedSearchModel, FilteringCollection, ListView, template) {
 
     var DATES_DISPLAY_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -49,6 +50,17 @@ define([
         initialize: function(options) {
             this.datesFilterModel = options.datesFilterModel;
             this.savedSearchModel = options.savedSearchModel;
+            this.queryModel = options.queryModel;
+
+            this.parametricCollection = new FilteringCollection([], {
+                collection: options.parametricCollection,
+                modelFilter: function(model){
+                    return model.get('name') === 'autn_date';
+                }
+            }).on('reset', function(coll){
+                var model = coll.models[0];
+                this.updateDateChart(model && model.get('values'))
+            }, this)
 
             this.template = _.template(template);
 
@@ -117,6 +129,17 @@ define([
                     dateNewDocsLastFetched: moment()
                 });
             }
+        },
+
+        updateDateChart: function(values) {
+            var show = values && values.length > 0
+            if (show) {
+
+            }
+            this.$('.date-chart').toggleClass('hide', !values || values.length === 0).text(values)
+
+            this.queryModel.get('datePeriod')
+
         },
 
         getFilters: function() {

@@ -203,7 +203,9 @@ define([
 
             this.dateView = new DateView({
                 datesFilterModel: this.queryState.datesFilterModel,
-                savedSearchModel: this.savedSearchModel
+                savedSearchModel: this.savedSearchModel,
+                parametricCollection: this.parametricCollection,
+                queryModel: this.queryModel
             });
 
             //Right Collapsed View
