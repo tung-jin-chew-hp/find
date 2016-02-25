@@ -147,11 +147,36 @@ define([
                     return a[0] - b[0]
                 })
 
+                var datePeriods = {
+                    year: 365 * 24 * 3600e3,
+                    month: 31 * 24 * 3600e3,
+                    day: 24 * 3600e3,
+                    hour: 3600e3,
+                    minute: 60e3
+                };
+
+                var step = datePeriods[this.queryModel.get('datePeriod')]
+                // Pad the expected next step slightly, to avoid numerical precision issues
+                var stepFloat = 1.1 * step;
+
+                // Pad out the points with zeroes, since any time with a count of 0 wasn't returned
+                for (var ii = 1; ii < seriesData.length; ++ii) {
+                    var curr = seriesData[ii][0], prev = seriesData[ii - 1][0];
+
+                    if (curr - prev > stepFloat) {
+                        // we need to fill in a zero
+                        seriesData.splice(ii, 0, [prev + step, 0])
+                        --ii;
+                    }
+                }
+
                 $.plot($el, [seriesData], {
-                    xaxis: { mode: 'time' }
+                    xaxis: { mode: 'time' },
+                    points: {
+                        radius: 5
+                    }
                 })
             }
-            //this.queryModel.get('datePeriod')
 
         },
 
