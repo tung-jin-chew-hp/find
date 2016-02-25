@@ -184,7 +184,7 @@ define([
                     }
                 })
 
-                var $tooltip;
+                var $tooltip, lastFetch;
 
                 $el.on('plothover', function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
@@ -192,9 +192,10 @@ define([
                         if (!$tooltip) {
                             $tooltip = $('<div class="popover date-chart-tooltip">'+ html +'</div>').appendTo('body');
                         }
-                        else {
+                        else if (lastFetch !== item.dataIndex) {
                             $tooltip.html(html)
                         }
+                        lastFetch = item.dataIndex;
                         $tooltip.css({
                             top: pos.pageY - $tooltip.height() - 10,
                             left: pos.pageX - $tooltip.width() / 2
@@ -202,7 +203,7 @@ define([
                     }
                     else if ($tooltip){
                         $tooltip.remove()
-                        $tooltip = null
+                        $tooltip = lastFetch = null
                     }
                 }).on('plotclick', _.bind(function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
