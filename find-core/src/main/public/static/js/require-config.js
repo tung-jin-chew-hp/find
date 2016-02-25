@@ -21,6 +21,8 @@ require.config({
         'parametric-refinement': '../bower_components/hp-autonomy-js-parametric-refinement/src',
         iCheck: '../bower_components/iCheck/icheck',
         chosen: '../bower_components/chosen/chosen.jquery.min',
+        flot: '../bower_components/flot/jquery.flot',
+        flotTime: '../bower_components/flot/jquery.flot.time',
         jquery: '../bower_components/jquery/jquery',
         'js-whatever': '../bower_components/hp-autonomy-js-whatever/src',
         json2: '../bower_components/json/json2',
@@ -43,6 +45,8 @@ require.config({
         'bootstrap-datetimepicker': ['jquery'],
         colorbox: ['jquery'],
         iCheck: ['jquery'],
+        flot: ['jquery'],
+        flotTime: ['flot'],
         peg: {
             exports: 'PEG'
         },

@@ -1,5 +1,6 @@
 define([
     'backbone',
+    'flotTime',
     'jquery',
     'underscore',
     'moment',
@@ -10,7 +11,7 @@ define([
     'js-whatever/js/list-view',
     'text!find/templates/app/page/search/filters/date/dates-filter-view.html',
     'bootstrap-datetimepicker'
-], function(Backbone, $, _, moment, i18n, DatesFilterModel, SavedSearchModel, FilteringCollection, ListView, template) {
+], function(Backbone, flot, $, _, moment, i18n, DatesFilterModel, SavedSearchModel, FilteringCollection, ListView, template) {
 
     var DATES_DISPLAY_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -132,13 +133,25 @@ define([
         },
 
         updateDateChart: function(values) {
-            var show = values && values.length > 0
+            var show = values && values.length
+            var $el = this.$('.date-chart');
+            $el.toggleClass('hide', !show)
+
             if (show) {
+                $el.css('width', $el.width() + 'px')
 
+                var seriesData = _.map(values, function(v){
+                    // we're assuming we're in the range in which autn_dates are epoch seconds
+                    return [v.value * 1000, +v.count]
+                }).sort(function(a,b){
+                    return a[0] - b[0]
+                })
+
+                $.plot($el, [seriesData], {
+                    xaxis: { mode: 'time' }
+                })
             }
-            this.$('.date-chart').toggleClass('hide', !values || values.length === 0).text(values)
-
-            this.queryModel.get('datePeriod')
+            //this.queryModel.get('datePeriod')
 
         },
 

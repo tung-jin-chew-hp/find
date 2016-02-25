@@ -30,6 +30,7 @@
     "jquery": "components/jquery#~1.10.2",
     "json": "json2#*",
     "underscore": "~1.8.3",
+    "flot": "~0.8.3",
     "hp-autonomy-js-whatever": "~2.5.0",
     "hp-autonomy-login-page": "~1.0.2",
     "hp-autonomy-settings-page": "~0.1.0",

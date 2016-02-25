@@ -1222,6 +1222,10 @@ h4.similar-dates-message {
     border: 2px solid rgb(68, 85, 95);
 }
 
+.date-chart {
+    height: 300px;
+}
+
 .after-slider-div .slider.slider-horizontal .slider-track .slider-selection.tick-slider-selection,
 .after-slider-div .slider.slider-horizontal .slider-track .in-selection,
 .before-slider-div .slider.slider-horizontal .slider-track .slider-track-high,
