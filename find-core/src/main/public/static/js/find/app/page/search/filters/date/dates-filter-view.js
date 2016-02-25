@@ -5,13 +5,14 @@ define([
     'underscore',
     'moment',
     'i18n!find/nls/bundle',
+    'find/app/model/entity-collection',
     'find/app/model/dates-filter-model',
     'find/app/model/saved-searches/saved-search-model',
     'js-whatever/js/filtering-collection',
     'js-whatever/js/list-view',
     'text!find/templates/app/page/search/filters/date/dates-filter-view.html',
     'bootstrap-datetimepicker'
-], function(Backbone, flot, $, _, moment, i18n, DatesFilterModel, SavedSearchModel, FilteringCollection, ListView, template) {
+], function(Backbone, flot, $, _, moment, i18n, EntityCollection, DatesFilterModel, SavedSearchModel, FilteringCollection, ListView, template) {
 
     var DATES_DISPLAY_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -184,28 +185,65 @@ define([
                     }
                 })
 
-                var $tooltip, lastFetch;
+                var $tooltip, lastFetch, lastFetchModel;
 
-                $el.on('plothover', function(evt, pos, item) {
+                $el.on('plothover', _.bind(function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
-                        var html = i18n['search.datechart.tooltipHtml'](new Date(item.datapoint[0]), item.datapoint[1]);
+                        var epoch = item.datapoint[0];
+                        var html = i18n['search.datechart.tooltipHtml'](new Date(epoch), item.datapoint[1]);
+                        var fetchRequired = true;
                         if (!$tooltip) {
                             $tooltip = $('<div class="popover date-chart-tooltip">'+ html +'</div>').appendTo('body');
                         }
                         else if (lastFetch !== item.dataIndex) {
                             $tooltip.html(html)
                         }
+                        else {
+                            fetchRequired = false;
+                        }
                         lastFetch = item.dataIndex;
+
+                        var pageY = pos.pageY;
+                        var pageX = pos.pageX;
+
+                        if (fetchRequired) {
+                            var currentFetch = lastFetch
+                            lastFetchModel = new EntityCollection().fetch({
+                                data: {
+                                    databases: this.queryModel.get('indexes'),
+                                    queryText: this.queryModel.get('queryText'),
+                                    fieldText: this.queryModel.get('fieldText'),
+                                    minDate: moment(epoch).toISOString(),
+                                    maxDate: moment(epoch + step).toISOString()
+                                }
+                            }).done(function(json){
+                                if ($tooltip && currentFetch === lastFetch) {
+                                    var terms = _.chain(json)
+                                        .reject(function(a){return a.cluster < 0})
+                                        .groupBy(function(a){return a.cluster})
+                                        .map(function(a){return '<span class="date-chart-tooltip-cluster">' + _.escape(a[0].text) + '</span>'})
+                                        .value()
+
+                                    if (terms.length) {
+                                        $tooltip.html(terms.concat(html).join('<br>')).css({
+                                            top: pageY - $tooltip.height() - 20,
+                                            left: pageX - 3
+                                        })
+                                    }
+                                }
+                            })
+                        }
+
                         $tooltip.css({
-                            top: pos.pageY - $tooltip.height() - 10,
-                            left: pos.pageX - $tooltip.width() / 2
+                            top: pageY - $tooltip.height() - 20,
+                            left: pageX - 3
                         })
                     }
                     else if ($tooltip){
                         $tooltip.remove()
-                        $tooltip = lastFetch = null
+                        $tooltip = null
                     }
-                }).on('plotclick', _.bind(function(evt, pos, item) {
+                }, this)).on('plotclick', _.bind(function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
                         var epoch = item.datapoint[0];
                         this.datesFilterModel.set('dateRange', DatesFilterModel.DateRange.CUSTOM);

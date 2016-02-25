@@ -1228,9 +1228,15 @@ h4.similar-dates-message {
 
 .date-chart-tooltip {
     display: block;
-    padding: 2px;
+    padding: 5px;
     text-align: center;
     color: white;
+}
+
+.date-chart-tooltip-cluster {
+    color: #00b388;
+    font-size: smaller;
+    font-weight: bold;
 }
 
 .after-slider-div .slider.slider-horizontal .slider-track .slider-selection.tick-slider-selection,
