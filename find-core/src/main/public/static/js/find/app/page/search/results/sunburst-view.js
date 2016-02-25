@@ -145,7 +145,7 @@ define([
             this.getParametricCollection(val);
             var secondCollection = this.parametricCollection.pluck('name');
             this.populateDropDown(this.$secondChosen, _.reject(secondCollection, function (name) {
-                return name === val
+                return name === val || name === 'autn_date'
             }, this));
             this.$secondChosen.removeClass('hide')
         },
@@ -161,7 +161,9 @@ define([
             this.$firstChosen = this.$('.first-parametric');
             this.$secondChosen = this.$('.second-parametric');
 
-            this.populateDropDown(this.$firstChosen, this.parametricCollection.pluck('name'));
+            this.populateDropDown(this.$firstChosen, _.reject(this.parametricCollection.pluck('name'), function(v){
+                return v === 'autn_date'
+            }));
             this.firstPass();
 
             this.$firstChosen.change(_.bind(this.firstPass, this));
@@ -174,7 +176,9 @@ define([
             this.listenTo(this.parametricCollection, 'request', this.resetView);
 
             this.listenTo(this.parametricCollection, 'sync', function() {
-                this.populateDropDown(this.$firstChosen, this.parametricCollection.pluck('name'));
+                this.populateDropDown(this.$firstChosen, _.reject(this.parametricCollection.pluck('name'), function(v){
+                    return v === 'autn_date'
+                }));
             });
 
             this.listenTo(this.secondParametricCollection, 'sync', this.update);
