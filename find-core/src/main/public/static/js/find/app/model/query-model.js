@@ -5,9 +5,10 @@
 
 define([
     'backbone',
+    'moment',
     'find/app/page/search/filters/date/date-periods',
     'find/app/util/search-data-util'
-], function(Backbone, DatePeriods, searchDataUtil) {
+], function(Backbone, moment, DatePeriods, searchDataUtil) {
 
     /**
      * @readonly
@@ -46,9 +47,11 @@ define([
             this.queryState = options.queryState;
 
             this.on('change:minDate change:maxDate', function(){
-                //debugger;
                 var min = this.get('minDate')
-                var max = this.get('maxDate')
+                // The max is always bounded by the current time, assuming there's no future-dated documents.
+                // If the user specifies a maxDate in the future, presumably they're expecting future-dated docs, so
+                //  use that value as-is.
+                var max = this.get('maxDate') || moment()
 
                 if (min && max) {
                     this.set('datePeriod', DatePeriods.choosePeriod(min, max))
