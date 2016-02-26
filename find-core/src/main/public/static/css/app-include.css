@@ -377,6 +377,10 @@ html, body {
     vertical-align: bottom;
 }
 
+.search-links {
+    border: none;
+}
+
 .search-links i {
     vertical-align: bottom;
 }
