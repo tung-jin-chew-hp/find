@@ -234,12 +234,12 @@ define([
 
                 plot()
 
-                var sentimentField = 'CATEGORY';
+                var sentimentField = 'OVERALL_VIBE';
 
                 // green placeholder
-                fetch(sentimentField, 'TC', 'Category: TC', '#02c422')
+                fetch(sentimentField, 'POSITIVE', 'Positive', '#02c422')
                 // red placeholder
-                fetch(sentimentField, 'ENTERPRISE', 'Category: Enterprise', '#f93c02')
+                fetch(sentimentField, 'NEGATIVE', 'Negative', '#f93c02')
 
                 var $tooltip, lastFetch, lastFetchModel;
 
