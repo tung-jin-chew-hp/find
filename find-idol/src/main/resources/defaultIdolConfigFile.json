@@ -50,6 +50,16 @@
     ],
     "referenceField": "DREREFERENCE"
   },
+  "category": {
+    "protocol": "HTTP",
+    "host": "maindemo-category.autonomy.com",
+    "port": 9120,
+    "productType": [
+      "CLASSSERVER",
+      "IDOLPROXY",
+      "DAH"
+    ]
+  },
   "mmap": {
     "enabled": false,
     "baseUrl": ""

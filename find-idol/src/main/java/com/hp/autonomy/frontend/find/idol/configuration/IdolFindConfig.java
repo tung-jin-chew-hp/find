@@ -17,6 +17,7 @@ import com.hp.autonomy.frontend.configuration.CommunityAuthentication;
 import com.hp.autonomy.frontend.configuration.ConfigException;
 import com.hp.autonomy.frontend.configuration.ServerConfig;
 import com.hp.autonomy.searchcomponents.core.config.FieldsInfo;
+import com.hp.autonomy.searchcomponents.idol.category.configuration.CategoryConfig;
 import com.hp.autonomy.searchcomponents.idol.configuration.IdolSearchCapable;
 import com.hp.autonomy.searchcomponents.idol.configuration.QueryManipulation;
 import com.hp.autonomy.searchcomponents.idol.view.configuration.ViewConfig;
@@ -36,6 +37,8 @@ public class IdolFindConfig extends AbstractConfig<IdolFindConfig> implements Us
     private final CommunityAuthentication login;
     private final ServerConfig content;
     private final QueryManipulation queryManipulation;
+    @JsonProperty("category")
+    private final CategoryConfig categoryConfig;
     @JsonProperty("view")
     private final ViewConfig viewConfig;
     private final MMAP mmap;
@@ -51,6 +54,7 @@ public class IdolFindConfig extends AbstractConfig<IdolFindConfig> implements Us
                 .setContent(content == null ? other.content : content.merge(other.content))
                 .setLogin(login == null ? other.login : login.merge(other.login))
                 .setQueryManipulation(queryManipulation == null ? other.queryManipulation : queryManipulation.merge(other.queryManipulation))
+                .setCategory(categoryConfig == null ? other.categoryConfig : categoryConfig.merge(other.categoryConfig))
                 .setView(viewConfig == null ? other.viewConfig : viewConfig.merge(other.viewConfig))
                 .setMmap(mmap == null ? other.mmap : mmap.merge(other.mmap))
                 .setFieldsInfo(fieldsInfo == null ? other.fieldsInfo : fieldsInfo.merge(other.fieldsInfo))
@@ -111,6 +115,7 @@ public class IdolFindConfig extends AbstractConfig<IdolFindConfig> implements Us
     public static class Builder {
         private CommunityAuthentication login;
         private ServerConfig content;
+        private CategoryConfig category;
         private QueryManipulation queryManipulation;
         private ViewConfig view;
         private MMAP mmap;
@@ -120,13 +125,14 @@ public class IdolFindConfig extends AbstractConfig<IdolFindConfig> implements Us
             login = config.login;
             content = config.content;
             queryManipulation = config.queryManipulation;
+            category = config.categoryConfig;
             view = config.viewConfig;
             mmap = config.mmap;
             fieldsInfo = config.fieldsInfo;
         }
 
         public IdolFindConfig build() {
-            return new IdolFindConfig(login, content, queryManipulation, view, mmap, fieldsInfo);
+            return new IdolFindConfig(login, content, queryManipulation, category, view, mmap, fieldsInfo);
         }
     }
 
