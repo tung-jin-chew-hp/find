@@ -191,23 +191,23 @@ define([
                     if (item && item.datapoint[1] > 0) {
                         var epoch = item.datapoint[0];
                         var html = i18n['search.datechart.tooltipHtml'](new Date(epoch), item.datapoint[1]);
-                        var fetchRequired = true;
                         if (!$tooltip) {
                             $tooltip = $('<div class="popover date-chart-tooltip">'+ html +'</div>').appendTo('body');
                         }
                         else if (lastFetch !== item.dataIndex) {
                             $tooltip.html(html)
                         }
-                        else {
-                            fetchRequired = false;
-                        }
-                        lastFetch = item.dataIndex;
 
                         var pageY = pos.pageY;
                         var pageX = pos.pageX;
 
-                        if (fetchRequired) {
-                            var currentFetch = lastFetch
+                        if (lastFetch !== item.dataIndex) {
+                            lastFetch = item.dataIndex;
+
+                            if (lastFetchModel) {
+                                lastFetchModel.abort()
+                            }
+
                             lastFetchModel = new EntityCollection().fetch({
                                 data: {
                                     databases: this.queryModel.get('indexes'),
@@ -216,23 +216,25 @@ define([
                                     minDate: moment(epoch).toISOString(),
                                     maxDate: moment(epoch + step).toISOString()
                                 }
-                            }).done(function(json){
-                                if ($tooltip && currentFetch === lastFetch) {
-                                    var terms = _.chain(json)
-                                        .reject(function(a){return a.cluster < 0})
-                                        .groupBy(function(a){return a.cluster})
-                                        .map(function(a){return '\u2022<span class="date-chart-tooltip-cluster">' + _.escape(a[0].text) + '</span>'})
-                                        .value()
-
-                                    if (terms.length) {
-                                        $tooltip.html([html].concat(terms).join('<br>')).css({
-                                            top: pageY - $tooltip.height() - 20,
-                                            left: pageX - 3
-                                        })
-                                    }
-                                }
                             })
                         }
+
+                        lastFetchModel.done(function(json){
+                            if ($tooltip) {
+                                var terms = _.chain(json)
+                                    .reject(function(a){return a.cluster < 0})
+                                    .groupBy(function(a){return a.cluster})
+                                    .map(function(a){return '\u2022<span class="date-chart-tooltip-cluster">' + _.escape(a[0].text) + '</span>'})
+                                    .value()
+
+                                if (terms.length) {
+                                    $tooltip.html([html].concat(terms).join('<br>')).css({
+                                        top: pageY - $tooltip.height() - 20,
+                                        left: pageX - 3
+                                    })
+                                }
+                            }
+                        })
 
                         $tooltip.css({
                             top: pageY - $tooltip.height() - 20,
