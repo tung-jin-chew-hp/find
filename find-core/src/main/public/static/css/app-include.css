@@ -593,6 +593,10 @@ input.find-input {
     margin-top: 2em;
 }
 
+.suggested-query > a {
+    color: inherit;
+}
+
 /* fancy animation */
 .animated-container {
     position: absolute;
@@ -610,9 +614,21 @@ input.find-input {
     border-bottom: none;
     transition: all 1s ease;
 }
+
+.animated-container .suggestions-box {
+    display: none;
+    opacity: 0;
+    transition: all 1s ease;
+}
 /* fancy reverse animation */
 .reverse-animated-container {
     margin-top: 10%;
+    transition: all 1s ease;
+}
+
+.reverse-animated-container .suggestions-box {
+    display: block;
+    opacity: 1;
     transition: all 1s ease;
 }
 
