@@ -55,6 +55,7 @@ define([
             this.datesFilterModel = options.datesFilterModel;
             this.savedSearchModel = options.savedSearchModel;
             this.queryModel = options.queryModel;
+            this.queryState = options.queryState;
 
             this.parametricCollection = new FilteringCollection([], {
                 collection: options.parametricCollection,
@@ -183,7 +184,8 @@ define([
                             color: color,
                             data: padZeroes(json[0].values),
                             baseParams: newParams,
-                            name: name
+                            name: name,
+                            parametric: { field: field, value: value }
                         })
 
                         plot()
@@ -306,6 +308,13 @@ define([
                         this.datesFilterModel.set('dateRange', DatesFilterModel.DateRange.CUSTOM);
                         this.datesFilterModel.set('customMinDate', moment(epoch));
                         this.datesFilterModel.set('customMaxDate', moment(epoch + step));
+
+                        var filter = item.series.parametric;
+                        if (filter) {
+                            // TODO: there's subtleties if you already have an existing filter which we don't
+                            //   deal with for this demo
+                            this.queryState.selectedParametricValues.add(filter)
+                        }
                     }
                 }, this))
             }

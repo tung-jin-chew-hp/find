@@ -205,7 +205,8 @@ define([
                 datesFilterModel: this.queryState.datesFilterModel,
                 savedSearchModel: this.savedSearchModel,
                 parametricCollection: this.parametricCollection,
-                queryModel: this.queryModel
+                queryModel: this.queryModel,
+                queryState: this.queryState
             });
 
             //Right Collapsed View
