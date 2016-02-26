@@ -221,11 +221,11 @@ define([
                                     var terms = _.chain(json)
                                         .reject(function(a){return a.cluster < 0})
                                         .groupBy(function(a){return a.cluster})
-                                        .map(function(a){return '<span class="date-chart-tooltip-cluster">' + _.escape(a[0].text) + '</span>'})
+                                        .map(function(a){return '\u2022<span class="date-chart-tooltip-cluster">' + _.escape(a[0].text) + '</span>'})
                                         .value()
 
                                     if (terms.length) {
-                                        $tooltip.html(terms.concat(html).join('<br>')).css({
+                                        $tooltip.html([html].concat(terms).join('<br>')).css({
                                             top: pageY - $tooltip.height() - 20,
                                             left: pageX - 3
                                         })

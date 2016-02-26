@@ -1237,6 +1237,7 @@ h4.similar-dates-message {
     color: #00b388;
     font-size: smaller;
     font-weight: bold;
+    margin-left: 3px;
 }
 
 .after-slider-div .slider.slider-horizontal .slider-track .slider-selection.tick-slider-selection,
