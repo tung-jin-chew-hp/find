@@ -235,15 +235,12 @@ define([
                 plot()
 
                 var sentimentField = 'OVERALL_VIBE';
-
-                // green placeholder
                 fetch(sentimentField, 'POSITIVE', 'Positive', '#02c422')
-                // red placeholder
                 fetch(sentimentField, 'NEGATIVE', 'Negative', '#f93c02')
 
                 var $tooltip, lastFetch, lastFetchModel;
 
-                $el.on('plothover', _.bind(function(evt, pos, item) {
+                $el.off('.datefilterview').on('plothover.datefilterview', _.bind(function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
                         var epoch = item.datapoint[0];
                         var html = i18n['search.datechart.tooltipHtml'](new Date(epoch), item.datapoint[1]);
@@ -303,7 +300,7 @@ define([
                         $tooltip.remove()
                         $tooltip = null
                     }
-                }, this)).on('plotclick', _.bind(function(evt, pos, item) {
+                }, this)).on('plotclick.datefilterview', _.bind(function(evt, pos, item) {
                     if (item && item.datapoint[1] > 0) {
                         var epoch = item.datapoint[0];
                         this.datesFilterModel.set('dateRange', DatesFilterModel.DateRange.CUSTOM);
