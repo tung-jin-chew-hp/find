@@ -9,12 +9,13 @@ define([
     'find/app/model/parametric-collection',
     'find/app/model/dates-filter-model',
     'find/app/model/saved-searches/saved-search-model',
+    'find/app/page/search/filters/date/date-periods',
     'fieldtext/js/field-text-parser',
     'js-whatever/js/filtering-collection',
     'js-whatever/js/list-view',
     'text!find/templates/app/page/search/filters/date/dates-filter-view.html',
     'bootstrap-datetimepicker'
-], function(Backbone, flot, $, _, moment, i18n, EntityCollection, ParametricCollection, DatesFilterModel, SavedSearchModel, parser, FilteringCollection, ListView, template) {
+], function(Backbone, flot, $, _, moment, i18n, EntityCollection, ParametricCollection, DatesFilterModel, SavedSearchModel, DatePeriods, parser, FilteringCollection, ListView, template) {
 
     var DATES_DISPLAY_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -203,15 +204,7 @@ define([
 
                 $el.css('width', $el.width() + 'px')
 
-                var datePeriods = {
-                    year: 365 * 24 * 3600e3,
-                    month: 31 * 24 * 3600e3,
-                    day: 24 * 3600e3,
-                    hour: 3600e3,
-                    minute: 60e3
-                };
-
-                var step = datePeriods[this.queryModel.get('datePeriod')]
+                var step = DatePeriods.datePeriods[this.queryModel.get('datePeriod')]
                 // Pad the expected next step slightly, to avoid numerical precision issues
                 var stepFloat = 1.1 * step;
 

@@ -5,8 +5,9 @@
 
 define([
     'backbone',
+    'find/app/page/search/filters/date/date-periods',
     'find/app/util/search-data-util'
-], function(Backbone, searchDataUtil) {
+], function(Backbone, DatePeriods, searchDataUtil) {
 
     /**
      * @readonly
@@ -28,7 +29,7 @@ define([
     return Backbone.Model.extend({
         defaults: {
             autoCorrect: true,
-            datePeriod: 'day',
+            datePeriod: 'hour',
             queryText: '',
             indexes: [],
             fieldText: null,
@@ -43,6 +44,19 @@ define([
          */
         initialize: function(attributes, options) {
             this.queryState = options.queryState;
+
+            this.on('change:minDate change:maxDate', function(){
+                //debugger;
+                var min = this.get('minDate')
+                var max = this.get('maxDate')
+
+                if (min && max) {
+                    this.set('datePeriod', DatePeriods.choosePeriod(min, max))
+                }
+                else {
+                    this.set('datePeriod', 'day')
+                }
+            }, this)
 
             this.listenTo(this.queryState.queryTextModel, 'change', function() {
                 this.set('queryText', this.queryState.queryTextModel.makeQueryText());
