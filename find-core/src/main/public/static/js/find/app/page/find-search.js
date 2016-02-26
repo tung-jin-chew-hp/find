@@ -184,8 +184,7 @@ define([
         },
 
         onSuggestedQuery: function(evt){
-
-            var info = $(evt.target).data();
+            var info = $(evt.currentTarget).data();
 
             this.searchModel.set({
                 selectedSearchCid: null,
