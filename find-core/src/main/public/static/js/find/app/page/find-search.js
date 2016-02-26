@@ -22,13 +22,14 @@ define([
     'find/app/util/database-name-resolver',
     'find/app/router',
     'find/app/vent',
+    'fieldtext/js/field-text-parser',
     'i18n!find/nls/bundle',
     'underscore',
     'text!find/templates/app/page/find-search.html'
 ], function(BasePage, Backbone, SearchPageModel, DatesFilterModel, SelectedParametricValuesCollection,
             IndexesCollection, DocumentsCollection, InputView, TabbedSearchView, SavedSearchCollection,
             addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, DocumentDetailView,
-            databaseNameResolver, router, vent, i18n, _, template) {
+            databaseNameResolver, router, vent, parser, i18n, _, template) {
     'use strict';
 
     var reducedClasses = 'reverse-animated-container col-md-offset-1 col-lg-offset-2 col-xs-12 col-sm-12 col-md-10 col-lg-8';
@@ -178,6 +179,42 @@ define([
             }, this);
 
             this.selectContentView();
+
+            this.$el.on('click', '.suggested-query', _.bind(this.onSuggestedQuery, this))
+        },
+
+        onSuggestedQuery: function(evt){
+
+            var info = $(evt.target).data();
+
+            this.searchModel.set({
+                selectedSearchCid: null,
+                inputText: info.queryText || '*',
+                relatedConcepts: []
+            });
+
+            var sel = this.searchModel.get('selectedSearchCid');
+            var view = this.serviceViews[sel].view;
+
+            if (info.indexes) {
+                var indexes = info.indexes.split(';');
+                view.queryModel.set('indexes', indexes, {quiet: !!info.match})
+                view.indexesView.selectedDatabasesCollection.reset(indexes.map(function(name){
+                    return { domain: '', name: name }
+                }), {
+                    quiet: !!info.match
+                })
+            }
+
+            if (info.match) {
+                view.indexesView.updateCheckedOptions()
+                view.parametricView.selectedParametricValues.reset(
+                    info.match.split(';').map(function(str){
+                        var pair = str.split('=');
+                        return {field: pair[0], value: pair[1]}
+                    })
+                )
+            }
         },
 
         createNewTab: function() {
@@ -281,6 +318,7 @@ define([
             this.$('.query-service-view-container').removeClass('hide');
             this.$('.app-logo').addClass('hide');
             this.$('.hp-logo-footer').addClass('hide');
+            this.$('.suggestions-box').addClass('hide')
 
             this.removeDocumentDetailView();
 
@@ -296,6 +334,7 @@ define([
             this.$('.service-view-container').addClass('hide');
             this.$('.app-logo').removeClass('hide');
             this.$('.hp-logo-footer').removeClass('hide');
+            this.$('.suggestions-box').removeClass('hide')
 
             this.removeDocumentDetailView();
 

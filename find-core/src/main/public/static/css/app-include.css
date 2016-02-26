@@ -588,6 +588,11 @@ input.find-input {
     top: 11px !important;
 }
 
+.suggestions-box {
+    text-align: left;
+    margin-top: 2em;
+}
+
 /* fancy animation */
 .animated-container {
     position: absolute;
@@ -607,7 +612,7 @@ input.find-input {
 }
 /* fancy reverse animation */
 .reverse-animated-container {
-    margin-top: 15%;
+    margin-top: 10%;
     transition: all 1s ease;
 }
 
