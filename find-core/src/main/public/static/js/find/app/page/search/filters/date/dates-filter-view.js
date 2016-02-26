@@ -232,6 +232,8 @@ define([
                 var sentimentField = 'OVERALL_VIBE';
                 fetch(sentimentField, 'POSITIVE', 'Positive', '#02c422')
                 fetch(sentimentField, 'NEGATIVE', 'Negative', '#f93c02')
+                fetch(sentimentField, 'MIXED', 'Mixed', '#dbdbdb')
+                fetch(sentimentField, 'NEUTRAL', 'Neutral', '#ffbd0b')
 
                 var $tooltip, lastFetch, lastFetchModel;
 
