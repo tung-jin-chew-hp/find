@@ -6,13 +6,15 @@ define([
     'moment',
     'i18n!find/nls/bundle',
     'find/app/model/entity-collection',
+    'find/app/model/parametric-collection',
     'find/app/model/dates-filter-model',
     'find/app/model/saved-searches/saved-search-model',
+    'fieldtext/js/field-text-parser',
     'js-whatever/js/filtering-collection',
     'js-whatever/js/list-view',
     'text!find/templates/app/page/search/filters/date/dates-filter-view.html',
     'bootstrap-datetimepicker'
-], function(Backbone, flot, $, _, moment, i18n, EntityCollection, DatesFilterModel, SavedSearchModel, FilteringCollection, ListView, template) {
+], function(Backbone, flot, $, _, moment, i18n, EntityCollection, ParametricCollection, DatesFilterModel, SavedSearchModel, parser, FilteringCollection, ListView, template) {
 
     var DATES_DISPLAY_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -139,14 +141,65 @@ define([
             $el.toggleClass('hide', !show)
 
             if (show) {
-                $el.css('width', $el.width() + 'px')
+                function padZeroes(values) {
+                    var seriesData = _.map(values, function(v){
+                        // we're assuming we're in the range in which autn_dates are epoch seconds
+                        return [v.value * 1000, +v.count]
+                    }).sort(function(a,b){
+                        return a[0] - b[0]
+                    })
 
-                var seriesData = _.map(values, function(v){
-                    // we're assuming we're in the range in which autn_dates are epoch seconds
-                    return [v.value * 1000, +v.count]
-                }).sort(function(a,b){
-                    return a[0] - b[0]
-                })
+                    // Pad out the points with zeroes, since any time with a count of 0 wasn't returned
+                    for (var ii = 1; ii < seriesData.length; ++ii) {
+                        var curr = seriesData[ii][0], prev = seriesData[ii - 1][0];
+
+                        if (curr - prev > stepFloat) {
+                            // we need to fill in a zero
+                            seriesData.splice(ii, 0, [prev + step, 0])
+                            --ii;
+                        }
+                    }
+
+                    return seriesData
+                }
+
+                var fetch = _.bind(function(field, value, name, color){
+                    var fieldText = baseParams.fieldText;
+                    var term = new parser.ExpressionNode('MATCH', [field], [value])
+
+                    var newParams = _.defaults({
+                        fieldText: fieldText == null ? term : term.AND(fieldText),
+                        fieldNames: ['autn_date']
+                    }, baseParams);
+
+                    new ParametricCollection().fetch({
+                        data: newParams
+                    }).done(function(json){
+                        if (!json.length || !json[0].values.length) {
+                            return
+                        }
+
+                        plots.push({
+                            color: color,
+                            data: padZeroes(json[0].values),
+                            baseParams: newParams,
+                            name: name
+                        })
+
+                        plot()
+                    })
+                }, this)
+
+                var baseParams = {
+                    databases: this.queryModel.get('indexes'),
+                    queryText: this.queryModel.get('queryText'),
+                    fieldText: this.queryModel.get('fieldText'),
+                    minDate: this.queryModel.getIsoDate('minDate'),
+                    maxDate: this.queryModel.getIsoDate('maxDate'),
+                    datePeriod: this.queryModel.get('datePeriod')
+                }
+
+                $el.css('width', $el.width() + 'px')
 
                 var datePeriods = {
                     year: 365 * 24 * 3600e3,
@@ -160,30 +213,33 @@ define([
                 // Pad the expected next step slightly, to avoid numerical precision issues
                 var stepFloat = 1.1 * step;
 
-                // Pad out the points with zeroes, since any time with a count of 0 wasn't returned
-                for (var ii = 1; ii < seriesData.length; ++ii) {
-                    var curr = seriesData[ii][0], prev = seriesData[ii - 1][0];
+                var plots = [{
+                    color: '#018f6e',
+                    data: padZeroes(values),
+                    baseParams: baseParams
+                }];
 
-                    if (curr - prev > stepFloat) {
-                        // we need to fill in a zero
-                        seriesData.splice(ii, 0, [prev + step, 0])
-                        --ii;
-                    }
+                function plot(){
+                    $.plot($el, plots, {
+                        xaxis: { mode: 'time' },
+                        points: {
+                            radius: 3
+                        },
+                        grid: {
+                            clickable: true,
+                            hoverable: true
+                        }
+                    })
                 }
 
-                $.plot($el, [ {
-                    color: '#018f6e',
-                    data: seriesData
-                }], {
-                    xaxis: { mode: 'time' },
-                    points: {
-                        radius: 3
-                    },
-                    grid: {
-                        clickable: true,
-                        hoverable: true
-                    }
-                })
+                plot()
+
+                var sentimentField = 'CATEGORY';
+
+                // green placeholder
+                fetch(sentimentField, 'TC', 'Category: TC', '#02c422')
+                // red placeholder
+                fetch(sentimentField, 'ENTERPRISE', 'Category: Enterprise', '#f93c02')
 
                 var $tooltip, lastFetch, lastFetchModel;
 
@@ -191,6 +247,11 @@ define([
                     if (item && item.datapoint[1] > 0) {
                         var epoch = item.datapoint[0];
                         var html = i18n['search.datechart.tooltipHtml'](new Date(epoch), item.datapoint[1]);
+
+                        if (item.series.name) {
+                            html = item.series.name + '<br>' + html;
+                        }
+
                         if (!$tooltip) {
                             $tooltip = $('<div class="popover date-chart-tooltip">'+ html +'</div>').appendTo('body');
                         }
@@ -209,13 +270,10 @@ define([
                             }
 
                             lastFetchModel = new EntityCollection().fetch({
-                                data: {
-                                    databases: this.queryModel.get('indexes'),
-                                    queryText: this.queryModel.get('queryText'),
-                                    fieldText: this.queryModel.get('fieldText'),
+                                data: _.defaults({
                                     minDate: moment(epoch).toISOString(),
                                     maxDate: moment(epoch + step).toISOString()
-                                }
+                                }, item.series.baseParams)
                             })
                         }
 
