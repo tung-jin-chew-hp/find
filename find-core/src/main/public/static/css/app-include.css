@@ -377,6 +377,14 @@ html, body {
     vertical-align: bottom;
 }
 
+.search-links i {
+    vertical-align: bottom;
+}
+
+.search-link {
+    background-color: transparent !important;
+}
+
 .find {
     text-align: center;
     /* We need to be on top of the static navbar */
