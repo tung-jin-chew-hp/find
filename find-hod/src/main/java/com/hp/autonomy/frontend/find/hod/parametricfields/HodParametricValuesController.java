@@ -31,6 +31,8 @@ public class HodParametricValuesController extends ParametricValuesController<Ho
         return new HodParametricRequest.Builder()
                 .setFieldNames(fieldNames)
                 .setQueryRestrictions(queryRestrictions)
+                // TODO: this is a hack which should be removed or at least made configurable
+                .setMaxValues(20)
                 .build();
     }
 }
