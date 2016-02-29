@@ -129,9 +129,7 @@ define([
                             }
 
                             if (values.length) {
-                                setTimeout(_.bind(function () {
-                                    this.queryState.selectedParametricValues.add(values)
-                                }, this), 100)
+                                this.queryState.selectedParametricValues.add(values)
                             }
 
                             return false

@@ -19,15 +19,17 @@ define([
         initialize: function (options) {
             this.queryModel = options.queryModel;
             this.parametricCollection = options.parametricCollection;
-        },
-
-        getParametricCollection: function(first, second) {
-            if (!second) this.$map.empty();
-            this.$loadingSpinner.removeClass('hide');
+            this.queryState = options.queryState;
         },
 
         update: function () {
             this.$loadingSpinner.addClass('hide');
+
+            if (this.previousMap) {
+                // jvectormap is not good at cleaning up its tooltips
+                $('.jvectormap-tip').remove();
+            }
+
             this.$map.empty().removeClass('hide');
 
             var field = this.parametricCollection.findWhere({ name: 'COUNTRY' })
@@ -40,7 +42,7 @@ define([
                 countryMap = _.object(_.pluck(values, 'value'), _.pluck(values, 'count'))
             }
 
-            this.$map.vectorMap({
+            this.previousMap = this.$map.vectorMap({
                 map: 'world_mill',
                 hoverOpacity: 0.7,
                 hoverColor: false,
@@ -56,7 +58,13 @@ define([
                 onRegionTipShow: function(e, el, code){
                     var val = countryMap[code];
                     val && el.html(el.html()+' ('+ val+')');
-                }
+                },
+                onRegionClick: _.bind(function(e, code) {
+                    this.queryState.selectedParametricValues.add({
+                        field: field.attributes.name,
+                        value: code
+                    })
+                }, this)
             })
         },
 
