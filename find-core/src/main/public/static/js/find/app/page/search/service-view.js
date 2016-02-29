@@ -125,7 +125,7 @@ define([
                 indexesCollection: this.indexesCollection,
                 queryModel: this.queryModel,
                 queryTextModel: this.queryState.queryTextModel,
-                parametricCollection: this.parametricCollection,
+                parametricCollection: this.queryParametricCollection,
                 queryState: this.queryState
             };
 
