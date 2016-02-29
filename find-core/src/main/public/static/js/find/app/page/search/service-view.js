@@ -125,7 +125,8 @@ define([
                 indexesCollection: this.indexesCollection,
                 queryModel: this.queryModel,
                 queryTextModel: this.queryState.queryTextModel,
-                parametricCollection: this.parametricCollection
+                parametricCollection: this.parametricCollection,
+                queryState: this.queryState
             };
 
             this.resultsViewAugmentation = new this.ResultsViewAugmentation({
