@@ -30,7 +30,8 @@ define([
             this.$loadingSpinner.addClass('hide');
             this.$map.empty().removeClass('hide');
 
-            var field = this.parametricCollection.findWhere({ name: 'USER_COUNTRY_CODE' });
+            var field = this.parametricCollection.findWhere({ name: 'COUNTRY' })
+                || this.parametricCollection.findWhere({ name: 'USER_COUNTRY_CODE' });
 
             var countryMap = {}
 
