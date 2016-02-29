@@ -204,12 +204,14 @@ define([
                 this.getParametricCollection(this.$firstChosen.val(), this.$secondChosen.val());
             }, this));
 
-            this.listenTo(this.parametricCollection, 'request', this.resetView);
+            this.listenTo(this.parametricCollection, 'request', function() {
+                this.$loadingSpinner.removeClass('hide');
+                this.resetView();
+            });
 
             this.listenTo(this.parametricCollection, 'sync', function() {
-                this.populateDropDown(this.$firstChosen, _.reject(this.parametricCollection.pluck('name'), function(v){
-                    return v === 'autn_date'
-                }));
+                this.populateDropDown(this.$firstChosen, _.without(this.parametricCollection.pluck('name'), 'autn_date'));
+                this.firstPass();
             });
 
             this.listenTo(this.secondParametricCollection, 'sync', this.update);
