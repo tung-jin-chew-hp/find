@@ -6,6 +6,7 @@ define([
     'find/app/model/indexes-collection',
     'find/app/model/entity-collection',
     'find/app/model/query-model',
+    'find/app/model/parametric-collection',
     'find/app/model/search-filters-collection',
     'find/app/page/search/filters/parametric/parametric-view',
     'find/app/page/search/filter-display/filter-display-view',
@@ -25,7 +26,7 @@ define([
     'i18n!find/nls/bundle',
     'i18n!find/nls/indexes',
     'text!find/templates/app/page/search/service-view.html'
-], function(Backbone, $, _, DatesFilterModel, IndexesCollection, EntityCollection, QueryModel, SearchFiltersCollection,
+], function(Backbone, $, _, DatesFilterModel, IndexesCollection, EntityCollection, QueryModel, ParametricCollection, SearchFiltersCollection,
             ParametricView, FilterDisplayView, DateView, ResultsViewContainer, ResultsViewSelection, RelatedConceptsView, SpellCheckView,
             Collapsible, addChangeListener, SelectedParametricValuesCollection, SavedSearchControlView, TopicMapView, SunburstView, Cluster2dView, CompareModal, i18n, i18nIndexes, template) {
 
@@ -70,9 +71,14 @@ define([
             this.savedSearchModel = options.savedSearchModel;
             this.queryState = options.queryState;
             this.documentsCollection = options.documentsCollection;
+
+            // "Global" parametric values
             this.parametricCollection = options.parametricCollection;
 
             this.entityCollection = new EntityCollection();
+
+            // Parametric values specific to the current query
+            this.queryParametricCollection = new ParametricCollection();
 
             this.queryModel = new QueryModel({}, {queryState: this.queryState});
 
@@ -106,8 +112,6 @@ define([
                 indexesCollection: this.indexesCollection
             });
 
-            addChangeListener(this, this.queryModel, ['queryText', 'indexes', 'fieldText', 'minDate', 'maxDate'], this.fetchEntities);
-
             this.savedSearchControlView = new SavedSearchControlView({
                 savedSearchModel: this.savedSearchModel,
                 savedSearchCollection: this.savedSearchCollection,
@@ -121,7 +125,7 @@ define([
                 indexesCollection: this.indexesCollection,
                 queryModel: this.queryModel,
                 queryTextModel: this.queryState.queryTextModel,
-                parametricCollection: this.parametricCollection
+                parametricCollection: this.queryParametricCollection
             };
 
             this.resultsViewAugmentation = new this.ResultsViewAugmentation({
@@ -202,7 +206,7 @@ define([
             this.dateView = new DateView({
                 datesFilterModel: this.queryState.datesFilterModel,
                 savedSearchModel: this.savedSearchModel,
-                parametricCollection: this.parametricCollection,
+                parametricCollection: this.queryParametricCollection,
                 queryModel: this.queryModel,
                 queryState: this.queryState
             });
@@ -226,6 +230,9 @@ define([
             this.relatedConceptsViewWrapper = collapseView(i18n['search.relatedConcepts'], this.relatedConceptsView);
 
             this.listenTo(this.savedSearchCollection, 'reset update', this.updateCompareModalButton);
+
+            addChangeListener(this, this.queryModel, ['queryText', 'indexes', 'fieldText', 'minDate', 'maxDate', 'stateTokens'], this.fetchData);
+            this.fetchData();
         },
 
         render: function() {
@@ -248,23 +255,31 @@ define([
             this.$('.container-toggle').on('click', this.containerToggle);
 
             this.updateCompareModalButton();
-            this.fetchEntities();
         },
 
         updateCompareModalButton: function() {
             this.$('.compare-modal-button').toggleClass('disabled not-clickable', this.savedSearchCollection.length <= 1);
         },
 
-        fetchEntities: function() {
+        fetchData: function() {
+            this.queryParametricCollection.reset();
+
             if (this.queryModel.get('queryText') && this.queryModel.get('indexes').length !== 0) {
-                this.entityCollection.fetch({
-                    data: {
-                        databases: this.queryModel.get('indexes'),
-                        queryText: this.queryModel.get('queryText'),
-                        fieldText: this.queryModel.get('fieldText'),
-                        minDate: this.queryModel.getIsoDate('minDate'),
-                        maxDate: this.queryModel.getIsoDate('maxDate')
-                    }
+                var data = {
+                    databases: this.queryModel.get('indexes'),
+                    queryText: this.queryModel.get('queryText'),
+                    fieldText: this.queryModel.get('fieldText'),
+                    minDate: this.queryModel.getIsoDate('minDate'),
+                    maxDate: this.queryModel.getIsoDate('maxDate'),
+                    stateTokens: this.queryModel.get('stateTokens')
+                };
+
+                this.entityCollection.fetch({data: data});
+
+                this.queryParametricCollection.fetch({
+                    data: _.extend({
+                        datePeriod: this.queryModel.get('datePeriod')
+                    }, data)
                 });
             }
         },
