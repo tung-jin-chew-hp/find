@@ -242,6 +242,10 @@ define([
                 })
             }
 
+            if (info.dateRange) {
+                view.dateView.datesFilterModel.set('dateRange', info.dateRange)
+            }
+
             if (info.match) {
                 view.indexesView.updateCheckedOptions()
                 view.parametricView.selectedParametricValues.reset(
