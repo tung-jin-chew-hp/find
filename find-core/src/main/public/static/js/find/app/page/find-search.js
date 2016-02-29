@@ -19,6 +19,7 @@ define([
     'find/app/model/saved-searches/saved-search-model',
     'find/app/model/query-text-model',
     'find/app/model/document-model',
+    'find/app/page/search/cluster/cluster2d',
     'find/app/page/search/document/document-detail-view',
     'find/app/util/database-name-resolver',
     'find/app/router',
@@ -30,7 +31,7 @@ define([
     'text!find/templates/app/page/find-search.html'
 ], function(BasePage, Backbone, SearchPageModel, DatesFilterModel, SelectedParametricValuesCollection,
             IndexesCollection, DocumentsCollection, ParametricCollection, InputView, TabbedSearchView, SavedSearchCollection,
-            addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, DocumentDetailView,
+            addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, DocumentDetailView,
             databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
     'use strict';
 
@@ -89,6 +90,8 @@ define([
 
             // Model mapping saved search cids to query state
             this.queryStates = new Backbone.Model();
+
+            this.clusterView = new Cluster2d();
 
             // Map of saved search cid to ServiceView
             this.serviceViews = {};
@@ -197,18 +200,17 @@ define([
             }, this);
 
 
-            //this.$('.query-service-view-container').append('<div class="full-height hide">This is a test</div>')
+            this.$('.query-service-view-container').append(this.clusterView.$el);
+            this.clusterView.render();
 
             this.selectContentView();
 
             this.$el.on('click', '.suggested-query', _.bind(this.onSuggestedQuery, this))
+            this.$el.on('click', '.link-2dcluster', _.bind(this.selectClusterMap, this))
         },
 
-        showClusterMap: function() {
-            _.each(this.serviceViews, function(data) {
-                data.view.$el.addClass('hide');
-                this.stopListening(data.queryTextModel);
-            }, this);
+        selectClusterMap: function() {
+            this.searchModel.set('selectedSearchCid', 'cluster')
         },
 
         onSuggestedQuery: function(evt){
@@ -263,7 +265,11 @@ define([
                 this.stopListening(data.queryTextModel);
             }, this);
 
-            if (cid) {
+            if (cid === 'cluster') {
+                this.$('.nav.saved-search-tabs-list > li').removeClass('active');
+                this.clusterView.$el.removeClass('hide')
+            }
+            else if (cid) {
                 var viewData;
                 var savedSearchModel = this.savedSearchCollection.get(cid);
 
