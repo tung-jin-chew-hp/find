@@ -47,6 +47,7 @@ define([
             this.queryModel = options.queryModel;
             this.parametricCollection = options.parametricCollection;
             this.secondParametricCollection = new Collection();
+            this.queryState = options.queryState;
         },
 
         getParametricCollection: function(first, second) {
@@ -71,6 +72,11 @@ define([
             if (!this.secondParametricCollection.isEmpty()) {
                 var nameAttr = 'text';
                 var sizeAttr = 'count';
+
+                // TODO: this is not ideal
+                var field1 = this.$firstChosen.val();
+                var field2 = this.$secondChosen.val();
+
                 this.sunburst = new Sunburst(this.$sunburst, {
                     data: {
                         text: i18n['search.sunburst.title'],
@@ -107,7 +113,30 @@ define([
 
                         return '<div style="font-size:14px;font-weight:bold;">' + icon + _.escape(d[nameAttr]) + '</div>'
                             + d[sizeAttr];
-                    }
+                    },
+                    clickFn: _.bind(function(node, evt){
+                        if (evt.ctrlKey || evt.altKey || evt.button !== 0) {
+                            evt.preventDefault()
+
+                            var values = []
+
+                            if (node.depth === 1) {
+                                values.push({field: field1, value: node.text})
+                            }
+                            else if (node.depth === 2) {
+                                values.push({field: field1, value: node.parent.text})
+                                values.push({field: field2, value: node.text})
+                            }
+
+                            if (values.length) {
+                                setTimeout(_.bind(function () {
+                                    this.queryState.selectedParametricValues.add(values)
+                                }, this), 100)
+                            }
+
+                            return false
+                        }
+                    }, this)
                 });
                 this.$loadingSpinner.addClass('hide');
                 this.$sunburst.removeClass('hide');
