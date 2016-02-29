@@ -4,7 +4,7 @@ define([
     'jquery',
     'jvectormap-world',
     'i18n!find/nls/bundle',
-    'text!find/templates/app/page/search/results/cluster2d-view.html',
+    'text!find/templates/app/page/search/results/geolocation-view.html',
     'text!find/templates/app/page/loading-spinner.html',
     'chosen'
 
