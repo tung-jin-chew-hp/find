@@ -196,9 +196,19 @@ define([
                 data.view.render();
             }, this);
 
+
+            //this.$('.query-service-view-container').append('<div class="full-height hide">This is a test</div>')
+
             this.selectContentView();
 
             this.$el.on('click', '.suggested-query', _.bind(this.onSuggestedQuery, this))
+        },
+
+        showClusterMap: function() {
+            _.each(this.serviceViews, function(data) {
+                data.view.$el.addClass('hide');
+                this.stopListening(data.queryTextModel);
+            }, this);
         },
 
         onSuggestedQuery: function(evt){
