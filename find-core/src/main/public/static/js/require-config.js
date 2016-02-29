@@ -9,6 +9,8 @@ require.config({
         backbone: 'find/lib/backbone/backbone-extensions',
         'backbone-base': '../bower_components/backbone/backbone',
         bootstrap: '../lib/bootstrap/js/bootstrap',
+        'jvectormap': '../lib/jvectormap/jquery-jvectormap-2.0.3.min',
+        'jvectormap-world': '../lib/jvectormap/jquery-jvectormap-world-mill',
         colorbox: '../bower_components/colorbox/jquery.colorbox',
         'bootstrap-datetimepicker': '../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker',
         'databases-view': '../bower_components/hp-autonomy-js-databases-view/src',
@@ -47,6 +49,8 @@ require.config({
         iCheck: ['jquery'],
         flot: ['jquery'],
         flotTime: ['flot'],
+        'jvectormap': ['jquery'],
+        'jvectormap-world': ['jvectormap'],
         peg: {
             exports: 'PEG'
         },

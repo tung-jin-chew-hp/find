@@ -129,7 +129,7 @@ define([
         'search.resultsView.list': 'List',
         'search.resultsView.topic-map': 'Topic Map',
         'search.resultsView.sunburst': 'Sunburst',
-        'search.resultsView.cluster2d': '2D Cluster',
+        'search.resultsView.cluster2d': 'Geolocation',
         'search.resultsView.map': 'Map',
         'search.savedSearchControl.save': 'Save',
         'search.savedSearchControl.openEdit.create': 'Save Search',

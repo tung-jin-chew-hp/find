@@ -5,6 +5,7 @@
 
 @import '../lib/bootstrap/css/bootstrap.css';
 @import '../lib/bootstrap/css/bootstrap-theme.css';
+@import '../lib/jvectormap/jquery-jvectormap.css';
 @import '../bower_components/fontawesome/css/font-awesome.css';
 @import "../bower_components/colorbox/example1/colorbox.css";
 @import "../bower_components/hp-autonomy-settings-page/src/css/settings.css";

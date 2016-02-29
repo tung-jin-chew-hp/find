@@ -711,6 +711,11 @@ input.find-input {
     height: 600px;
 }
 
+.map2d {
+    width: 800px;
+    height: 600px;
+}
+
 .chosen-container {
     margin-left: 5px;
     margin-bottom: 5px;
