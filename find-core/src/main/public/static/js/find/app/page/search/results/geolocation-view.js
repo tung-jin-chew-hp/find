@@ -60,7 +60,7 @@ define([
                     val && el.html(el.html()+' ('+ val+')');
                 },
                 onRegionClick: _.bind(function(e, code) {
-                    this.queryState.selectedParametricValues.add({
+                    field && this.queryState.selectedParametricValues.add({
                         field: field.attributes.name,
                         value: code
                     })
