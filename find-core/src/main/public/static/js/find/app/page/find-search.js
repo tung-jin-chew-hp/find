@@ -265,6 +265,8 @@ define([
                 this.stopListening(data.queryTextModel);
             }, this);
 
+            this.clusterView.$el.addClass('hide')
+
             if (cid === 'cluster') {
                 this.$('.nav.saved-search-tabs-list > li').removeClass('active');
                 this.clusterView.$el.removeClass('hide')

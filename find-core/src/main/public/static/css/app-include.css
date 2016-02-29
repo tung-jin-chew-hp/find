@@ -716,6 +716,31 @@ input.find-input {
     height: 600px;
 }
 
+.cluster2d-container {
+    text-align: center;
+}
+
+.cluster2d {
+    width: 512px;
+    height: 512px;
+    margin: auto;
+    position: relative;
+    display: inline-block;
+}
+
+.cluster-marker {
+    position: absolute;
+    background-color: red;
+    width: 5px;
+    height: 5px;
+    /*margin-left: -2px;*/
+    margin-top: -2px;
+}
+
+.cluster-marker:hover {
+    background-color: #00b388;
+}
+
 .chosen-container {
     margin-left: 5px;
     margin-bottom: 5px;
