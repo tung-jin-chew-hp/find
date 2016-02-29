@@ -35,6 +35,8 @@ define([
             databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
     'use strict';
 
+    var CLUSTER = '__cluster__'
+
     var reducedClasses = 'reverse-animated-container col-md-offset-1 col-lg-offset-2 col-xs-12 col-sm-12 col-md-10 col-lg-8';
     var expandedClasses = 'animated-container col-sm-offset-0 col-md-offset-4 col-lg-offset-3 col-xs-12 col-sm-12 col-md-5 col-lg-6';
     var QUERY_TEXT_MODEL_ATTRIBUTES = ['inputText', 'relatedConcepts'];
@@ -91,7 +93,9 @@ define([
             // Model mapping saved search cids to query state
             this.queryStates = new Backbone.Model();
 
-            this.clusterView = new Cluster2d();
+            this.clusterView = new Cluster2d({
+                searchModel: this.searchModel
+            });
 
             // Map of saved search cid to ServiceView
             this.serviceViews = {};
@@ -115,7 +119,10 @@ define([
             addChangeListener(this, this.searchModel, QUERY_TEXT_MODEL_ATTRIBUTES, function() {
                 var selectedSearchCid = this.searchModel.get('selectedSearchCid');
 
-                if (selectedSearchCid) {
+                if (selectedSearchCid === CLUSTER) {
+                    this.createNewTab();
+                }
+                else if (selectedSearchCid) {
                     var queryTextModel = this.serviceViews[selectedSearchCid].queryTextModel;
                     queryTextModel.set(this.searchModel.pick('inputText', 'relatedConcepts'));
                 }
@@ -210,7 +217,7 @@ define([
         },
 
         selectClusterMap: function() {
-            this.searchModel.set('selectedSearchCid', 'cluster')
+            this.searchModel.set('selectedSearchCid', CLUSTER)
         },
 
         onSuggestedQuery: function(evt){
@@ -267,7 +274,7 @@ define([
 
             this.clusterView.$el.addClass('hide')
 
-            if (cid === 'cluster') {
+            if (cid === CLUSTER) {
                 this.$('.nav.saved-search-tabs-list > li').removeClass('active');
                 this.clusterView.$el.removeClass('hide')
             }
