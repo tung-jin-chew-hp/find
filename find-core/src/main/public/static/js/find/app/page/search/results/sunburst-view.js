@@ -96,7 +96,9 @@ define([
                         var par = d.parent.color;
                         var idx = d.parent.children.indexOf(d);
                         var satShift = idx / d.parent.children.length;
-                        return d.color = d3.hsl(par.h, (par.s + satShift) % 1, par.l + 0.05);
+                        //return d.color = d3.hsl(par.h, (par.s + satShift) % 1, par.l + 0.05);
+                        // Brian Cowe says the colors look too similar, so just using a fixed color progression
+                        return d.color = color(idx);
                     },
                     labelFormatter: function (d, prevClicked) {
                         var zoomedOnRoot = !prevClicked || prevClicked.depth === 0;
