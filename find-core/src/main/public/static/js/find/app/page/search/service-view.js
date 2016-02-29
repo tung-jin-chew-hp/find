@@ -160,7 +160,7 @@ define([
                 uniqueId: _.uniqueId('results-view-item-'),
                 selector: {
                     displayNameKey: 'cluster2d',
-                    icon: 'hp-circular-view'
+                    icon: 'hp-globe2'
                 }
             }];
 
