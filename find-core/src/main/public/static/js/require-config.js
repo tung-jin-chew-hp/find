@@ -34,7 +34,7 @@ require.config({
         settings: '../bower_components/hp-autonomy-settings-page/src',
         slider: '../bower_components/seiyria-bootstrap-slider/dist',
         text: '../bower_components/requirejs-text/text',
-        sunburst: '../bower_components/hp-autonomy-sunburst/src',
+        sunburst: '../lib/sunburst',
         topicmap: '../bower_components/hp-autonomy-topic-map/src',
         underscore: '../bower_components/underscore/underscore',
         typeahead: '../bower_components/corejs-typeahead/dist/typeahead.jquery'
