@@ -59,6 +59,10 @@ define([
 
             response.thumbnail = getFieldValue(response.fieldMap.thumbnail);
             response.thumbnailUrl = getFieldValue(response.fieldMap.thumbnailUrl);
+            if (response.thumbnailUrl && response.thumbnailUrl.indexOf('C:\\') === 0) {
+                // TODO: remove this hack, we'd rather have clean data which contains the right values
+                response.thumbnailUrl = 'http://intelssdtest.autonomy.com/images/' + response.thumbnailUrl.replace(/.*\\/, '');
+            }
             response.contentType = getFieldValue(response.fieldMap.contentType);
             response.media = getMediaType(response.contentType);
             response.url = getFieldValue(response.fieldMap.url);
