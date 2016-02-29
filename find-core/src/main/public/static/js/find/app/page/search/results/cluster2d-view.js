@@ -30,17 +30,32 @@ define([
             this.$loadingSpinner.addClass('hide');
             this.$map.empty().removeClass('hide');
 
+            var field = this.parametricCollection.findWhere({ name: 'USER_COUNTRY_CODE' });
+
+            var countryMap = {}
+
+            if (field) {
+                var values = field.attributes.values
+                countryMap = _.object(_.pluck(values, 'value'), _.pluck(values, 'count'))
+            }
+
             this.$map.vectorMap({
                 map: 'world_mill',
                 hoverOpacity: 0.7,
                 hoverColor: false,
-                markerStyle: {
-                    initial: {
-                        fill: '#F8E23B',
-                        stroke: '#383f47'
-                    }
+                backgroundColor: '#383f47',
+                series: {
+                    regions: [{
+                        values: countryMap,
+                        scale: ['#d7fbe9', '#00b388'],
+                        //scale: ['#C8EEFF', '#0071A4'],
+                        normalizeFunction: 'polynomial'
+                    }]
                 },
-                backgroundColor: '#383f47'
+                onRegionTipShow: function(e, el, code){
+                    var val = countryMap[code];
+                    val && el.html(el.html()+' ('+ val+')');
+                }
             })
         },
 
@@ -52,6 +67,8 @@ define([
             this.$map.after(this.$loadingSpinner);
             this.$loadingSpinner.addClass('hide');
             this.$map.addClass('hide');
+
+            this.parametricCollection.on('change reset', this.update, this)
         }
     })
 });
