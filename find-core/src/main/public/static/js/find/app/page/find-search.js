@@ -11,6 +11,7 @@ define([
     'parametric-refinement/selected-values-collection',
     'find/app/model/indexes-collection',
     'find/app/model/documents-collection',
+    'find/app/model/parametric-collection',
     'find/app/page/search/input-view',
     'find/app/page/search/tabbed-search-view',
     'find/app/model/saved-searches/saved-search-collection',
@@ -22,14 +23,15 @@ define([
     'find/app/util/database-name-resolver',
     'find/app/router',
     'find/app/vent',
+    'find/app/util/search-data-util',
     'fieldtext/js/field-text-parser',
     'i18n!find/nls/bundle',
     'underscore',
     'text!find/templates/app/page/find-search.html'
 ], function(BasePage, Backbone, SearchPageModel, DatesFilterModel, SelectedParametricValuesCollection,
-            IndexesCollection, DocumentsCollection, InputView, TabbedSearchView, SavedSearchCollection,
+            IndexesCollection, DocumentsCollection, ParametricCollection, InputView, TabbedSearchView, SavedSearchCollection,
             addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, DocumentDetailView,
-            databaseNameResolver, router, vent, parser, i18n, _, template) {
+            databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
     'use strict';
 
     var reducedClasses = 'reverse-animated-container col-md-offset-1 col-lg-offset-2 col-xs-12 col-sm-12 col-md-10 col-lg-8';
@@ -64,7 +66,23 @@ define([
             this.savedSearchCollection.fetch({remove: false});
 
             this.indexesCollection = new IndexesCollection();
-            this.indexesCollection.fetch();
+            this.parametricCollection = new ParametricCollection();
+
+            this.indexesCollection
+                .fetch()
+                .done(_.bind(function() {
+                    var databases = searchDataUtil.buildIndexes(this.indexesCollection.map(function (model) {
+                        return model.pick('domain', 'name');
+                    }));
+
+                    this.parametricCollection.fetch({
+                        data: {
+                            databases: databases,
+                            queryText: '*',
+                            fieldText: ''
+                        }
+                    });
+                }, this));
 
             // Model representing high level search page state
             this.searchModel = new SearchPageModel();
@@ -282,7 +300,8 @@ define([
                             searchModel: this.searchModel,
                             savedSearchCollection: this.savedSearchCollection,
                             queryState: queryState,
-                            savedSearchModel: savedSearchModel
+                            savedSearchModel: savedSearchModel,
+                            parametricCollection: this.parametricCollection
                         })
                     };
 
