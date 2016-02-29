@@ -38,6 +38,8 @@ public class IdolParametricValuesController extends ParametricValuesController<I
                 .setFieldNames(fieldNames)
                 .setDatePeriod(datePeriod)
                 .setQueryRestrictions(queryRestrictions)
+                // TODO: this is a hack which should be removed or at least made configurable
+                .setMaxValues(20)
                 .build();
     }
 
