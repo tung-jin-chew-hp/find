@@ -8,7 +8,6 @@ define([
     'find/app/model/query-model',
     'find/app/model/search-filters-collection',
     'find/app/page/search/filters/parametric/parametric-view',
-    'find/app/model/parametric-collection',
     'find/app/page/search/filter-display/filter-display-view',
     'find/app/page/search/filters/date/dates-filter-view',
     'find/app/page/search/results/results-view-container',
@@ -27,7 +26,7 @@ define([
     'i18n!find/nls/indexes',
     'text!find/templates/app/page/search/service-view.html'
 ], function(Backbone, $, _, DatesFilterModel, IndexesCollection, EntityCollection, QueryModel, SearchFiltersCollection,
-            ParametricView, ParametricCollection, FilterDisplayView, DateView, ResultsViewContainer, ResultsViewSelection, RelatedConceptsView, SpellCheckView,
+            ParametricView, FilterDisplayView, DateView, ResultsViewContainer, ResultsViewSelection, RelatedConceptsView, SpellCheckView,
             Collapsible, addChangeListener, SelectedParametricValuesCollection, SavedSearchControlView, TopicMapView, SunburstView, Cluster2dView, CompareModal, i18n, i18nIndexes, template) {
 
     'use strict';
@@ -71,12 +70,11 @@ define([
             this.savedSearchModel = options.savedSearchModel;
             this.queryState = options.queryState;
             this.documentsCollection = options.documentsCollection;
+            this.parametricCollection = options.parametricCollection;
 
             this.entityCollection = new EntityCollection();
 
             this.queryModel = new QueryModel({}, {queryState: this.queryState});
-
-            this.parametricCollection = new ParametricCollection();
 
             this.listenTo(this.queryModel, 'change:indexes', function() {
                 this.queryState.selectedParametricValues.reset();
