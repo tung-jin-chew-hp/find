@@ -131,7 +131,7 @@ define([
             this.clearLoadingSpinner = this.stateTokenMode ? this.stateTokenClearLoadingSpinner : this.normalClearLoadingSpinner;
 
             this.queryModel = options.queryModel;
-            this.queryTextModel = options.queryTextModel;
+            this.queryTextModel = options.queryState.queryTextModel;
             this.entityCollection = options.entityCollection;
             this.indexesCollection = options.indexesCollection;
             this.documentsCollection = options.documentsCollection;

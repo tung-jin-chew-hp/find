@@ -17,7 +17,7 @@ define([
 
         initialize: function(options) {
             this.entityCollection = options.entityCollection;
-            this.queryTextModel = options.queryTextModel;
+            this.queryTextModel = options.queryState.queryTextModel;
             this.clickHandler = options.clickHandler;
 
             this.relevance = {

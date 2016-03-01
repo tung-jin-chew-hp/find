@@ -153,7 +153,7 @@ define([
                 indexesCollection: this.indexesCollection,
                 parametricCollection: this.queryParametricCollection,
                 queryModel: this.queryModel,
-                queryTextModel: this.queryState.queryTextModel
+                queryState: this.queryState
             };
 
             var relatedConceptsClickHandler;
