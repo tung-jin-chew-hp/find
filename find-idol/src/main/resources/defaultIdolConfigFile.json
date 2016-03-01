@@ -60,6 +60,11 @@
       "DAH"
     ]
   },
+  "map": {
+    "enabled": false,
+    "attribution": null,
+    "tileUrlTemplate": null
+  },
   "mmap": {
     "enabled": false,
     "baseUrl": ""
@@ -104,18 +109,40 @@
     },
     "mmapUrl": {
       "names": [
-        "HPSW_APP_NOINDEX_MMAPPROXY"
+        "MMAP_PROXY_URL"
       ]
     },
     "thumbnail": {
       "names": [
-        "HPSW_APP_NOINDEX_PREVIEWTHBNAILBASE64"
+        "PREVIEW_THUMBNAIL_BASE64"
       ]
     },
     "thumbnailUrl": {
       "names": [
         "RENDITION_FILEPATH"
       ]
+    },
+    "sourceType": {
+      "names": [
+        "SOURCETYPE"
+      ]
+    },
+    "transcript": {
+      "names": [
+        "TRANSCRIPTION_CONTENT"
+      ]
+    },
+    "latitude": {
+      "names": [
+        "LAT"
+      ],
+      "type": "NUMBER"
+    },
+    "longitude": {
+      "names": [
+        "LON"
+      ],
+      "type": "NUMBER"
     }
   }
 }

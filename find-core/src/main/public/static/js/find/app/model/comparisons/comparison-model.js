@@ -5,11 +5,12 @@
 
 define([
     'backbone',
+    'find/app/util/search-data-util',
     'find/app/model/comparisons/comparison-documents-collection'
-], function(Backbone, ComparisonDocumentsCollection) {
+], function(Backbone, searchDataUtil, ComparisonDocumentsCollection) {
 
 
-    return Backbone.Model.extend({
+    var ComparisonModel = Backbone.Model.extend({
         url: '../api/public/comparison/compare',
 
         parse: function(response) {
@@ -30,6 +31,20 @@ define([
                 })
             };
         }
+    }, {
+        fromModels: function(primaryModel, secondaryModel) {
+            var primaryStateMatchId = primaryModel.get('stateMatchId');
+            var secondaryStateMatchId = secondaryModel.get('stateMatchId');
+
+            var comparisonModelArguments = {};
+
+            primaryStateMatchId ? comparisonModelArguments.firstQueryStateToken = primaryStateMatchId : comparisonModelArguments.firstRestrictions = searchDataUtil.buildQuery(primaryModel);
+            secondaryStateMatchId ? comparisonModelArguments.secondQueryStateToken = secondaryStateMatchId : comparisonModelArguments.secondRestrictions = searchDataUtil.buildQuery(secondaryModel);
+
+            return new ComparisonModel(comparisonModelArguments);
+        }
     });
+
+    return ComparisonModel;
 
 });

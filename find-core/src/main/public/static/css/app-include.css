@@ -122,8 +122,27 @@ html, body {
     height: 100%;
 }
 
+dl.dl-inline > dt,
+dl.dl-inline > dd {
+    display: inline-block;
+}
+
+dl.dl-inline > dt:not(:last-child),
+dl.dl-inline > dd:not(:last-child) {
+    margin-right: 5px;
+}
+
+dt,
 .bold {
     font-family: Metric-Bold;
+}
+
+.label-secondary {
+    background-color: #8d9092;
+}
+
+.active .label-secondary {
+    background-color: #614767;
 }
 
 .italic {
@@ -340,8 +359,9 @@ html, body {
     font-weight: bold;
     font-size: 18px;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+}
+
+.middle-container.shorten h4 {
     width: 100%;
 }
 
@@ -351,30 +371,68 @@ html, body {
     display: inline;
 }
 
+/* Search tabs */
 .search-tabs-container {
-    background-color: #EFEFEF;
-    height: 51px;
+    background-color: #fff;
+    height: 65px;
     border-bottom: 1px solid #E4E4E4;
+    padding-top: 5px;
 }
 
-.search-tabs-container h4 {
-    vertical-align: text-bottom; /* hax? */
+.search-tabs-container .nav-tabs > li > a {
+    height: 60px;
+    line-height: 22px;
 }
 
-.saved-search-tabs-list .tab-title i {
+.search-tabs-container .nav-tabs > li.active > a {
+    background-color: #e2e2e2;
+}
+
+.search-tab-title i {
     font-size: 7px;
     vertical-align: super;
 }
 
-.tab-title {
+.compare-modal-error-spinner .loading-spinner {
+    margin-bottom: 0;
+}
+
+.comparison-create-error-message {
+    text-align: left;
+}
+
+.comparison-list-title.shorten {
+    max-width: 500px
+}
+
+.search-tab-title.shorten {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 150px;
 }
 
+.active .search-tab-title {
+    color: #614767;
+}
+
 .start-new-search i {
     vertical-align: bottom;
+}
+
+.search-tabs-container .nav-tabs > li.start-new-search > a {
+    background-color: transparent;
+    background-image: none;
+    color: #60798d;
+    border: 2px solid;
+    border-radius: 50px;
+    padding: 5px;
+    line-height: 10px;
+    height: 30px;
+}
+
+.search-type {
+    font-size: 10px;
 }
 
 .search-links {
@@ -402,10 +460,10 @@ html, body {
 }
 
 .find-logo-small {
-    background: url('../img/Find_Logo_sml.png') no-repeat;
-    background-size: 325px 20px;
-    width: 325px;
-    height: 20px;
+    font-family: Metric-Semibold;
+    float: left;
+    font-size: 22px;
+    line-height: 20px;
 }
 
 .find-logo-small.reduced {
@@ -413,11 +471,12 @@ html, body {
 }
 
 .find-logo-large {
-    background-image: url('../img/Find_Logo_lge.png');
-    width: 797px;
-    height: 45px;
+    font-size: 49px;
+    font-family: Metric-Semibold;
+    color: #000;
+    line-height: 46px;
+    text-align: center;
     display: inline-block;
-    vertical-align: middle;
 }
 
 .hp-logo-footer {
@@ -489,13 +548,13 @@ input.find-input {
 }
 
 .document-reference {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
     display: inline-block;
     color: #aeaeae;
     font-size: 13px;
+}
+
+.document-reference.shorten {
+    width: 100%;
 }
 
 .selected-document {
@@ -516,11 +575,12 @@ input.find-input {
 
 .saved-search-box .hpebox-content {
     width: 100px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
     text-align: center;
     border: 1px solid #e7eaec;
+}
+
+.saved-search-box .hpebox-content.shorten {
+    width: 100px;
 }
 
 .selected-saved-search .hpebox-content {
@@ -585,20 +645,17 @@ input.find-input {
 }
 
 /* username */
-.username {
+.username.shorten {
     max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .navbar-username {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    max-width: 150px;
     right: 70px !important;
     top: 11px !important;
+}
+
+.navbar-username.shorten {
+    max-width: 150px;
 }
 
 .suggestions-box {
@@ -691,9 +748,13 @@ input.find-input {
     color: #00b388;
 }
 
+.comparison-list-title,
+.results-list-container .result-message {
+    color: #425563;
+}
+
 .results-list-container .result-message {
     font-size: 28px;
-    color: #425563;
 }
 
 .results-contents {
@@ -833,12 +894,47 @@ input.find-input {
 }
 
 .selected-related-concept {
-    padding: 2px;
+    padding: 1px 6px;
+    border: solid 2px #fff;
+    border-radius: 0;
     font-size: 100%;
     font-weight: normal;
+    margin-left: 5px;
+}
+
+.selected-related-concept {
     color: #fff;
-    border: solid 1px #00b388;
-    border-radius: 0;
+}
+
+.selected-related-concept-cluster {
+    color: #425563;
+    background-color: #fff;
+    display: inline;
+    border-left: 0;
+    border-right: 0;
+}
+
+.selected-related-concept-cluster ul {
+    margin-left: -6px;
+}
+
+.selected-related-concept-cluster ul a:hover {
+    cursor: default;
+    background: inherit;
+    color: inherit;
+}
+
+.selected-related-concept-cluster > .btn-group {
+    vertical-align: inherit;
+}
+
+.selected-related-concept-cluster > .btn-group .dropdown-toggle {
+    box-shadow: inset 0 0 0 0;
+}
+
+.selected-related-concept-cluster-chevron {
+    vertical-align: middle;
+    font-weight: bold;
 }
 
 .reverse-animated-container .see-all-documents,
@@ -865,6 +961,10 @@ input.find-input {
 
 .top-options-container {
     min-height: 0;
+}
+
+.search-options-container {
+    background-color: #e2e2e2;
 }
 
 @media only screen and (max-width: 1210px) {
@@ -1028,6 +1128,9 @@ input:-moz-placeholder::before {
     .reverse-animated-container .find-form {
         width: 100%;
     }
+    .find-logo-small {
+        display: none;
+    }
 }
 
 .filter-checkbox {
@@ -1039,7 +1142,6 @@ input:-moz-placeholder::before {
 }
 
 .shorten {
-    max-width: 130px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -1048,6 +1150,10 @@ input:-moz-placeholder::before {
 .filter-display-text {
     vertical-align: middle;
     line-height: 1.2em;
+}
+
+.filter-display-text.shorten {
+    max-width: 130px;
 }
 
 .filters-margin {
@@ -1228,6 +1334,13 @@ input:-moz-placeholder::before {
 
 .document-detail-tabs-content .table > tbody > tr:first-child > td {
     border: none;
+}
+
+.location-tab-map {
+    min-height: 400px;
+    max-height: 750px;
+    height: 100%;
+    width: 100%;
 }
 
 #cboxLoadedContent .table > tbody > tr > th,

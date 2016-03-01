@@ -7,22 +7,18 @@ package com.hp.autonomy.frontend.find.core.savedsearches;
 
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public abstract class AbstractSavedSearchTest<T extends SavedSearch> {
+public abstract class AbstractSavedSearchTest<T extends SavedSearch<T>> {
     protected abstract SavedSearch.Builder<T> createBuilder();
 
     @Test
     public void toQueryTextWithNoConceptClusters() {
-        final SavedSearch search = createBuilder()
+        final SavedSearch<T> search = createBuilder()
                 .setQueryText("cats")
                 .build();
 
@@ -31,14 +27,19 @@ public abstract class AbstractSavedSearchTest<T extends SavedSearch> {
 
     @Test
     public void toQueryTextWithConceptClusters() {
-        final Set<String> phrases = new HashSet<>();
-        phrases.add("california");
-        phrases.add("county");
-        phrases.add("luke skywalker");
+        final Set<ConceptClusterPhrase> conceptClusterPhrases = new HashSet<>();
 
-        final SavedSearch search = createBuilder()
+        final ConceptClusterPhrase countyClusterPhrase = new ConceptClusterPhrase("county", true, 0);
+        final ConceptClusterPhrase californiaClusterPhrase = new ConceptClusterPhrase("california", false, 0);
+        conceptClusterPhrases.add(countyClusterPhrase);
+        conceptClusterPhrases.add(californiaClusterPhrase);
+
+        final ConceptClusterPhrase lukeClusterPhrase = new ConceptClusterPhrase("luke skywalker", true, 1);
+        conceptClusterPhrases.add(lukeClusterPhrase);
+
+        final SavedSearch<T> search = createBuilder()
                 .setQueryText("orange jedi")
-                .setRelatedConcepts(phrases)
+                .setConceptClusterPhrases(conceptClusterPhrases)
                 .build();
 
         final String queryText = search.toQueryText();
@@ -50,7 +51,7 @@ public abstract class AbstractSavedSearchTest<T extends SavedSearch> {
 
     @Test
     public void toFieldTextWithNoParametricValues() {
-        final SavedSearch search = createBuilder()
+        final SavedSearch<T> search = createBuilder()
                 .setParametricValues(Collections.<FieldAndValue>emptySet())
                 .build();
 
@@ -61,7 +62,7 @@ public abstract class AbstractSavedSearchTest<T extends SavedSearch> {
     public void toFieldTextWithOneFieldAndValue() {
         final FieldAndValue fieldAndValue = new FieldAndValue("SPECIES", "cat");
 
-        final SavedSearch search = createBuilder()
+        final SavedSearch<T> search = createBuilder()
                 .setParametricValues(Collections.singleton(fieldAndValue))
                 .build();
 
@@ -81,7 +82,7 @@ public abstract class AbstractSavedSearchTest<T extends SavedSearch> {
         final FieldAndValue fieldAndValue3 = new FieldAndValue("COLOUR", "white");
         parametricValues.add(fieldAndValue3);
 
-        final SavedSearch search = createBuilder()
+        final SavedSearch<T> search = createBuilder()
                 .setParametricValues(parametricValues)
                 .build();
 

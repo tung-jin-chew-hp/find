@@ -67,7 +67,7 @@ define([
             this.listenTo(options.parametricCollection, 'sync', function() {
                 this.model.set({processing: false});
             });
-
+            
             this.listenTo(options.parametricCollection, 'update reset', function() {
                 this.model.set('empty', options.parametricCollection.isEmpty());
             });
@@ -114,7 +114,7 @@ define([
                 this.$errorMessage.toggleClass('hide', !this.model.get('error'));
             }
         },
-
+        
         updateEmpty: function() {
             if (this.$emptyMessage) {
                 var showEmptyMessage = this.model.get('empty') && !(this.model.get('error') || this.model.get('processing'));

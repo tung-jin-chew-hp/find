@@ -30,6 +30,7 @@ import java.util.Set;
 @RequestMapping(ParametricValuesController.PARAMETRIC_VALUES_PATH)
 public abstract class ParametricValuesController<R extends ParametricRequest<S>, S extends Serializable, E extends Exception> {
     public static final String PARAMETRIC_VALUES_PATH = "/api/public/parametric";
+    public static final String SECOND_PARAMETRIC_PATH = "second-parametric";
 
     public static final String FIELD_NAMES_PARAM = "fieldNames";
     public static final String QUERY_TEXT_PARAM = "queryText";
@@ -37,9 +38,9 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
     public static final String DATABASES_PARAM = "databases";
     public static final String MIN_DATE_PARAM = "minDate";
     public static final String MAX_DATE_PARAM = "maxDate";
+    public static final String STATE_TOKEN_PARAM = "stateTokens";
     public static final String DATE_PERIOD_PARAM = "datePeriod";
     public static final String MAX_VALUES_PARAM = "maxValues";
-    public static final String SECOND_PARAMETRIC_PARAM = "second-parametric";
 
     protected final ParametricValuesService<R, S, E> parametricValuesService;
     protected final QueryRestrictionsBuilder<S> queryRestrictionsBuilder;
@@ -52,15 +53,26 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
     @SuppressWarnings("MethodWithTooManyParameters")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Set<QueryTagInfo> getParametricValues(@RequestParam(value = FIELD_NAMES_PARAM, required = false) final List<String> fieldNames,
-                                                 @RequestParam(QUERY_TEXT_PARAM) final String queryText,
-                                                 @RequestParam(value = FIELD_TEXT_PARAM, defaultValue = "") final String fieldText,
-                                                 @RequestParam(DATABASES_PARAM) final List<S> databases,
-                                                 @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
-                                                 @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
-                                                 @RequestParam(value = DATE_PERIOD_PARAM, required = false) final String datePeriod,
-                                                 @RequestParam(value = MAX_VALUES_PARAM, defaultValue = "20") final int maxValues) throws E {
-        final QueryRestrictions<S> queryRestrictions = queryRestrictionsBuilder.build(queryText, fieldText, databases, minDate, maxDate, Collections.<String>emptyList(), Collections.<String>emptyList());
+    public Set<QueryTagInfo> getParametricValues(
+            @RequestParam(value = FIELD_NAMES_PARAM, required = false) final List<String> fieldNames,
+            @RequestParam(QUERY_TEXT_PARAM) final String queryText,
+            @RequestParam(value = FIELD_TEXT_PARAM, defaultValue = "") final String fieldText,
+            @RequestParam(DATABASES_PARAM) final List<S> databases,
+            @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
+            @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
+            @RequestParam(value = STATE_TOKEN_PARAM, required = false) final List<String> stateTokens,
+            @RequestParam(value = DATE_PERIOD_PARAM, required = false) final String datePeriod,
+            @RequestParam(value = MAX_VALUES_PARAM, defaultValue = "20") final int maxValues
+    ) throws E {
+        final QueryRestrictions<S> queryRestrictions = queryRestrictionsBuilder.build(
+                queryText,
+                fieldText,
+                databases,
+                minDate,
+                maxDate,
+                stateTokens == null ? Collections.<String>emptyList() : stateTokens,
+                Collections.<String>emptyList()
+        );
 
         final R parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions, datePeriod, maxValues);
         return parametricValuesService.getAllParametricValues(parametricRequest);

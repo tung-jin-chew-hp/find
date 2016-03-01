@@ -17,7 +17,7 @@ define([
             return inputText;
         }
 
-        return '(' + inputText + ') ' + _.map(relatedConcepts, wrapQuotes).join(' ');
+        return '(' + inputText + ') ' + _.map(_.flatten(_.uniq(relatedConcepts)), wrapQuotes).join(' ');
     };
 
     var buildIndexes = function(selectedIndexesArray) {
@@ -32,7 +32,8 @@ define([
             maxDate: model.get('maxDate'),
             queryText: makeQueryText(model.get('queryText'), model.get('relatedConcepts')),
             databases: buildIndexes(model.get('indexes')),
-            fieldText: toFieldTextNode(model.get('parametricValues'))
+            fieldText: toFieldTextNode(model.get('parametricValues')),
+            anyLanguage: true
         };
     };
 

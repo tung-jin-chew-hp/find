@@ -3,6 +3,10 @@
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
-define([], function () {
-    return jasmine.createSpyObj('vent', ['navigate', 'navigateToDetailRoute']);
+define([
+    'backbone'
+], function(Backbone) {
+
+    return _.extend(jasmine.createSpyObj('vent', ['navigate', 'navigateToDetailRoute']), Backbone.Events);
+
 });

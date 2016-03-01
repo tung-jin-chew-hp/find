@@ -36,7 +36,8 @@ define([
             fieldText: null,
             minDate: undefined,
             maxDate: undefined,
-            sort: Sort.relevance
+            sort: Sort.relevance,
+            stateTokens: []
         },
 
         /**
