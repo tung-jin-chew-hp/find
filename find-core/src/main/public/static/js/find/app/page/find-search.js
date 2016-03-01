@@ -241,7 +241,7 @@ define([
                 relatedConcepts: []
             });
 
-            var sel = this.searchModel.get('selectedSearchCid');
+            var sel = this.selectedTabModel.get('selectedSearchCid');
             var view = this.serviceViews[sel].view;
 
             if (info.indexes) {
