@@ -9,11 +9,10 @@ define([
     'use strict';
 
     var printFields = [
-        {title: 'Author', field: 'author'},
         {title: 'Category', field: 'category'},
         {title: 'Comments', field: 'comments'},
         {title: 'Rank', field: 'rank'},
-        {title: 'Readability', field: 'readability'},
+        {title: 'Readability', field: 'ARI_READABILITY'},
         {title: 'Recommendations', field: 'recommendations'}
     ];
 

@@ -29,7 +29,20 @@
     <% if (model.get('date')) { %>
         <tr>
             <td class="font-bold"><%-i18n['search.document.date']%></td>
-            <td class="break-all p-l-sm"><%-model.get('date').fromNow()%></td>
+            <td class="break-all p-l-sm"><%-model.get('date').format('LLLL')%></td>
+        </tr>
+    <% } %>
+
+    <% if (model.get('authors')) { %>
+        <tr>
+            <td class="font-bold">Author</td>
+            <td class="break-all p-l-sm">
+                <ul class="list-unstyled m-b-nil">
+                    <% _.each(model.get('authors'), function(author) { %>
+                        <li><%-author%></li>
+                    <% }); %>
+                </ul>
+            </td>
         </tr>
     <% } %>
 
