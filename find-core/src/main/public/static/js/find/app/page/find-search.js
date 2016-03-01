@@ -6,9 +6,11 @@
 define([
     'js-whatever/js/base-page',
     'backbone',
+    'jquery',
     'find/app/model/search-page-model',
     'find/app/model/dates-filter-model',
     'parametric-refinement/selected-values-collection',
+    'find/app/configuration',
     'find/app/model/indexes-collection',
     'find/app/model/documents-collection',
     'find/app/model/parametric-collection',
@@ -20,6 +22,7 @@ define([
     'find/app/model/query-text-model',
     'find/app/model/document-model',
     'find/app/page/search/cluster/cluster2d',
+    'find/app/page/search/company-links',
     'find/app/page/search/document/document-detail-view',
     'find/app/util/database-name-resolver',
     'find/app/router',
@@ -29,9 +32,9 @@ define([
     'i18n!find/nls/bundle',
     'underscore',
     'text!find/templates/app/page/find-search.html'
-], function(BasePage, Backbone, SearchPageModel, DatesFilterModel, SelectedParametricValuesCollection,
+], function(BasePage, Backbone, $, SearchPageModel, DatesFilterModel, SelectedParametricValuesCollection, configuration,
             IndexesCollection, DocumentsCollection, ParametricCollection, InputView, TabbedSearchView, SavedSearchCollection,
-            addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, DocumentDetailView,
+            addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, companyLinks, DocumentDetailView,
             databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
     'use strict';
 
@@ -58,7 +61,11 @@ define([
 
     return BasePage.extend({
         className: 'search-page',
-        template: _.template(template),
+
+        viewHtml: _.template(template)({
+            logoBasePath: '../static-' + configuration().commit + '/img/logos/',
+            companyLinks: companyLinks
+        }),
 
         // Abstract
         ServiceView: null,
@@ -191,7 +198,7 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template);
+            this.$el.html(this.viewHtml);
 
             this.inputView.setElement(this.$('.input-view-container')).render();
             this.tabView.setElement(this.$('.tabbed-search-row')).render();

@@ -5,15 +5,25 @@
                 <span class="find-logo-large m-r-sm"></span>
             </div>
             <div class="input-view-container"></div>
-
-            <div class="suggestions-box">
-                Suggested queries
-                <ul>
-                    <li class="suggested-query" data-match="PRODUCT=TABLEAU"><a class="hyperlink">Tableau-related documents</a></li>
-                    <li class="suggested-query" data-indexes="Twitter" data-date-range="WEEK"><a class="hyperlink">Tweets in the last week</a></li>
-                    <li class="suggested-query" data-indexes="Twitter" data-match="PRODUCT=COGNOS" data-date-range="WEEK"><a class="hyperlink">Tweets about Cognos in the last week</a></li>
-                    <li class="suggested-query" data-query-text="analytics" data-date-range="MONTH"><a class="hyperlink">Sample query about 'analytics' in the last month</a></li>
-                </ul>
+            <div class="row suggested-query-row">
+                <div class="col-xs-6">
+                    <div class="company-links-box">
+                        <% _.each(companyLinks, function(companyData) { %>
+                        <img class="clickable suggested-query" alt="<%-companyData.alt%>" src="<%=logoBasePath%><%=companyData.image%>" data-match="COMPANY=<%-companyData.company%>">
+                        <% }) %>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="suggestions-box">
+                        Suggested queries
+                        <ul>
+                            <li class="suggested-query" data-match="PRODUCT=TABLEAU"><a class="hyperlink">Tableau-related documents</a></li>
+                            <li class="suggested-query" data-indexes="Twitter" data-date-range="WEEK"><a class="hyperlink">Tweets in the last week</a></li>
+                            <li class="suggested-query" data-indexes="Twitter" data-match="PRODUCT=COGNOS" data-date-range="WEEK"><a class="hyperlink">Tweets about Cognos in the last week</a></li>
+                            <li class="suggested-query" data-query-text="analytics" data-date-range="MONTH"><a class="hyperlink">Sample query about 'analytics' in the last month</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

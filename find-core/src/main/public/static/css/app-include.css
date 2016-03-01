@@ -601,9 +601,22 @@ input.find-input {
     top: 11px !important;
 }
 
+.suggested-query-row {
+    padding-top: 2em;
+}
+
+.company-links-box {
+    vertical-align: middle;
+    text-align: left;
+}
+
+.company-links-box img {
+    height: auto;
+    width: 100px;
+}
+
 .suggestions-box {
     text-align: left;
-    margin-top: 2em;
 }
 
 .suggested-query > a {
@@ -628,7 +641,7 @@ input.find-input {
     transition: all 1s ease;
 }
 
-.animated-container .suggestions-box {
+.animated-container .suggested-query-row {
     display: none;
     opacity: 0;
     transition: all 1s ease;
@@ -639,7 +652,7 @@ input.find-input {
     transition: all 1s ease;
 }
 
-.reverse-animated-container .suggestions-box {
+.reverse-animated-container .suggested-query-row {
     display: block;
     opacity: 1;
     transition: all 1s ease;
