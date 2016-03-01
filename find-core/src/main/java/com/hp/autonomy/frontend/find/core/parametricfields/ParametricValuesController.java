@@ -61,19 +61,8 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
                                                  @RequestParam(value = DATE_PERIOD_PARAM, required = false) final String datePeriod,
                                                  @RequestParam(value = MAX_VALUES_PARAM, defaultValue = "20") final int maxValues) throws E {
         final QueryRestrictions<S> queryRestrictions = queryRestrictionsBuilder.build(queryText, fieldText, databases, minDate, maxDate, Collections.<String>emptyList(), Collections.<String>emptyList());
-        final List<String> fields = new ArrayList<>();
 
-        if (fieldNames != null) {
-            fields.addAll(fieldNames);
-        }
-        if (fields.isEmpty()) {
-            fields.addAll(parametricValuesService.getDefaultFields(null));
-        }
-        if (datePeriod != null) {
-            fields.add("autn_date");
-        }
-
-        final R parametricRequest = buildParametricRequest(fields, queryRestrictions, datePeriod, maxValues);
+        final R parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions, datePeriod, maxValues);
         return parametricValuesService.getAllParametricValues(parametricRequest);
     }
 
