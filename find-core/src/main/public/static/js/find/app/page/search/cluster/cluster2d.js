@@ -28,7 +28,7 @@ define([
 
         initialize: function(options){
             this.searchModel = options.searchModel;
-            collection.on('change reset', this.redrawMarkers, this)
+            collection.on('update change reset', this.redrawMarkers, this)
         },
 
         render: function() {
