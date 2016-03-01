@@ -27,12 +27,11 @@ public class HodParametricValuesController extends ParametricValuesController<Ho
     }
 
     @Override
-    protected HodParametricRequest buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<ResourceIdentifier> queryRestrictions, final String datePeriod) {
+    protected HodParametricRequest buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<ResourceIdentifier> queryRestrictions, final String datePeriod, final int maxValues) {
         return new HodParametricRequest.Builder()
                 .setFieldNames(fieldNames)
                 .setQueryRestrictions(queryRestrictions)
-                // TODO: this is a hack which should be removed or at least made configurable
-                .setMaxValues(20)
+                .setMaxValues(maxValues)
                 .build();
     }
 }

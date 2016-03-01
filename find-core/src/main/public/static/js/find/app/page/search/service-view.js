@@ -80,6 +80,10 @@ define([
             // Parametric values specific to the current query
             this.queryParametricCollection = new ParametricCollection();
 
+            // Parametric values specific to the current query, with maxvalues = infinity
+            this.bulkParametricCollection = new ParametricCollection();
+
+
             this.queryModel = new QueryModel({}, {queryState: this.queryState});
 
             this.listenTo(this.queryModel, 'change:indexes', function() {
@@ -158,7 +162,7 @@ define([
                     icon: 'hp-favorite'
                 }
             }, {
-                content: new GeolocationView(constructorArguments),
+                content: new GeolocationView(_.defaults({ parametricCollection: this.bulkParametricCollection }, constructorArguments)),
                 id: 'geolocation',
                 uniqueId: _.uniqueId('results-view-item-'),
                 selector: {
@@ -207,7 +211,7 @@ define([
             this.dateView = new DateView({
                 datesFilterModel: this.queryState.datesFilterModel,
                 savedSearchModel: this.savedSearchModel,
-                parametricCollection: this.queryParametricCollection,
+                parametricCollection: this.bulkParametricCollection,
                 queryModel: this.queryModel,
                 queryState: this.queryState
             });
@@ -264,6 +268,7 @@ define([
 
         fetchData: function() {
             this.queryParametricCollection.reset();
+            this.bulkParametricCollection.reset();
 
             if (this.queryModel.get('queryText') && this.queryModel.get('indexes').length !== 0) {
                 var data = {
@@ -277,11 +282,15 @@ define([
 
                 this.entityCollection.fetch({data: data});
 
-                this.queryParametricCollection.fetch({
+                this.queryParametricCollection.fetch({ data: data });
+
+                this.bulkParametricCollection.fetch({
                     data: _.extend({
-                        datePeriod: this.queryModel.get('datePeriod')
+                        datePeriod: this.queryModel.get('datePeriod'),
+                        maxValues: -1,
+                        fieldNames: ['autn_date', 'country']
                     }, data)
-                });
+                })
             }
         },
 

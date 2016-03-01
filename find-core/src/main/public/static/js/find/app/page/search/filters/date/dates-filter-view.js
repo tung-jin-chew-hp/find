@@ -170,8 +170,7 @@ define([
                     var term = new parser.ExpressionNode('MATCH', [field], [value])
 
                     var newParams = _.defaults({
-                        fieldText: fieldText == null ? term : term.AND(fieldText),
-                        fieldNames: ['autn_date']
+                        fieldText: fieldText == null ? term : term.AND(fieldText)
                     }, baseParams);
 
                     new ParametricCollection().fetch({
@@ -197,9 +196,11 @@ define([
                     databases: this.queryModel.get('indexes'),
                     queryText: this.queryModel.get('queryText'),
                     fieldText: this.queryModel.get('fieldText'),
+                    fieldNames: ['autn_date'],
                     minDate: this.queryModel.getIsoDate('minDate'),
                     maxDate: this.queryModel.getIsoDate('maxDate'),
-                    datePeriod: this.queryModel.get('datePeriod')
+                    datePeriod: this.queryModel.get('datePeriod'),
+                    maxValues: -1
                 }
 
                 $el.css('width', $el.width() + 'px')

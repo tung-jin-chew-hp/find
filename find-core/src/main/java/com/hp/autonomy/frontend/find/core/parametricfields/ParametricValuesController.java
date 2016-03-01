@@ -38,6 +38,7 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
     public static final String MIN_DATE_PARAM = "minDate";
     public static final String MAX_DATE_PARAM = "maxDate";
     public static final String DATE_PERIOD_PARAM = "datePeriod";
+    public static final String MAX_VALUES_PARAM = "maxValues";
     public static final String SECOND_PARAMETRIC_PARAM = "second-parametric";
 
     protected final ParametricValuesService<R, S, E> parametricValuesService;
@@ -57,7 +58,8 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
                                                  @RequestParam(DATABASES_PARAM) final List<S> databases,
                                                  @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
                                                  @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
-                                                 @RequestParam(value = DATE_PERIOD_PARAM, required = false) final String datePeriod) throws E {
+                                                 @RequestParam(value = DATE_PERIOD_PARAM, required = false) final String datePeriod,
+                                                 @RequestParam(value = MAX_VALUES_PARAM, defaultValue = "20") final int maxValues) throws E {
         final QueryRestrictions<S> queryRestrictions = queryRestrictionsBuilder.build(queryText, fieldText, databases, minDate, maxDate, Collections.<String>emptyList(), Collections.<String>emptyList());
         final List<String> fields = new ArrayList<>();
 
@@ -71,9 +73,9 @@ public abstract class ParametricValuesController<R extends ParametricRequest<S>,
             fields.add("autn_date");
         }
 
-        final R parametricRequest = buildParametricRequest(fields, queryRestrictions, datePeriod);
+        final R parametricRequest = buildParametricRequest(fields, queryRestrictions, datePeriod, maxValues);
         return parametricValuesService.getAllParametricValues(parametricRequest);
     }
 
-    protected abstract R buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<S> queryRestrictions, final String datePeriod);
+    protected abstract R buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<S> queryRestrictions, final String datePeriod, final int maxValues);
 }

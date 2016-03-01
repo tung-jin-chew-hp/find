@@ -33,13 +33,12 @@ public class IdolParametricValuesController extends ParametricValuesController<I
     }
 
     @Override
-    protected IdolParametricRequest buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<String> queryRestrictions, final String datePeriod) {
+    protected IdolParametricRequest buildParametricRequest(final List<String> fieldNames, final QueryRestrictions<String> queryRestrictions, final String datePeriod, final int maxValues) {
         return new IdolParametricRequest.Builder()
                 .setFieldNames(fieldNames)
                 .setDatePeriod(datePeriod)
                 .setQueryRestrictions(queryRestrictions)
-                // TODO: this is a hack which should be removed or at least made configurable
-                .setMaxValues(20)
+                .setMaxValues(maxValues)
                 .build();
     }
 
@@ -52,11 +51,13 @@ public class IdolParametricValuesController extends ParametricValuesController<I
             @RequestParam(value = FIELD_TEXT_PARAM, defaultValue = "") final String fieldText,
             @RequestParam(DATABASES_PARAM) final List<String> databases,
             @RequestParam(value = MIN_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime minDate,
-            @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate
+            @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
+            // The UI only shows 10 values anyway
+            @RequestParam(value = MAX_VALUES_PARAM, defaultValue = "10") final int maxValues
     ) throws AciErrorException, InterruptedException {
 
         final QueryRestrictions<String> queryRestrictions = queryRestrictionsBuilder.build(queryText, fieldText, databases, minDate, maxDate, Collections.<String>emptyList(), Collections.<String>emptyList());
-        final IdolParametricRequest parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions, null);
+        final IdolParametricRequest parametricRequest = buildParametricRequest(fieldNames == null ? Collections.<String>emptyList() : fieldNames, queryRestrictions, null, maxValues);
         return parametricValuesService.getDependentParametricValues(parametricRequest);
     }
 }
