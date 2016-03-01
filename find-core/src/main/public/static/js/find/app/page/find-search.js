@@ -8,6 +8,7 @@ define([
     'backbone',
     'find/app/model/dates-filter-model',
     'parametric-refinement/selected-values-collection',
+    'find/app/configuration',
     'find/app/model/indexes-collection',
     'find/app/model/documents-collection',
     'find/app/model/parametric-collection',
@@ -22,6 +23,8 @@ define([
     'find/app/model/query-text-model',
     'find/app/model/document-model',
     'find/app/page/search/cluster/cluster2d',
+    'find/app/page/search/company-links',
+    'find/app/page/search/index-links',
     'find/app/page/search/document/document-detail-view',
     'find/app/util/database-name-resolver',
     'find/app/router',
@@ -31,9 +34,9 @@ define([
     'i18n!find/nls/bundle',
     'underscore',
     'text!find/templates/app/page/find-search.html'
-], function(BasePage, Backbone, DatesFilterModel, SelectedParametricValuesCollection, IndexesCollection, DocumentsCollection, ParametricCollection,
+], function(BasePage, Backbone, DatesFilterModel, SelectedParametricValuesCollection, configuration, IndexesCollection, DocumentsCollection, ParametricCollection,
             ComparisonDocumentsCollection, InputView, TabbedSearchView, SavedQueryCollection, SavedSnapshotCollection,
-            addChangeListener, MergeCollection, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, DocumentDetailView,
+            addChangeListener, MergeCollection, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, companyLinks, indexLinks, DocumentDetailView,
             databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
 
     'use strict';
@@ -44,7 +47,12 @@ define([
     var expandedClasses = 'animated-container col-sm-offset-0 col-md-offset-3 col-lg-offset-3 col-md-6 col-lg-6 col-xs-12 col-sm-12';
     var QUERY_TEXT_MODEL_ATTRIBUTES = ['inputText', 'relatedConcepts'];
 
-    var html = _.template(template)({i18n: i18n});
+    var html = _.template(template)({
+        i18n: i18n,
+        logoBasePath: '../static-' + configuration().commit + '/img/logos/',
+        companyLinks: companyLinks,
+        indexLinks: indexLinks
+    });
     
     function selectInitialIndexes(indexesCollection) {
         var privateIndexes = indexesCollection.reject({domain: 'PUBLIC_INDEXES'});
@@ -63,10 +71,6 @@ define([
 
     return BasePage.extend({
         className: 'search-page',
-        template: _.template(template),
-
-        // Callback to bind the search bar to the active tab; will be removed and added as the user changes tabs
-        searchChangeCallback: null,
 
         // Abstract
         ServiceView: null,
@@ -405,7 +409,7 @@ define([
             this.$('.query-service-view-container').removeClass('hide');
             this.$('.app-logo').addClass('hide');
             this.$('.hp-logo-footer').addClass('hide');
-            this.$('.suggestions-box').addClass('hide')
+            this.$('.suggested-query-row').addClass('hide')
 
             this.removeDocumentDetailView();
 
@@ -422,7 +426,7 @@ define([
             this.$('.service-view-container').addClass('hide');
             this.$('.app-logo').removeClass('hide');
             this.$('.hp-logo-footer').removeClass('hide');
-            this.$('.suggestions-box').removeClass('hide')
+            this.$('.suggested-query-row').removeClass('hide');
 
             this.removeDocumentDetailView();
 

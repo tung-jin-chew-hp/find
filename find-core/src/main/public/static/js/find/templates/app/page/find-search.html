@@ -9,15 +9,20 @@
                 </span>
             </div>
             <div class="input-view-container"></div>
-
-            <div class="suggestions-box">
-                Suggested queries
-                <ul>
-                    <li class="suggested-query" data-match="PRODUCT=TABLEAU"><a class="hyperlink">Tableau-related documents</a></li>
-                    <li class="suggested-query" data-indexes="Twitter" data-date-range="WEEK"><a class="hyperlink">Tweets in the last week</a></li>
-                    <li class="suggested-query" data-indexes="Twitter" data-match="PRODUCT=COGNOS" data-date-range="WEEK"><a class="hyperlink">Tweets about Cognos in the last week</a></li>
-                    <li class="suggested-query" data-query-text="analytics" data-date-range="MONTH"><a class="hyperlink">Sample query about 'analytics' in the last month</a></li>
-                </ul>
+            <div class="row suggested-query-row">
+                <div class="col-xs-6">
+                    <% _.each(companyLinks, function(companyData) { %>
+                        <img class="clickable suggested-query" alt="<%-companyData.alt%>" src="<%=logoBasePath%><%=companyData.image%>" data-match="COMPANY=<%-companyData.company%>">
+                    <% }) %>
+                </div>
+                <div class="col-xs-6">
+                    <% _.each(indexLinks, function(indexData) { %>
+                        <figure class="suggested-index-container suggested-query clickable" data-indexes="<%-indexData.index%>">
+                            <i class="fa fa-3x fa-<%=indexData.icon%>"></i>
+                            <figcaption><%=indexData.index%></figcaption>
+                        </figure>
+                    <% }) %>
+                </div>
             </div>
         </div>
     </div>

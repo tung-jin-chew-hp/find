@@ -658,13 +658,23 @@ input.find-input {
     max-width: 150px;
 }
 
-.suggestions-box {
+.suggested-query-row {
+    padding: 2em 5px 0 5px;
+    vertical-align: middle;
     text-align: left;
-    margin-top: 2em;
 }
 
-.suggested-query > a {
-    color: inherit;
+
+.suggested-query-row img {
+    height: auto;
+    width: 100px;
+    margin-right: 5px;
+}
+
+.suggested-index-container {
+    display: inline-block;
+    margin-right: 15px;
+    text-align: center;
 }
 
 /* fancy animation */
@@ -685,7 +695,7 @@ input.find-input {
     transition: all 1s ease;
 }
 
-.animated-container .suggestions-box {
+.animated-container .suggested-query-row {
     display: none;
     opacity: 0;
     transition: all 1s ease;
@@ -696,7 +706,7 @@ input.find-input {
     transition: all 1s ease;
 }
 
-.reverse-animated-container .suggestions-box {
+.reverse-animated-container .suggested-query-row {
     display: block;
     opacity: 1;
     transition: all 1s ease;
