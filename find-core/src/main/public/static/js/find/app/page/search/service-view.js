@@ -173,7 +173,10 @@ define([
 
                 this.dateView = new DateView({
                     datesFilterModel: this.queryState.datesFilterModel,
-                    savedSearchModel: this.savedSearchModel
+                    savedSearchModel: this.savedSearchModel,
+                    parametricCollection: this.bulkParametricCollection,
+                    queryModel: this.queryModel,
+                    queryState: this.queryState
                 });
 
                 this.parametricView = new ParametricView({
