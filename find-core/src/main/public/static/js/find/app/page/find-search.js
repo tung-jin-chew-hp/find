@@ -229,7 +229,7 @@ define([
         },
 
         selectClusterMap: function() {
-            this.searchModel.set('selectedSearchCid', CLUSTER)
+            this.selectedTabModel.set('selectedSearchCid', CLUSTER)
         },
 
         onSuggestedQuery: function(evt){
