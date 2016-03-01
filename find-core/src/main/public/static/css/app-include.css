@@ -602,25 +602,21 @@ input.find-input {
 }
 
 .suggested-query-row {
-    padding-top: 2em;
-}
-
-.company-links-box {
+    padding: 2em 5px 0 5px;
     vertical-align: middle;
     text-align: left;
 }
 
-.company-links-box img {
+.suggested-query-row img {
     height: auto;
     width: 100px;
+    margin-right: 5px;
 }
 
-.suggestions-box {
-    text-align: left;
-}
-
-.suggested-query > a {
-    color: inherit;
+.suggested-index-container {
+    display: inline-block;
+    margin-right: 15px;
+    text-align: center;
 }
 
 /* fancy animation */

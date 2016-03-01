@@ -23,6 +23,7 @@ define([
     'find/app/model/document-model',
     'find/app/page/search/cluster/cluster2d',
     'find/app/page/search/company-links',
+    'find/app/page/search/index-links',
     'find/app/page/search/document/document-detail-view',
     'find/app/util/database-name-resolver',
     'find/app/router',
@@ -34,7 +35,7 @@ define([
     'text!find/templates/app/page/find-search.html'
 ], function(BasePage, Backbone, $, SearchPageModel, DatesFilterModel, SelectedParametricValuesCollection, configuration,
             IndexesCollection, DocumentsCollection, ParametricCollection, InputView, TabbedSearchView, SavedSearchCollection,
-            addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, companyLinks, DocumentDetailView,
+            addChangeListener, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, companyLinks, indexLinks, DocumentDetailView,
             databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
     'use strict';
 
@@ -64,7 +65,8 @@ define([
 
         viewHtml: _.template(template)({
             logoBasePath: '../static-' + configuration().commit + '/img/logos/',
-            companyLinks: companyLinks
+            companyLinks: companyLinks,
+            indexLinks: indexLinks
         }),
 
         // Abstract
@@ -372,7 +374,7 @@ define([
             this.$('.query-service-view-container').removeClass('hide');
             this.$('.app-logo').addClass('hide');
             this.$('.hp-logo-footer').addClass('hide');
-            this.$('.suggestions-box').addClass('hide')
+            this.$('.suggested-query-row').addClass('hide')
 
             this.removeDocumentDetailView();
 
@@ -388,7 +390,7 @@ define([
             this.$('.service-view-container').addClass('hide');
             this.$('.app-logo').removeClass('hide');
             this.$('.hp-logo-footer').removeClass('hide');
-            this.$('.suggestions-box').removeClass('hide')
+            this.$('.suggested-query-row').removeClass('hide');
 
             this.removeDocumentDetailView();
 
