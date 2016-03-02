@@ -5,7 +5,6 @@
 
 package com.hp.autonomy.frontend.find.idol.beanconfiguration;
 
-import com.autonomy.aci.client.annotations.IdolAnnotationsProcessorFactory;
 import com.autonomy.aci.client.services.AciService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -18,6 +17,7 @@ import com.hp.autonomy.frontend.find.idol.configuration.IdolFindConfig;
 import com.hp.autonomy.frontend.find.idol.configuration.IdolFindConfigFileService;
 import com.hp.autonomy.idolutils.processors.AciResponseJaxbProcessorFactory;
 import com.hp.autonomy.searchcomponents.core.search.QueryRestrictions;
+import com.hp.autonomy.searchcomponents.idol.category.configuration.CategoryConfig;
 import com.hp.autonomy.searchcomponents.idol.view.configuration.ViewConfig;
 import com.hp.autonomy.user.UserService;
 import com.hp.autonomy.user.UserServiceImpl;
@@ -44,6 +44,7 @@ public class IdolConfiguration {
                 .featuresToEnable(SerializationFeature.INDENT_OUTPUT)
                 .mixIn(ServerConfig.class, ConfigurationFilterMixin.class)
                 .mixIn(ViewConfig.class, ConfigurationFilterMixin.class)
+                .mixIn(CategoryConfig.class, ConfigurationFilterMixin.class)
                 .mixIn(IdolFindConfig.class, ConfigurationFilterMixin.class)
                 .deserializerByType(QueryRestrictions.class, queryRestrictionsDeserializer)
                 .build();

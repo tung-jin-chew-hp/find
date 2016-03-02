@@ -10,21 +10,23 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.hp.autonomy.frontend.configuration.ConfigurationFilterMixin;
 import com.hp.autonomy.frontend.configuration.ServerConfig;
 import com.hp.autonomy.frontend.find.core.beanconfiguration.ConfigFileConfiguration;
+import com.hp.autonomy.searchcomponents.idol.category.configuration.CategoryConfig;
 import com.hp.autonomy.searchcomponents.idol.view.configuration.ViewConfig;
+import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jasypt.util.text.TextEncryptor;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IdolFindConfigFileServiceTest {
@@ -49,6 +51,7 @@ public class IdolFindConfigFileServiceTest {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.addMixIn(ServerConfig.class, ConfigurationFilterMixin.class);
         objectMapper.addMixIn(ViewConfig.class, ConfigurationFilterMixin.class);
+        objectMapper.addMixIn(CategoryConfig.class, ConfigurationFilterMixin.class);
 
         final FilterProvider filterProvider = new ConfigFileConfiguration().filterProvider();
 
