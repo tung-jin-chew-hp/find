@@ -135,7 +135,9 @@ define([
                 }
 
                 // Create a tab if the user has run a search but has no open tabs
-                if (this.selectedTabModel.get('selectedSearchCid') === null && this.searchModel.get('inputText')) {
+                var selectedCid = this.selectedTabModel.get('selectedSearchCid');
+
+                if ((selectedCid === null || selectedCid === CLUSTER) && this.searchModel.get('inputText')) {
                     this.createNewTab(this.searchModel.get('inputText'));
                 }
             });
