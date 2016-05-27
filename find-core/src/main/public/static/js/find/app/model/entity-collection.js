@@ -14,7 +14,7 @@ define([
         parse: function(response) {
             return _.reject(response, function (model) {
                 // A negative cluster indicates that the associated documents did not fall into a cluster
-                return model.cluster < 0;
+                return model.cluster < 0 || model.docsWithPhrase <= 1;
             });
         },
 
