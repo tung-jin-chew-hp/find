@@ -887,24 +887,30 @@ input.find-input {
     -webkit-line-clamp: 2;
 }
 
+.result-header {
+    display: inline-block;
+    font-weight: bold;
+    min-width: 70px;
+}
+
 .result-category {
     /*background-color: #000066;*/
 }
 
 .result-sentiment-positive {
-    color: #02c422;
+    background-color: #02c422;
 }
 
 .result-sentiment-negative {
-    color: #f93c02;
+    background-color: #f93c02;
 }
 
 .result-sentiment-mixed {
-    color: #dbdbdb;
+    background-color: #dbdbdb;
 }
 
 .result-sentiment-neutral {
-    color: #ffbd0b;
+    background-color: #ffbd0b;
 }
 
 .related-concepts-list {

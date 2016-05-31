@@ -27,14 +27,14 @@
         </p>
         <% if(categories && categories.length) { %>
         <p class="result-categories">
-            Categories: <% _.forEach(categories, function(category){ %>
+            <span class="result-header">Categories:</span> <% _.forEach(categories, function(category){ %>
                 <span class="label result-category"><%- category %></span>
             <%}) %>
         </p>
         <% } %>
         <% if(sentiment) { %>
         <p class="result-sentiment">
-            Sentiment: <span class="result-sentiment-<%- sentiment.toLowerCase() %>"><%- sentiment %></span>
+            <span class="result-header">Sentiment:</span> <span class="label result-sentiment-<%- sentiment.toLowerCase() %>"><%- sentiment %></span>
         </p>
         <% } %>
         <p class="text-right">
