@@ -17,7 +17,8 @@ define([
         MAX_DATE: 'MAX_DATE',
         MIN_DATE: 'MIN_DATE',
         DATE_RANGE: 'DATE_RANGE',
-        PARAMETRIC: 'PARAMETRIC'
+        PARAMETRIC: 'PARAMETRIC',
+        STRING: 'STRING'
     };
 
     var customDatesFilters = [
@@ -52,6 +53,31 @@ define([
         });
     }
 
+    // Get the filter model id for a given string field name
+    // There's an assumption that nobody configures a parametric field which shares the same name as a string field
+    function stringFilterId(fieldName) {
+        return fieldName;
+    }
+
+    // Get an array of filter model attributes from the selected string filter collection
+    function extractStringFilters(stringFilterModel) {
+
+        var attrs = stringFilterModel.toQueryModelAttributes();
+
+        var toAdd = [];
+
+        _.each(attrs, function(value, field){
+            toAdd.push({
+                id: stringFilterId(field),
+                field: field,
+                text: value,
+                type: FilterType.STRING
+            })
+        })
+
+        return toAdd;
+    }
+
      // This collection backs the search filters display view. It monitors the query state models and collections and
     // creates/removes it's own models when they change.
     // When a dates filter model is removed, it updates the appropriate request model attribute with a null value. However,
@@ -63,11 +89,13 @@ define([
             this.datesFilterModel = options.queryState.datesFilterModel;
             this.selectedIndexesCollection = options.queryState.selectedIndexes;
             this.selectedParametricValues = options.queryState.selectedParametricValues;
+            this.stringFilterModel = options.queryState.stringFilterModel;
 
             this.listenTo(this.selectedParametricValues, 'add remove', this.updateParametricSelection);
             this.listenTo(this.selectedParametricValues, 'reset', this.resetParametricSelection);
             this.listenTo(this.selectedIndexesCollection, 'reset update', this.updateDatabases);
             this.listenTo(this.datesFilterModel, 'change', this.updateDateFilters);
+            this.listenTo(this.stringFilterModel, 'change', this.updateStringFilters);
 
             this.on('remove', function(model) {
                 var type = model.get('type');
@@ -85,6 +113,8 @@ define([
                     this.datesFilterModel.set('customMaxDate', null);
                 } else if (type === FilterType.MIN_DATE) {
                     this.datesFilterModel.set('customMinDate', null);
+                } else if (type === FilterType.STRING) {
+                    this.stringFilterModel.set(model.get('field'), null);
                 }
             });
 
@@ -121,6 +151,7 @@ define([
             }
 
             Array.prototype.push.apply(models, extractParametricFilters(this.selectedParametricValues));
+            Array.prototype.push.apply(models, extractStringFilters(this.stringFilterModel));
         },
 
         getDatabasesFilterText: function() {
@@ -224,6 +255,29 @@ define([
                     return _.contains([FilterType.DATE_RANGE, FilterType.MAX_DATE, FilterType.MIN_DATE], model.id);
                 }));
             }
+        },
+
+        updateStringFilters: function() {
+            var filters = this.stringFilterModel.toQueryModelAttributes();
+
+            this.remove(this.filter(function (model) {
+                return model.id === FilterType.STRING && !filters.hasOwnProperty(stringFilterId(model.get('field')));
+            }));
+
+            _.each(filters, function(value, key){
+                var existingModel = this.get(key);
+                if (existingModel) {
+                    existingModel.set('text', value)
+                }
+                else {
+                    this.add({
+                        id: stringFilterId(key),
+                        field: key,
+                        text: value,
+                        type: FilterType.STRING
+                    })
+                }
+            }, this)
         },
 
         resetParametricSelection: function() {

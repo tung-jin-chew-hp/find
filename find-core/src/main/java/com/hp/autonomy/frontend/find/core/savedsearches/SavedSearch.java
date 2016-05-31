@@ -4,6 +4,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hp.autonomy.aci.content.fieldtext.FieldText;
 import com.hp.autonomy.aci.content.fieldtext.MATCH;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +43,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
-import java.util.*;
 
 @Entity
 @Table(name = SavedSearch.Table.NAME)
@@ -62,6 +84,13 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
             @JoinColumn(name = ParametricValuesTable.Column.SEARCH_ID)
     })
     private Set<FieldAndValue> parametricValues;
+
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = StringFiltersTable.NAME, joinColumns = {
+            @JoinColumn(name = StringFiltersTable.Column.SEARCH_ID)
+    })
+    private Set<FieldAndValue> stringFilters;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = ConceptClusterPhraseTable.NAME, joinColumns = {
@@ -325,6 +354,14 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
 
     public interface ParametricValuesTable {
         String NAME = "search_parametric_values";
+
+        interface Column {
+            String SEARCH_ID = "search_id";
+        }
+    }
+
+    public interface StringFiltersTable {
+        String NAME = "search_string_filters";
 
         interface Column {
             String SEARCH_ID = "search_id";

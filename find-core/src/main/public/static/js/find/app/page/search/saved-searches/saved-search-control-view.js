@@ -117,6 +117,7 @@ define([
                         this.queryState.datesFilterModel.set(this.savedSearchModel.toDatesFilterModelAttributes());
                         this.queryState.selectedIndexes.set(this.savedSearchModel.toSelectedIndexes());
                         this.queryState.selectedParametricValues.set(this.savedSearchModel.toSelectedParametricValues());
+                        this.queryState.stringFilterModel.set(this.savedSearchModel.toStringFilterValues());
                     }, this)
                 });
             }
@@ -168,6 +169,7 @@ define([
             // the save and reset buttons immediately
             this.listenTo(this.queryState.selectedIndexes, 'add remove', updateSavedState);
             this.listenTo(this.queryState.selectedParametricValues, 'add remove', updateSavedState);
+            this.listenTo(this.queryState.stringFilterModel, 'change', updateSavedState);
         },
 
         render: function() {

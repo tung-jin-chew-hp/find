@@ -14,6 +14,7 @@ define([
     'find/app/model/parametric-collection',
     'find/app/page/search/filter-display/filter-display-view',
     'find/app/page/search/filters/date/dates-filter-view',
+    'find/app/page/search/filters/string/string-filter-view',
     'find/app/page/search/results/results-view',
     'find/app/page/search/results/results-view-augmentation',
     'find/app/page/search/results/results-view-container',
@@ -34,7 +35,7 @@ define([
     'i18n!find/nls/indexes',
     'text!find/templates/app/page/search/service-view.html'
 ], function(Backbone, $, _, DatesFilterModel, IndexesCollection, EntityCollection, QueryModel, SavedSearchModel, ComparisonModel, SearchFiltersCollection,
-            ComparisonDocumentsCollection, ParametricView, ParametricCollection, FilterDisplayView, DateView, ResultsView, ResultsViewAugmentation, 
+            ComparisonDocumentsCollection, ParametricView, ParametricCollection, FilterDisplayView, DateView, StringView, ResultsView, ResultsViewAugmentation,
             ResultsViewContainer, ResultsViewSelection, RelatedConceptsView, relatedConceptsClickHandlers, SpellCheckView, SnapshotDataView, Collapsible,
             addChangeListener, SelectedParametricValuesCollection, SavedSearchControlView, TopicMapView, SunburstView, GeolocationView, CompareModal, i18n, i18nIndexes, template) {
 
@@ -179,6 +180,14 @@ define([
                     queryState: this.queryState
                 });
 
+                this.stringView = new StringView({
+                    savedSearchModel: this.savedSearchModel,
+                    stringFilterModel: this.queryState.stringFilterModel,
+                    parametricCollection: this.bulkParametricCollection,
+                    queryModel: this.queryModel,
+                    queryState: this.queryState
+                });
+
                 this.parametricView = new ParametricView({
                     queryModel: this.queryModel,
                     queryState: this.queryState,
@@ -195,6 +204,7 @@ define([
 
                 this.indexesViewWrapper = collapseView(i18nIndexes['search.indexes'], this.indexesView);
                 this.dateViewWrapper = collapseView(i18n['search.dates'], this.dateView);
+                this.stringViewWrapper = collapseView(i18n['search.strings'], this.stringView);
 
                 relatedConceptsClickHandler = relatedConceptsClickHandlers.updateQuery({queryTextModel: this.queryState.queryTextModel});
 
@@ -332,6 +342,7 @@ define([
                 this.indexesViewWrapper.setElement(this.$('.indexes-container')).render();
                 this.parametricView.setElement(this.$('.parametric-container')).render();
                 this.dateViewWrapper.setElement(this.$('.date-container')).render();
+                this.stringViewWrapper.setElement(this.$('.string-container')).render();
                 this.spellCheckView.setElement(this.$('.spellcheck-container')).render();
             } else if (searchType === SavedSearchModel.Type.SNAPSHOT) {
                 this.snapshotDataView.setElement(this.$('.snapshot-view-container')).render();
@@ -405,7 +416,8 @@ define([
                 this.filterDisplayView,
                 this.snapshotDataView,
                 this.indexesViewWrapper,
-                this.dateViewWrapper
+                this.dateViewWrapper,
+                this.stringViewWrapper
             ]);
 
             Backbone.View.prototype.remove.call(this);

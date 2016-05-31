@@ -7,6 +7,7 @@ define([
     'js-whatever/js/base-page',
     'backbone',
     'find/app/model/dates-filter-model',
+    'find/app/model/string-filter-model',
     'parametric-refinement/selected-values-collection',
     'find/app/configuration',
     'find/app/model/indexes-collection',
@@ -34,7 +35,7 @@ define([
     'i18n!find/nls/bundle',
     'underscore',
     'text!find/templates/app/page/find-search.html'
-], function(BasePage, Backbone, DatesFilterModel, SelectedParametricValuesCollection, configuration, IndexesCollection, DocumentsCollection, ParametricCollection,
+], function(BasePage, Backbone, DatesFilterModel, StringFilterModel, SelectedParametricValuesCollection, configuration, IndexesCollection, DocumentsCollection, ParametricCollection,
             ComparisonDocumentsCollection, InputView, TabbedSearchView, SavedQueryCollection, SavedSnapshotCollection,
             addChangeListener, MergeCollection, SavedSearchModel, QueryTextModel, DocumentModel, Cluster2d, companyLinks, indexLinks, DocumentDetailView,
             databaseNameResolver, router, vent, searchDataUtil, parser, i18n, _, template) {
@@ -319,7 +320,8 @@ define([
                     var queryState = {
                         queryTextModel: queryTextModel,
                         datesFilterModel: new DatesFilterModel(savedSearchModel.toDatesFilterModelAttributes()),
-                        selectedParametricValues: new SelectedParametricValuesCollection(savedSearchModel.toSelectedParametricValues())
+                        selectedParametricValues: new SelectedParametricValuesCollection(savedSearchModel.toSelectedParametricValues()),
+                        stringFilterModel: new StringFilterModel(savedSearchModel.toStringFilterValues())
                     };
 
                     var initialSelectedIndexes;

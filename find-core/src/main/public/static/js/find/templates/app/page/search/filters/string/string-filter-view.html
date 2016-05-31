@@ -1,0 +1,14 @@
+<div class="search-strings-wrapper m-l-md">
+    <form class="form-inline">
+        <% _.each(filters, function(filterData) { %>
+            <div class="form-group">
+                <h6><%- filterData[0] %></h6>
+                <div class="input-group m-l-sm m-b-sm">
+                    <div class="input-group results-filter-string">
+                        <input type="text" class="form-control" value="<%- filterData[1] %>" data-field-attribute="<%- filterData[0] %>">
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </form>
+</div>

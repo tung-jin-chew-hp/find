@@ -63,6 +63,7 @@ define([
                 this.stopListening(this.queryState.queryTextModel);
                 this.stopListening(this.queryState.selectedParametricValues);
                 this.stopListening(this.queryState.datesFilterModel);
+                this.stopListening(this.queryState.stringFilterModel);
             }
 
             this.queryState = newQueryState;
@@ -72,6 +73,7 @@ define([
                 this.listenTo(this.queryState.queryTextModel, 'change', this.updateSavedness);
                 this.listenTo(this.queryState.selectedParametricValues, 'add remove', this.updateSavedness);
                 this.listenTo(this.queryState.datesFilterModel, 'change', this.updateSavedness);
+                this.listenTo(this.queryState.stringFilterModel, 'change', this.updateSavedness);
             }
         }
     });

@@ -104,6 +104,7 @@ define([
             title: null,
             indexes: [],
             parametricValues: [],
+            stringFilters: [],
             relatedConcepts: [],
             minDate: null,
             maxDate: null,
@@ -155,7 +156,8 @@ define([
                     && this.equalsQueryStateDateFilters(queryState)
                     && arraysEqual(this.get('relatedConcepts'), queryState.queryTextModel.get('relatedConcepts'), arrayEqualityPredicate)
                     && arraysEqual(this.get('indexes'), selectedIndexes, _.isEqual)
-                    && arraysEqual(this.get('parametricValues'), queryState.selectedParametricValues.map(pickFieldAndValue), _.isEqual);
+                    && arraysEqual(this.get('parametricValues'), queryState.selectedParametricValues.map(pickFieldAndValue), _.isEqual)
+                    && this.equalsQueryStateStringFilters(queryState);
         },
 
         equalsQueryStateDateFilters: function(queryState) {
@@ -168,6 +170,11 @@ define([
             } else {
                 return optionalExactlyEqual(this.get('dateRange'), datesAttributes.dateRange);
             }
+        },
+
+        equalsQueryStateStringFilters: function(queryState) {
+            var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { name: key, value: val }})
+            return arraysEqual(this.get('stringFilters'), stringFilters)
         },
 
         toDatesFilterModelAttributes: function() {
@@ -189,6 +196,16 @@ define([
             };
         },
 
+        toStringFilterValues: function() {
+            var attr = {}
+
+            _.each(this.get('stringFilters'), function(obj){
+                attr[obj.name] = attr[obj.value]
+            })
+
+            return attr
+        },
+
         toSelectedParametricValues: function() {
             return this.get('parametricValues');
         },
@@ -207,12 +224,14 @@ define([
         attributesFromQueryState: function(queryState) {
             var indexes = _.map(queryState.selectedIndexes.toResourceIdentifiers(), selectedIndexToResourceIdentifier);
             var parametricValues = queryState.selectedParametricValues.map(pickFieldAndValue);
+            var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { name: key, value: val }})
 
             return _.extend({
                 queryText: queryState.queryTextModel.get('inputText'),
                 relatedConcepts: queryState.queryTextModel.get('relatedConcepts'),
                 indexes: indexes,
-                parametricValues: parametricValues
+                parametricValues: parametricValues,
+                stringFilters: stringFilters
             }, queryState.datesFilterModel.toQueryModelAttributes(), { dateNewDocsLastFetched: moment() });
         }
     });

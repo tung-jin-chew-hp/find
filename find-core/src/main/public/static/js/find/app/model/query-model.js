@@ -75,17 +75,27 @@ define([
             }, this), DEBOUNCE_WAIT_MILLISECONDS));
 
             this.listenTo(this.queryState.selectedParametricValues, 'add remove reset', _.debounce(_.bind(function() {
-                var fieldTextNode = this.queryState.selectedParametricValues.toFieldTextNode();
-                this.set('fieldText', fieldTextNode ? fieldTextNode : null);
+                this.set('fieldText', mergeFieldText(this.queryState.selectedParametricValues, this.queryState.stringFilterModel));
             }, this), DEBOUNCE_WAIT_MILLISECONDS));
 
-            var fieldTextNode = this.queryState.selectedParametricValues.toFieldTextNode();
+            this.listenTo(this.queryState.stringFilterModel, 'change', _.debounce(_.bind(function() {
+                this.set('fieldText', mergeFieldText(this.queryState.selectedParametricValues, this.queryState.stringFilterModel));
+            }, this), DEBOUNCE_WAIT_MILLISECONDS));
 
             this.set(_.extend({
                 queryText: this.queryState.queryTextModel.makeQueryText(),
                 indexes: collectionBuildIndexes(this.queryState.selectedIndexes),
-                fieldText: fieldTextNode ? fieldTextNode : null
+                fieldText: mergeFieldText(this.queryState.selectedParametricValues, this.queryState.stringFilterModel)
             }, this.queryState.datesFilterModel.toQueryModelAttributes()));
+
+            function mergeFieldText(parametricModel, stringFilterModel) {
+                var parametricFieldText = parametricModel.toFieldTextNode()
+                var stringFieldText = stringFilterModel.toFieldTextNode()
+
+                return (parametricFieldText ? stringFieldText ? (parametricFieldText.AND(stringFieldText))
+                                                             : parametricFieldText
+                                           : stringFieldText) || null
+            }
         },
 
         getIsoDate: function(type) {
