@@ -61,7 +61,7 @@ define([
             this.parametricCollection = new FilteringCollection([], {
                 collection: options.parametricCollection,
                 modelFilter: function(model){
-                    return model.get('name') === 'DATE';
+                    return model.get('name') === 'autn_date';
                 }
             }).on('reset', function(coll){
                 var model = coll.models[0];
@@ -196,7 +196,7 @@ define([
                     databases: this.queryModel.get('indexes'),
                     queryText: this.queryModel.get('queryText'),
                     fieldText: this.queryModel.get('fieldText'),
-                    fieldNames: ['DATE'],
+                    fieldNames: ['autn_date'],
                     minDate: this.queryModel.getIsoDate('minDate'),
                     maxDate: this.queryModel.getIsoDate('maxDate'),
                     datePeriod: this.queryModel.get('datePeriod'),
