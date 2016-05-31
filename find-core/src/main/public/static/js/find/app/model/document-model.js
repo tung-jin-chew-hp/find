@@ -88,6 +88,7 @@ define([
             response.sourceType = getFieldValue(response.fieldMap.sourceType);
             response.transcript = getFieldValue(response.fieldMap.transcript);
             response.sentiment = getFieldValue(response.fieldMap.sentiment);
+            response.question = getFieldValue(response.fieldMap.question);
             response.media = getMediaType(response.contentType);
 
             response.authors = getFieldValues(response.fieldMap.authors);

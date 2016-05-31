@@ -360,7 +360,8 @@ define([
                 thumbnail: model.get('thumbnail'),
                 thumbnailUrl: model.get('thumbnailUrl'),
                 categories: model.get('categories'),
-                sentiment: model.get('sentiment')
+                sentiment: model.get('sentiment'),
+                question: model.get('question')
             }));
 
             if (isPromotion) {

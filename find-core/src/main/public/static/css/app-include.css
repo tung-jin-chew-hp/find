@@ -893,6 +893,17 @@ input.find-input {
     min-width: 70px;
 }
 
+.result-question > .result-header {
+    font-size: 24px;
+}
+
+.result-question > .result-summary {
+    overflow: visible;
+    max-height: none;
+    display: block;
+    -webkit-line-clamp: none;
+}
+
 .result-category {
     /*background-color: #000066;*/
 }
