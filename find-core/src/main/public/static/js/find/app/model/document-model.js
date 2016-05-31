@@ -87,10 +87,11 @@ define([
             response.latitude = getFieldValue(response.fieldMap.latitude);
             response.sourceType = getFieldValue(response.fieldMap.sourceType);
             response.transcript = getFieldValue(response.fieldMap.transcript);
-
+            response.sentiment = getFieldValue(response.fieldMap.sentiment);
             response.media = getMediaType(response.contentType);
 
             response.authors = getFieldValues(response.fieldMap.authors);
+            response.categories = getFieldValues(response.fieldMap.categories);
 
             response.fields = _.chain(response.fieldMap)
                 .map(function(fieldData) {

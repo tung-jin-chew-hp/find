@@ -879,6 +879,34 @@ input.find-input {
     max-height: 43px;
 }
 
+.result-sentiment, .result-categories {
+    font-weight: bold;
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.result-category {
+    /*background-color: #000066;*/
+}
+
+.result-sentiment-positive {
+    color: #02c422;
+}
+
+.result-sentiment-negative {
+    color: #f93c02;
+}
+
+.result-sentiment-mixed {
+    color: #dbdbdb;
+}
+
+.result-sentiment-neutral {
+    color: #ffbd0b;
+}
+
 .related-concepts-list {
     padding-left: 0;
 }

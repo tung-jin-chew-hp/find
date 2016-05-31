@@ -358,7 +358,9 @@ define([
                 date: model.has('date') ? model.get('date').fromNow() : null,
                 contentType: getContentTypeClass(model),
                 thumbnail: model.get('thumbnail'),
-                thumbnailUrl: model.get('thumbnailUrl')
+                thumbnailUrl: model.get('thumbnailUrl'),
+                categories: model.get('categories'),
+                sentiment: model.get('sentiment')
             }));
 
             if (isPromotion) {

@@ -92,7 +92,7 @@
     },
     "categories": {
       "names": [
-        "AU_REPOSITORY_METADATA_CATEGORY_STRING"
+        "CATEGORY"
       ]
     },
     "dateCreated": {
@@ -120,6 +120,11 @@
     "thumbnailUrl": {
       "names": [
         "RENDITION_FILEPATH"
+      ]
+    },
+    "sentiment": {
+      "names": [
+        "OVERALL_VIBE"
       ]
     },
     "sourceType": {
