@@ -10,6 +10,7 @@ require.config({
         'backbone-base': '../bower_components/backbone/backbone',
         bootstrap: '../lib/bootstrap/js/bootstrap',
         'jvectormap': '../lib/jvectormap/jquery-jvectormap-2.0.3.min',
+        'jvectormap-us': '../lib/jvectormap/jquery-jvectormap-us-aea',
         'jvectormap-world': '../lib/jvectormap/jquery-jvectormap-world-mill',
         colorbox: '../bower_components/colorbox/jquery.colorbox',
         'bootstrap-datetimepicker': '../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker',
@@ -53,6 +54,7 @@ require.config({
         flotTime: ['flot'],
         'jvectormap': ['jquery'],
         'jvectormap-world': ['jvectormap'],
+        'jvectormap-us': ['jvectormap'],
         peg: {
             exports: 'PEG'
         },

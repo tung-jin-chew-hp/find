@@ -2,7 +2,7 @@ define([
     'backbone',
     'underscore',
     'jquery',
-    'jvectormap-world',
+    'jvectormap-us',
     'i18n!find/nls/bundle',
     'text!find/templates/app/page/search/results/geolocation-view.html',
     'text!find/templates/app/page/loading-spinner.html',
@@ -43,7 +43,7 @@ define([
             }
 
             this.previousMap = this.$map.vectorMap({
-                map: 'world_mill',
+                map: 'us_aea',
                 hoverOpacity: 0.7,
                 hoverColor: false,
                 backgroundColor: '#383f47',
