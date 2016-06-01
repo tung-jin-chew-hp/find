@@ -70,14 +70,14 @@ define([
 
             response.thumbnail = getFieldValue(response.fieldMap.thumbnail);
             response.thumbnailUrl = getFieldValue(response.fieldMap.thumbnailUrl);
-            if (response.thumbnailUrl && response.thumbnailUrl.indexOf('C:\\') === 0) {
+            if (response.thumbnailUrl && response.thumbnailUrl.indexOf('thumbnails/') === 0) {
                 // TODO: remove this hack, we'd rather have clean data which contains the right values
                 // Currently requires the following stanza in the nginx.conf
-                //  location ~* ^/images/(.+)$ {
-                //      root /mnt/magdisk/data/Forrester/untagged/WebConnector;
-                //      try_files /news_thumbnails/$1 /google_scrape_thumbnails/$1 /Main_Crawl_thumbnails/$1 /Main_Crawl_2_thumbnails/thumbnails/$1 @missing;
+                //  location ~* ^/attimages/(.+)$ {
+                //      root /mnt/magdisk/data/ATT;
+                //      try_files /$1 @missing;
                 //  }
-                response.thumbnailUrl = 'http://intelssdtest.autonomy.com/images/' + response.thumbnailUrl.replace(/.*\\/, '');
+                response.thumbnailUrl = 'http://intelssdtest.autonomy.com/attimages/' + response.thumbnailUrl.replace(/.*\\/, '');
             }
             response.contentType = getFieldValue(response.fieldMap.contentType);
             response.url = getFieldValue(response.fieldMap.url);
