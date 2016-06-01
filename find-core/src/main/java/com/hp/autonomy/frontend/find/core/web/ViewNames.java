@@ -11,7 +11,8 @@ public enum ViewNames
     LOGIN("login"),
     PUBLIC("public"),
     SSO("sso"),
-    SSO_LOGOUT("sso-logout");
+    SSO_LOGOUT("sso-logout"),
+    BLANK("blank");
 
     private final String viewName;
 
