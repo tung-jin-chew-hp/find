@@ -175,7 +175,7 @@ define([
 
         equalsQueryStateStringFilters: function(queryState) {
             var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { field: key, value: val }})
-            return arraysEqual(this.get('stringFilters'), stringFilters)
+            return arraysEqual(this.get('stringFilters'), stringFilters, _.isEqual)
         },
 
         toDatesFilterModelAttributes: function() {
