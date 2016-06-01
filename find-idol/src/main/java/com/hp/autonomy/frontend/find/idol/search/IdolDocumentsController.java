@@ -48,10 +48,8 @@ public class IdolDocumentsController extends DocumentsController<String, IdolSea
             @RequestParam(value = MAX_DATE_PARAM, required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final DateTime maxDate,
             @RequestParam(value = HIGHLIGHT_PARAM, defaultValue = "true") final boolean highlight,
             @RequestParam(value = AUTO_CORRECT_PARAM, defaultValue = "true") final boolean autoCorrect) throws AciErrorException {
-        // Demo-specific changes
-        // TODO: delete this
-        final boolean isQuestion = StringUtils.endsWith(text, "?");
-        final List<String> destIndex = isQuestion ? Collections.singletonList("Support") : index;
+        final boolean isQuestion = isQuestion(text);
+        final List<String> destIndex = isQuestion ? QUESTION_DB : index;
 
         // We're deliberately not calling the super implementation so we can hack the parameters
         final SearchRequest<String> searchRequest = parseRequestParamsToObject(text, resultsStart, maxResults, summary, destIndex, fieldText, sort, minDate, maxDate, highlight, autoCorrect);
@@ -96,6 +94,14 @@ public class IdolDocumentsController extends DocumentsController<String, IdolSea
             return new Documents<>(docs, totalResults, result.getExpandedQuery(), result.getSuggestion(), result.getAutoCorrection(), result.getWarnings());
         }
 
+    }
+
+    public static final List<String> QUESTION_DB = Collections.singletonList("Support");
+
+    // Demo-specific changes
+    // TODO: delete this
+    public static boolean isQuestion(final String text) {
+        return StringUtils.endsWith(text, "?");
     }
 
     @Override

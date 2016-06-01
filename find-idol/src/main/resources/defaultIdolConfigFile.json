@@ -119,7 +119,7 @@
     },
     "thumbnailUrl": {
       "names": [
-        "RENDITION_FILEPATH"
+        "RENDITION_FILE_THUMBNAIL"
       ]
     },
     "sentiment": {
