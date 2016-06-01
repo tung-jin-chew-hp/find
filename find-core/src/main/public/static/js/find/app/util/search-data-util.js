@@ -27,8 +27,8 @@ define([
         });
     };
 
-    var buildFieldText = function(parametricValues) {
-        var fieldTextNode = toFieldTextNode(parametricValues);
+    var buildFieldText = function(parametricValues, stringFilters) {
+        var fieldTextNode = toFieldTextNode((parametricValues || []).concat(stringFilters||[]));
         return fieldTextNode && fieldTextNode.toString();
     };
 
@@ -38,7 +38,7 @@ define([
             maxDate: model.get('maxDate'),
             queryText: makeQueryText(model.get('queryText'), model.get('relatedConcepts')),
             databases: buildIndexes(model.get('indexes')),
-            fieldText: buildFieldText(model.get('parametricValues')),
+            fieldText: buildFieldText(model.get('parametricValues'), model.get('stringFilters')),
             anyLanguage: true
         };
     };

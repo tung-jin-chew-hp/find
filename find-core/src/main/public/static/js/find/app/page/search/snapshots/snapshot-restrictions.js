@@ -29,6 +29,7 @@ define([
             'relatedConcepts',
             'indexes',
             'parametricValues',
+            'stringFilters',
             'minDate',
             'maxDate'
         ],
@@ -40,6 +41,13 @@ define([
             var indexesContent = _.pluck(attributes.indexes, 'name').join(', ');
 
             var parametricRestrictions = _.map(_.groupBy(attributes.parametricValues, 'field'), function(items, field) {
+                return {
+                    title: prettifyFieldName(field),
+                    content: _.pluck(items, 'value').join(', ')
+                };
+            });
+
+            var stringRestrictions = _.map(_.groupBy(attributes.stringFilters, 'field'), function(items, field) {
                 return {
                     title: prettifyFieldName(field),
                     content: _.pluck(items, 'value').join(', ')
@@ -58,7 +66,7 @@ define([
                 },
                 dateRestriction(i18n['search.snapshot.restrictions.minDate'], attributes.minDate),
                 dateRestriction(i18n['search.snapshot.restrictions.maxDate'], attributes.maxDate)
-            ].concat(parametricRestrictions);
+            ].concat(parametricRestrictions).concat(stringRestrictions);
         }
     };
 

@@ -10,6 +10,7 @@ define([
      * Models representing the state of a search.
      * @typedef {Object} QueryState
      * @property {DatesFilterModel} datesFilterModel Contains the date restrictions
+     * @property {StringFilterModel} stringFilterModel Contains the any MATCH string restrictions
      * @property {Backbone.Model} queryTextModel Contains the input text and related concepts
      * @property {Backbone.Collection} selectedIndexes
      * @property {Backbone.Collection} selectedParametricValues
@@ -173,7 +174,7 @@ define([
         },
 
         equalsQueryStateStringFilters: function(queryState) {
-            var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { name: key, value: val }})
+            var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { field: key, value: val }})
             return arraysEqual(this.get('stringFilters'), stringFilters)
         },
 
@@ -200,7 +201,7 @@ define([
             var attr = {}
 
             _.each(this.get('stringFilters'), function(obj){
-                attr[obj.name] = attr[obj.value]
+                attr[obj.field] = attr[obj.value]
             })
 
             return attr
@@ -224,7 +225,7 @@ define([
         attributesFromQueryState: function(queryState) {
             var indexes = _.map(queryState.selectedIndexes.toResourceIdentifiers(), selectedIndexToResourceIdentifier);
             var parametricValues = queryState.selectedParametricValues.map(pickFieldAndValue);
-            var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { name: key, value: val }})
+            var stringFilters = _.map(queryState.stringFilterModel.toQueryModelAttributes(), function(val,key){return { field: key, value: val }})
 
             return _.extend({
                 queryText: queryState.queryTextModel.get('inputText'),

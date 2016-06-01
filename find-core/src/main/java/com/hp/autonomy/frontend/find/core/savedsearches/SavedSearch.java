@@ -129,6 +129,7 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
         queryText = builder.queryText;
         indexes = builder.indexes;
         parametricValues = builder.parametricValues;
+        stringFilters = builder.stringFilters;
         conceptClusterPhrases = builder.conceptClusterPhrases;
         minDate = builder.minDate;
         maxDate = builder.maxDate;
@@ -158,6 +159,7 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
 
             indexes = other.getIndexes() == null ? indexes : other.getIndexes();
             parametricValues = other.getParametricValues() == null ? parametricValues : other.getParametricValues();
+            stringFilters = other.getStringFilters() == null ? stringFilters : other.getStringFilters();
 
             if (other.getConceptClusterPhrases() != null) {
                 conceptClusterPhrases.clear();
@@ -202,12 +204,14 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
 
     // WARNING: This logic is duplicated in the client side SelectedValuesCollection
     public String toFieldText() {
-        if (CollectionUtils.isEmpty(parametricValues)) {
+        final Collection<FieldAndValue> union = CollectionUtils.union(parametricValues, stringFilters);
+
+        if (CollectionUtils.isEmpty(union)) {
             return "";
         } else {
             final Map<String, List<String>> fieldToValues = new HashMap<>();
 
-            for (final FieldAndValue fieldAndValue : parametricValues) {
+            for (final FieldAndValue fieldAndValue : union) {
                 List<String> values = fieldToValues.get(fieldAndValue.getField());
 
                 if (values == null) {
@@ -241,6 +245,7 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
         private String queryText;
         private Set<EmbeddableIndex> indexes;
         private Set<FieldAndValue> parametricValues;
+        private Set<FieldAndValue> stringFilters;
         private Set<ConceptClusterPhrase> conceptClusterPhrases;
         private DateTime minDate;
         private DateTime maxDate;
@@ -255,6 +260,7 @@ public abstract class SavedSearch<T extends SavedSearch<T>> {
             queryText = search.queryText;
             indexes = search.indexes;
             parametricValues = search.parametricValues;
+            stringFilters = search.stringFilters;
             conceptClusterPhrases = search.conceptClusterPhrases;
             minDate = search.minDate;
             maxDate = search.maxDate;
