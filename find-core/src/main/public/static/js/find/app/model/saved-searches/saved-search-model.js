@@ -201,7 +201,7 @@ define([
             var attr = {}
 
             _.each(this.get('stringFilters'), function(obj){
-                attr[obj.field] = attr[obj.value]
+                attr[obj.field] = obj.value
             })
 
             return attr
