@@ -14,7 +14,9 @@ import com.hp.autonomy.searchcomponents.core.search.DocumentsService;
 import com.hp.autonomy.searchcomponents.core.search.SearchRequest;
 import com.hp.autonomy.searchcomponents.idol.search.IdolSearchResult;
 import com.hp.autonomy.types.requests.Documents;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
@@ -49,7 +51,7 @@ public class IdolDocumentsController extends DocumentsController<String, IdolSea
         // Demo-specific changes
         // TODO: delete this
         final boolean isQuestion = StringUtils.endsWith(text, "?");
-        final List<String> destIndex = isQuestion ? Collections.singletonList("ChatTranscripts") : index;
+        final List<String> destIndex = isQuestion ? Collections.singletonList("Support") : index;
 
         // We're deliberately not calling the super implementation so we can hack the parameters
         final SearchRequest<String> searchRequest = parseRequestParamsToObject(text, resultsStart, maxResults, summary, destIndex, fieldText, sort, minDate, maxDate, highlight, autoCorrect);
@@ -61,21 +63,39 @@ public class IdolDocumentsController extends DocumentsController<String, IdolSea
 
         final Documents<IdolSearchResult> result = documentsService.queryTextIndex(searchRequest);
 
-        final List<IdolSearchResult> docs = result.getDocuments();
-        Integer totalResults = result.getTotalResults();
+        if (!isQuestion) {
+            return result;
+        }
+        else {
+            final List<IdolSearchResult> origDocs = result.getDocuments();
+            Integer totalResults = result.getTotalResults();
+            List<IdolSearchResult> docs = origDocs;
 
-        if (isQuestion && docs != null) {
-            totalResults = docs.size();
+            if (docs != null) {
+                totalResults = docs.size();
 
-            for(final IdolSearchResult doc : docs) {
-                final Map<String, FieldInfo<?>> map = doc.getFieldMap();
-                if (map != null) {
+                docs = new ArrayList<>();
+
+                for(final IdolSearchResult doc : origDocs) {
+                    LinkedHashMap<String, FieldInfo<?>> map = new LinkedHashMap<>();
+
+                    if (doc.getFieldMap() != null) {
+                        for(final Map.Entry<String, FieldInfo<?>> entry : doc.getFieldMap().entrySet()) {
+                            map.put(entry.getKey(), entry.getValue());
+                        }
+                    }
+
                     map.put("question", new FieldInfo<>("question", Collections.singletonList("question"), FieldType.BOOLEAN, Collections.singletonList("true")));
+
+                    docs.add(new IdolSearchResult.Builder(doc)
+                            .setFieldMap(map)
+                            .build());
                 }
             }
+
+            return new Documents<>(docs, totalResults, result.getExpandedQuery(), result.getSuggestion(), result.getAutoCorrection(), result.getWarnings());
         }
 
-        return new Documents<>(docs, totalResults, result.getExpandedQuery(), result.getSuggestion(), result.getAutoCorrection(), result.getWarnings());
     }
 
     @Override
