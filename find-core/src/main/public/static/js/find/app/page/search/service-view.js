@@ -377,7 +377,7 @@ define([
                     data: _.extend({
                         datePeriod: this.queryModel.get('datePeriod'),
                         maxValues: -1,
-                        fieldNames: ['autn_date', 'country']
+                        fieldNames: ['autn_date', 'state']
                     }, data)
                 })
             }
