@@ -6,6 +6,7 @@
 define([
     'js-testing/backbone-mock-factory',
     'find/app/model/dates-filter-model',
+    'find/app/model/string-filter-model',
     'find/app/model/search-filters-collection',
     'parametric-refinement/selected-values-collection',
     'databases-view/js/databases-collection',
@@ -13,7 +14,7 @@ define([
     'fieldtext/js/field-text-parser',
     'backbone',
     'moment'
-], function(mockFactory, DatesFilterModel, FiltersCollection, SelectedParametricValues, DatabasesCollection, i18n, fieldTextParser, Backbone, moment) {
+], function(mockFactory, DatesFilterModel, StringFilterModel, FiltersCollection, SelectedParametricValues, DatabasesCollection, i18n, fieldTextParser, Backbone, moment) {
 
     var WOOKIEPEDIA = {
         id: 'TESTDOMAIN:wookiepedia',
@@ -48,13 +49,16 @@ define([
                 {field: 'AGE', value: '4'}
             ]);
 
+            this.stringFilterModel = new StringFilterModel({})
+
             this.collection = new FiltersCollection([], {
                 queryModel: this.queryModel,
                 indexesCollection: this.indexesCollection,
                 queryState: {
                     datesFilterModel: this.datesFilterModel,
                     selectedIndexes: this.selectedIndexesCollection,
-                    selectedParametricValues: this.selectedParametricValues
+                    selectedParametricValues: this.selectedParametricValues,
+                    stringFilterModel: this.stringFilterModel
                 }
             });
         });

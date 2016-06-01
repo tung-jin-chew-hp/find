@@ -9,11 +9,12 @@ define([
     'find/app/page/search/saved-searches/saved-search-control-view',
     'find/app/model/saved-searches/saved-search-model',
     'find/app/model/dates-filter-model',
+    'find/app/model/string-filter-model',
     'find/app/util/confirm-view',
     'databases-view/js/databases-collection',
     'moment',
     'i18n!find/nls/bundle'
-], function(Backbone, $, SavedSearchControlView, SavedSearchModel, DatesFilterModel, MockConfirmView, DatabasesCollection, moment, i18n) {
+], function(Backbone, $, SavedSearchControlView, SavedSearchModel, DatesFilterModel, StringFilterModel, MockConfirmView, DatabasesCollection, moment, i18n) {
 
     function testDeactivatesTheSaveSearchButton() {
         it('deactivates the "Save Search" button', function() {
@@ -98,11 +99,14 @@ define([
                 customMaxDate: null
             });
 
+            var stringFilterModel = new StringFilterModel({})
+
             this.queryState = {
                 datesFilterModel: datesFilterModel,
                 queryTextModel: queryTextModel,
                 selectedIndexes: selectedIndexes,
-                selectedParametricValues: selectedParametricValues
+                selectedParametricValues: selectedParametricValues,
+                stringFilterModel: stringFilterModel
             };
 
             this.savedSearchModel = new SavedSearchModel({

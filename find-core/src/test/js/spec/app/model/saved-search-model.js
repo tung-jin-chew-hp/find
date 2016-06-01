@@ -8,8 +8,9 @@ define([
     'databases-view/js/databases-collection',
     'find/app/model/saved-searches/saved-search-model',
     'find/app/model/dates-filter-model',
+    'find/app/model/string-filter-model',
     'moment'
-], function(Backbone, DatabasesCollection, SavedSearchModel, DatesFilterModel, moment) {
+], function(Backbone, DatabasesCollection, SavedSearchModel, DatesFilterModel, StringFilterModel, moment) {
 
     var INPUT_TEXT = 'johnny';
     var RELATED_CONCEPTS = [['depp']];
@@ -58,11 +59,14 @@ define([
                 }, data);
             }));
 
+            this.stringFilterModel = new StringFilterModel({})
+
             this.queryState = {
                 queryTextModel: this.queryTextModel,
                 datesFilterModel: this.datesFilterModel,
                 selectedIndexes: this.selectedIndexes,
-                selectedParametricValues: this.selectedParametricValues
+                selectedParametricValues: this.selectedParametricValues,
+                stringFilterModel: this.stringFilterModel
             };
         });
 
