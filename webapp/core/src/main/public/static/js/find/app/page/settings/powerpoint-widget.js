@@ -23,7 +23,9 @@ define([
         successClass: 'has-success',
 
         events: _.extend({
-            'click button[name=validate]': 'triggerValidation'
+            'click button[name=validate]': 'triggerValidation',
+            'change .template-input-margin': 'updateMarginIndicator',
+            'keyup .template-input-margin': 'updateMarginIndicator'
         }, Widget.prototype.events),
 
         initialize: function(options) {
@@ -46,6 +48,8 @@ define([
             this.$marginTop = this.$('.template-input-marginTop');
             this.$marginRight = this.$('.template-input-marginRight');
             this.$marginBottom = this.$('.template-input-marginBottom');
+
+            this.$marginIndicator = this.$('.powerpoint-margins-indicator');
         },
 
         handleValidation: function(config, response) {
@@ -87,7 +91,17 @@ define([
                 this.$marginTop.val(config.marginTop);
                 this.$marginRight.val(config.marginRight);
                 this.$marginBottom.val(config.marginBottom);
+                this.updateMarginIndicator();
             }
+        },
+
+        updateMarginIndicator: function() {
+            this.$marginIndicator.css({
+                left: 100 * Math.min(1, Math.max(0, this.$marginLeft.val())) + '%',
+                top: 100 * Math.min(1, Math.max(0, this.$marginTop.val())) + '%',
+                right: 100 * Math.min(1, Math.max(0, this.$marginRight.val())) + '%',
+                bottom: 100 * Math.min(1, Math.max(0, this.$marginBottom.val())) + '%'
+            })
         }
     });
 });
