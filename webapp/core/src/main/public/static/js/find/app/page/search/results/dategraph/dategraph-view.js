@@ -30,8 +30,10 @@ define([
     var category10 = d3.scale.category10();
 
     function rangeModelMatching(fieldName, dataType) {
+        var upperCase = fieldName.toUpperCase();
+
         return function(model) {
-            return model.get('field') === fieldName && model.get('range') && model.get('dataType') === dataType;
+            return model.get('field').toUpperCase() === upperCase && model.get('range') && model.get('dataType') === dataType;
         };
     }
 
