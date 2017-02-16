@@ -64,24 +64,16 @@ public class PowerPointConfig implements OptionalConfigurationComponent<PowerPoi
     @JsonIgnore
     public Anchor getAnchor() {
         final Anchor anchor = new Anchor();
-        if (marginLeft != null && marginLeft > 0) {
-            anchor.setX(marginLeft);
-        }
-        if (marginTop != null && marginTop > 0) {
-            anchor.setY(marginTop);
-        }
-        if (marginRight != null) {
-            double avail = 1 - marginRight - anchor.getX();
-            if (avail > 0) {
-                anchor.setWidth(avail);
-            }
-        }
-        if (marginBottom != null) {
-            double avail = 1 - marginBottom - anchor.getY();
-            if (avail > 0) {
-                anchor.setHeight(avail);
-            }
-        }
+
+        final double tmpMarginTop = marginTop == null ? 0 : marginTop;
+        final double tmpMarginLeft = marginLeft == null ? 0 : marginLeft;
+        final double tmpMarginRight = marginRight == null ? 0 : marginRight;
+        final double tmpMarginBottom = marginBottom == null ? 0 : marginBottom;
+
+        anchor.setX(tmpMarginLeft);
+        anchor.setY(tmpMarginTop);
+        anchor.setWidth(1 - tmpMarginLeft - tmpMarginRight);
+        anchor.setHeight(1 - tmpMarginTop - tmpMarginBottom);
 
         return anchor;
     }
