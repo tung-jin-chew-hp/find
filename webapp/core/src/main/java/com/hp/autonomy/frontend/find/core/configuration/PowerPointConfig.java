@@ -12,7 +12,7 @@ import com.hp.autonomy.frontend.configuration.ConfigException;
 import com.hp.autonomy.frontend.configuration.validation.OptionalConfigurationComponent;
 import com.hp.autonomy.frontend.configuration.validation.ValidationResult;
 import com.hp.autonomy.frontend.reports.powerpoint.PowerPointServiceImpl;
-import com.hp.autonomy.frontend.reports.powerpoint.SlideShowTemplate;
+import com.hp.autonomy.frontend.reports.powerpoint.TemplateLoadException;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSettingsSource;
 import com.hp.autonomy.frontend.reports.powerpoint.dto.Anchor;
 import java.io.File;
@@ -110,7 +110,7 @@ public class PowerPointConfig implements OptionalConfigurationComponent<PowerPoi
             try {
                 service.validateTemplate();
             }
-            catch(SlideShowTemplate.LoadException e) {
+            catch(TemplateLoadException e) {
                 return new ValidationResult<>(false, Validation.TEMPLATE_INVALID);
             }
         }

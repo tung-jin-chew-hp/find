@@ -14,7 +14,7 @@ import com.hp.autonomy.frontend.find.core.web.ErrorModelAndViewInfo;
 import com.hp.autonomy.frontend.find.core.web.RequestMapper;
 import com.hp.autonomy.frontend.reports.powerpoint.PowerPointService;
 import com.hp.autonomy.frontend.reports.powerpoint.PowerPointServiceImpl;
-import com.hp.autonomy.frontend.reports.powerpoint.SlideShowTemplate;
+import com.hp.autonomy.frontend.reports.powerpoint.TemplateLoadException;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSettings;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSettingsSource;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSource;
@@ -155,7 +155,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     @RequestMapping(value = PPT_TOPICMAP_PATH, method = RequestMethod.POST)
     public HttpEntity<byte[]> topicmap(
             @RequestParam("data") final String topicMapStr
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final TopicMapData data = objectMapper.readValue(topicMapStr, TopicMapData.class);
         return writePPT(pptService.topicmap(data), "topicmap.pptx");
     }
@@ -174,7 +174,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     @RequestMapping(value = PPT_SUNBURST_PATH, method = RequestMethod.POST)
     public HttpEntity<byte[]> sunburst(
             @RequestParam("data") final String dataStr
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final SunburstData data = objectMapper.readValue(dataStr, SunburstData.class);
 
         final XMLSlideShow ppt = pptService.sunburst(data);
@@ -187,7 +187,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
             @RequestParam("title") final String title,
             @RequestParam("data") final String dataStr
 
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final TableData tableData = objectMapper.readValue(dataStr, TableData.class);
 
         final XMLSlideShow ppt = pptService.table(tableData, title);
@@ -199,7 +199,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     public HttpEntity<byte[]> map(
             @RequestParam("title") final String title,
             @RequestParam("data") final String markerStr
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final MapData map = objectMapper.readValue(markerStr, MapData.class);
 
         final XMLSlideShow ppt = pptService.map(map, title);
@@ -212,7 +212,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
             @RequestParam("results") final String results,
             @RequestParam("sortBy") final String sortBy,
             @RequestParam("data") final String docsStr
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final ListData documentList = objectMapper.readValue(docsStr, ListData.class);
 
         final XMLSlideShow ppt = pptService.list(documentList, results, sortBy);
@@ -223,7 +223,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     @RequestMapping(value = PPT_DATEGRAPH_PATH, method = RequestMethod.POST)
     public HttpEntity<byte[]> graph(
             @RequestParam("data") final String dataStr
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final DategraphData data = objectMapper.readValue(dataStr, DategraphData.class);
 
         final XMLSlideShow ppt = pptService.graph(data);
@@ -234,7 +234,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     @RequestMapping(value = PPT_REPORT_PATH, method = RequestMethod.POST)
     public HttpEntity<byte[]> report(
             @RequestParam("data") final String dataStr
-    ) throws IOException, SlideShowTemplate.LoadException {
+    ) throws IOException, TemplateLoadException {
         final ReportData report = objectMapper.readValue(dataStr, ReportData.class);
 
         final XMLSlideShow ppt = pptService.report(report);
