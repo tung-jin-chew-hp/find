@@ -4,12 +4,13 @@
  */
 
 define([
+    'i18n!find/nls/bundle',
     'find/app/page/abstract-find-settings-page',
     'find/app/page/settings/iod-widget',
     'find/app/page/settings/powerpoint-widget',
     'settings/js/widgets/single-user-widget',
     'underscore'
-], function(SettingsPage, IodWidget, PowerPointWidget, SingleUserWidget, _) {
+], function(i18n, SettingsPage, IodWidget, PowerPointWidget, SingleUserWidget, _) {
     'use strict';
 
     return SettingsPage.extend({
