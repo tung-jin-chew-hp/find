@@ -190,7 +190,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     ) throws IOException, SlideShowTemplate.LoadException {
         final TableData tableData = objectMapper.readValue(dataStr, TableData.class);
 
-        final XMLSlideShow ppt = pptService.table(title, tableData);
+        final XMLSlideShow ppt = pptService.table(tableData, title);
 
         return writePPT(ppt, "table.pptx");
     }
@@ -202,7 +202,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     ) throws IOException, SlideShowTemplate.LoadException {
         final MapData map = objectMapper.readValue(markerStr, MapData.class);
 
-        final XMLSlideShow ppt = pptService.map(title, map);
+        final XMLSlideShow ppt = pptService.map(map, title);
 
         return writePPT(ppt, "map.pptx");
     }
@@ -215,7 +215,7 @@ public abstract class ExportController<R extends QueryRequest<?>, E extends Exce
     ) throws IOException, SlideShowTemplate.LoadException {
         final ListData documentList = objectMapper.readValue(docsStr, ListData.class);
 
-        final XMLSlideShow ppt = pptService.list(results, sortBy, documentList);
+        final XMLSlideShow ppt = pptService.list(documentList, results, sortBy);
 
         return writePPT(ppt, "list.pptx");
     }
