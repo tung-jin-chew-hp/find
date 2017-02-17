@@ -1,30 +1,32 @@
 define([
-    'js-whatever/js/list-item-view',
+    'backbone',
     'underscore',
     'text!find/templates/app/page/search/filters/parametric/parametric-select-modal-item-view.html',
     'iCheck'
-], function(ListItemView, _, template) {
+], function(Backbone, _, template) {
 
-    return ListItemView.extend({
+    return Backbone.View.extend({
+        tagName: 'li',
         template: _.template(template),
-        
-        initialize: function(options) {
-            var field = options.field;
 
-            ListItemView.prototype.initialize.call(this, _.defaults({
-                template: this.template,
-                templateOptions: {
-                    field: field,
-                    model: this.model,
-                    showGraphButtons: options.showGraphButtons
-                }
-            }, options));
+        initialize: function(options) {
+            this.showGraphButtons = options.showGraphButtons;
         },
 
         render: function() {
-            ListItemView.prototype.render.apply(this, arguments);
+            this.$el
+                .html(this.template({
+                    count: this.model.get('count') || 0,
+                    value: this.model.get('value'),
+                    showGraphButtons: this.showGraphButtons
+                }))
+                .iCheck({checkboxClass: 'icheckbox-hp'});
 
-            this.$el.iCheck({checkboxClass: 'icheckbox-hp'})
+            this.updateSelected();
+        },
+
+        updateSelected: function() {
+            this.$('input').iCheck(this.model.get('selected') ? 'check' : 'uncheck');
         }
     });
 });

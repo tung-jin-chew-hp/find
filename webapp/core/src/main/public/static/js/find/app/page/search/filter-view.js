@@ -172,7 +172,6 @@ define([
                     );
                     this.parametricDisplayCollection = new ParametricDisplayCollection([], {
                         parametricCollection: options.parametricCollection,
-                        restrictedParametricCollection: options.restrictedParametricCollection,
                         selectedParametricValues: options.queryState.selectedParametricValues,
                         filterModel: this.filterModel
                     });
@@ -222,7 +221,7 @@ define([
                         formatting: NumericParametricFieldView.dateFormatting,
                         indexesCollection: options.indexesCollection,
                         parametricCollection: options.parametricCollection,
-                        restrictedParametricCollection: options.restrictedParametricCollection,
+                        parametricFieldsCollection: options.parametricFieldsCollection,
                         displayCollection: this.parametricDisplayCollection,
                         showGraphButtons: _.contains(config.resultViewOrder, 'dategraph')
                     });

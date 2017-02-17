@@ -14,22 +14,37 @@ define([
 ], function(Backbone, Modal, ParametricSelectView, SelectedValuesCollection, loadingSpinnerTemplate, i18n, _) {
     'use strict';
 
+    // Convert a selected value model to a field value pair
+    function toAttributes(model) {
+        return model.pick('field', 'value');
+    }
+
     return Modal.extend({
         className: Modal.prototype.className + ' fixed-height-modal',
 
-        loadingTemplate: _.template(loadingSpinnerTemplate)({i18n: i18n, large: false}),
+        events: _.defaults({
+            'shown.bs.modal': function() {
+                // The content view will be visible now, so check if we need to load parametric values
+                this.parametricSelectView.checkScroll();
+            },
+            'click .parametric-value-graph': function(){
+                var $checkboxEl = $(e.currentTarget).prev()
+                this.selectedParametricValues.trigger('graph', $checkboxEl.data().fieldId, $checkboxEl.find('.field-value').text());
+            }
+        }, Modal.prototype.events),
 
         initialize: function(options) {
-            this.selectCollection = new SelectedValuesCollection();
-            this.parametricDisplayCollection = options.parametricDisplayCollection;
-            this.selectedParametricValues = options.selectedParametricValues;
+            this.externalSelectedValues = options.selectedParametricValues;
+
+            // Track values selected in the modal, but only apply them when the user closes it
+            this.selectedParametricValues = new SelectedValuesCollection(this.externalSelectedValues.map(toAttributes));
 
             this.parametricSelectView = new ParametricSelectView({
-                collection: options.collection,
-                currentFieldGroup: options.currentFieldGroup,
-                parametricCollection: options.parametricCollection,
-                parametricDisplayCollection: this.parametricDisplayCollection,
-                selectCollection: this.selectCollection,
+                initialField: options.initialField,
+                indexesCollection: options.indexesCollection,
+                queryModel: options.queryModel,
+                parametricFieldsCollection: options.parametricFieldsCollection,
+                selectedParametricValues: this.selectedParametricValues,
                 showGraphButtons: options.showGraphButtons
             });
 
@@ -40,18 +55,17 @@ define([
                 contentView: this.parametricSelectView,
                 title: i18n['search.parametricFilters.modal.title'],
                 actionButtonCallback: _.bind(function() {
-                    this.selectedParametricValues.set(this.selectCollection.where({selected: true}), {remove: false});
-                    this.selectedParametricValues.remove(this.selectCollection.where({selected: false}));
+                    // Update the search with new selected values on close
+                    this.externalSelectedValues.set(this.selectedParametricValues.map(toAttributes));
 
                     this.hide();
                 }, this)
             });
+        },
 
-            this.$el.on('shown.bs.modal', _.bind(this.parametricSelectView.renderFields, this));
-            this.$el.on('click', '.parametric-value-graph', _.bind(function(e){
-                var $checkboxEl = $(e.currentTarget).prev()
-                this.selectedParametricValues.trigger('graph', $checkboxEl.data().fieldId, $checkboxEl.find('.field-value').text());
-            }, this));
+        remove: function() {
+            this.parametricSelectView.remove();
+            Modal.prototype.remove.call(this);
         }
     });
 });
