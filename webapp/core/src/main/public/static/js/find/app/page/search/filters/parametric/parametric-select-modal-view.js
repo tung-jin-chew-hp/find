@@ -58,7 +58,7 @@ define([
                     id: fieldModel.id,
                     displayName: fieldModel.get('displayName') || prettifyFieldName(fieldModel.id),
                     view: new ParametricSelectModalListView({
-                        showGraphButtons: this.showGraphButtons,
+                        showGraphButtons: options.showGraphButtons,
                         paginator: paginator
                     })
                 };
@@ -103,6 +103,10 @@ define([
                     data.view.checkScroll();
                 }
             });
+        },
+
+        getSelectedField: function(){
+            return this.fieldSelectionModel.get('field');
         },
 
         remove: function () {
