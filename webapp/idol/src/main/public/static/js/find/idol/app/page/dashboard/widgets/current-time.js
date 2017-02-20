@@ -45,13 +45,14 @@ define([
         },
 
         exportPPTData: function(){
-            // Depending on how complicated we need to make this parser, we could also handle font, italics, etc.
+            const fontScale = 10 / 16;
+
             return {
                 data: {
                     text: _.map([this.$time, this.$day, this.$date], function($el){
                         return {
-                            text: $el.text() + '\n',
-                            fontSize: 10
+                            text: $el.text().toUpperCase() + '\n',
+                            fontSize: Math.round(parseInt($el.css('font-size')) * fontScale)
                         }
                     })
                 },
