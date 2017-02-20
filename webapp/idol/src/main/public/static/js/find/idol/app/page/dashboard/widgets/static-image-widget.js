@@ -43,7 +43,7 @@ define([
                 }
             });
 
-            return deferred.promise().then(function(data){
+            return deferred.then(function(data){
                 return {
                     data: data,
                     type: 'map'
