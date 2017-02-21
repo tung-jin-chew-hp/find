@@ -132,11 +132,9 @@ define([
         render: function() {
             ParametricResultsView.prototype.render.apply(this, arguments);
 
-            this.$('.col-md-12').prepend('<a class="btn btn-default pull-right sunburst-pptx" href="#"><i class="hp-icon hp-document-download"></i> PPTX</a>');
-
             this.$content.addClass('sunburst');
 
-            this.$el.on('click', '.sunburst-pptx', _.bind(function(evt){
+            this.$el.on('click', '.parametric-pptx', _.bind(function(evt){
                 evt.preventDefault();
 
                 var $form = $('<form class="hide" enctype="multipart/form-data" method="post" target="_blank" action="api/bi/export/ppt/sunburst"><textarea name="data"></textarea><input type="submit"></form>');
