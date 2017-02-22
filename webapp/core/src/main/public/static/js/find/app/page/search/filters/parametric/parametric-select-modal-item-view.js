@@ -8,12 +8,17 @@ define([
     return Backbone.View.extend({
         tagName: 'li',
         template: _.template(template),
-        
+
+        initialize: function(options) {
+            this.showGraphButtons = options.showGraphButtons;
+        },
+
         render: function() {
             this.$el
                 .html(this.template({
                     count: this.model.get('count') || 0,
-                    value: this.model.get('value')
+                    value: this.model.get('value'),
+                    showGraphButtons: this.showGraphButtons
                 }))
                 .iCheck({checkboxClass: 'icheckbox-hp'});
 
