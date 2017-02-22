@@ -37,6 +37,14 @@ define([
         };
     }
 
+    function dateModelMatching(fieldName, dataType) {
+        var upperCase = fieldName.toUpperCase();
+
+        return function(model) {
+            return model.id.toUpperCase() === upperCase && model.get('dataType') === dataType;
+        };
+    }
+
     return Backbone.View.extend({
         template: _.template(template),
 
@@ -92,6 +100,7 @@ define([
 
             this.bucketModel = new BucketedParametricCollection.Model({id: this.fieldName});
             this.selectedParametricValues = options.queryState.selectedParametricValues;
+            this.dateParametricFieldsCollection = options.dateParametricFieldsCollection;
 
             this.listenTo(this.queryModel, 'change', this.fetchBuckets);
 
@@ -175,17 +184,19 @@ define([
             // If the SVG has no width or there are no values, there is no point fetching new data
             // if(width !== 0 && this.model.get('totalValues') !== 0) {
             if(width) {
-                var rangeFilter = this.selectedParametricValues.find(rangeModelMatching(this.fieldName, this.dataType))
+                var rangeFilter = this.selectedParametricValues.find(rangeModelMatching(this.fieldName, this.dataType));
 
                 var otherSelectedValues = this.selectedParametricValues
                     .map(function(model) {
                         return model.toJSON();
                     });
 
-                var dateRange = rangeFilter && rangeFilter.get('range')
+                var dateRange = rangeFilter && rangeFilter.get('range');
 
                 var minDate = this.queryModel.getIsoDate('minDate');
                 var maxDate = this.queryModel.getIsoDate('maxDate');
+
+                var dateField = this.dateParametricFieldsCollection.find(dateModelMatching(this.fieldName, this.dataType));
 
                 var baseParams = {
                     queryText: this.queryModel.get('queryText'),
@@ -195,9 +206,8 @@ define([
                     minScore: this.queryModel.get('minScore'),
                     databases: this.queryModel.get('indexes'),
                     targetNumberOfBuckets: Math.floor(width / this.pixelsPerBucket),
-                    // TODO: better upper/lower default ranges?
-                    bucketMin: dateRange ? dateRange[0] : Math.floor((new Date().getTime() - 86400e3*4*365)/1000),
-                    bucketMax: dateRange ? dateRange[1] : Math.floor(new Date().getTime()/1000)
+                    bucketMin: dateRange ? dateRange[0] : dateField ? dateField.get('min') : Math.floor((new Date().getTime() - 86400e3*365)/1000),
+                    bucketMax: dateRange ? dateRange[1] : dateField ? dateField.get('max') : Math.floor(new Date().getTime()/1000)
                 };
 
                 this.lastBaseParams = baseParams;
