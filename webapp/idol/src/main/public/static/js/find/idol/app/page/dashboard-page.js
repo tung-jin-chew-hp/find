@@ -21,6 +21,9 @@ define([
         template: _.template(template),
 
         events: {
+            'click .report-pptx-checkbox': function(evt){
+                evt.stopPropagation();
+            },
             'click .report-pptx': function(evt){
                 evt.preventDefault();
                 evt.stopPropagation();
@@ -28,7 +31,11 @@ define([
                 var reports = [],
                     scaleX = 0.01 * this.widthPerUnit,
                     scaleY = 0.01 * this.heightPerUnit,
-                    multipage = $(evt.currentTarget).is('.report-pptx-multipage')
+                    $el = $(evt.currentTarget),
+                    multipage = $el.is('.report-pptx-multipage'),
+                    $group = $el.closest('.btn-group'),
+                    labels = $group.find('.report-pptx-labels:checked').length,
+                    padding = $group.find('.report-pptx-padding:checked').length;
 
                 _.each(this.widgetViews, function(widget) {
                     if (widget.view.exportPPTData) {
@@ -40,11 +47,12 @@ define([
                                 var pos = widget.position;
 
                                 return _.defaults(data, {
-                                    title: widget.view.name,
+                                    title: labels ? widget.view.name : undefined,
                                     x: multipage ? 0 : pos.x * scaleX,
                                     y: multipage ? 0 : pos.y * scaleY,
                                     width: multipage ? 1 : pos.width * scaleX,
-                                    height: multipage ? 1 : pos.height * scaleY
+                                    height: multipage ? 1 : pos.height * scaleY,
+                                    margin: padding ? 3 : 0
                                 })
                             }));
                         }
@@ -106,7 +114,9 @@ define([
             this.$el.html(this.template({
                 dashboardName: this.dashboardName,
                 powerpointSingle: i18n['powerpoint.export.single'],
-                powerpointMultiple: i18n['powerpoint.export.multiple']
+                powerpointMultiple: i18n['powerpoint.export.multiple'],
+                powerpointLabels: i18n['powerpoint.export.labels'],
+                powerpointPadding: i18n['powerpoint.export.padding'],
             }));
 
             _.each(this.widgetViews, function(widget) {

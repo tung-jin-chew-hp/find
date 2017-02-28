@@ -84,6 +84,8 @@ define([
         'placeholder.port': 'port',
         'powerpoint.export.single': 'Single slide',
         'powerpoint.export.multiple': 'Multislide',
+        'powerpoint.export.labels': 'Labels',
+        'powerpoint.export.padding': 'Padding',
         'search.answeredQuestion.question': 'Question: ',
         'search.answeredQuestion.answer': 'Answer: ',
         'search.alsoSearchingFor': 'Also searching for',
