@@ -82,6 +82,8 @@ define([
         'placeholder.hostname': 'hostname',
         'placeholder.ip': 'IP',
         'placeholder.port': 'port',
+        'powerpoint.export.single': 'Single slide',
+        'powerpoint.export.multiple': 'Multislide',
         'search.answeredQuestion.question': 'Question: ',
         'search.answeredQuestion.answer': 'Answer: ',
         'search.alsoSearchingFor': 'Also searching for',

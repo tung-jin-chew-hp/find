@@ -11,8 +11,9 @@ define([
     'find/idol/app/page/dashboard/widget-registry',
     './dashboard/widgets/widget-not-found',
     './dashboard/update-tracker-model',
-    'text!find/idol/templates/page/dashboard-page.html'
-], function(_, $, BasePage, vent, widgetRegistry, WidgetNotFoundWidget, UpdateTrackerModel, template) {
+    'text!find/idol/templates/page/dashboard-page.html',
+    'i18n!find/nls/bundle'
+], function(_, $, BasePage, vent, widgetRegistry, WidgetNotFoundWidget, UpdateTrackerModel, template, i18n) {
     'use strict';
 
     return BasePage.extend({
@@ -26,7 +27,8 @@ define([
 
                 var reports = [],
                     scaleX = 0.01 * this.widthPerUnit,
-                    scaleY = 0.01 * this.heightPerUnit
+                    scaleY = 0.01 * this.heightPerUnit,
+                    multipage = $(evt.currentTarget).is('.report-pptx-multipage')
 
                 _.each(this.widgetViews, function(widget) {
                     if (widget.view.exportPPTData) {
@@ -39,10 +41,10 @@ define([
 
                                 return _.defaults(data, {
                                     title: widget.view.name,
-                                    x: pos.x * scaleX,
-                                    y: pos.y * scaleY,
-                                    width: pos.width * scaleX,
-                                    height: pos.height * scaleY
+                                    x: multipage ? 0 : pos.x * scaleX,
+                                    y: multipage ? 0 : pos.y * scaleY,
+                                    width: multipage ? 1 : pos.width * scaleX,
+                                    height: multipage ? 1 : pos.height * scaleY
                                 })
                             }));
                         }
@@ -59,6 +61,8 @@ define([
                         $form[0].data.value = JSON.stringify({
                             children: children
                         })
+
+                        $form[0].multipage.value = multipage;
 
                         $form.appendTo(document.body).submit().remove()
                     })
@@ -100,7 +104,9 @@ define([
 
         render: function() {
             this.$el.html(this.template({
-                dashboardName: this.dashboardName
+                dashboardName: this.dashboardName,
+                powerpointSingle: i18n['powerpoint.export.single'],
+                powerpointMultiple: i18n['powerpoint.export.multiple']
             }));
 
             _.each(this.widgetViews, function(widget) {
