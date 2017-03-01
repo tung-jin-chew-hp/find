@@ -61,7 +61,7 @@ define([
 
                 if (reports.length) {
                     $.when.apply($, reports).done(function(){
-                        var children = [].slice.call(arguments, 0);
+                        var children = _.compact(arguments);
 
                         // Since it's an async action, we have to keep it as target: _self to avoid the popup blocker.
                         var $form = $('<form class="hide" enctype="multipart/form-data" method="post" action="api/bi/export/ppt/report"><textarea name="data"></textarea><input type="submit"></form>');

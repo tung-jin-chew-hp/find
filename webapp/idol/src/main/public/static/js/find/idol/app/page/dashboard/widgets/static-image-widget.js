@@ -36,10 +36,16 @@ define([
             html2canvas($imageEl[0], {
                 useCORS: true,
                 onrendered: function(canvas) {
-                    deferred.resolve({
-                        image: canvas.toDataURL('image/jpeg'),
-                        markers: []
-                    });
+                    try {
+                        deferred.resolve({
+                            image: canvas.toDataURL('image/jpeg'),
+                            markers: []
+                        });
+                    }
+                    catch (e) {
+                        // canvas.toDataURL can throw exceptions in IE11 even if there's CORS headers on the background-image
+                        deferred.resolve(null)
+                    }
                 }
             });
 
