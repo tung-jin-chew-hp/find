@@ -50,7 +50,7 @@ define([
             });
 
             return deferred.then(function(data){
-                return {
+                return data && {
                     data: data,
                     type: 'map'
                 }
