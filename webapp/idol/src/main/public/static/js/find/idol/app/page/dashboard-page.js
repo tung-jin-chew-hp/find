@@ -33,7 +33,7 @@ define([
                     scaleY = 0.01 * this.heightPerUnit,
                     $el = $(evt.currentTarget),
                     multipage = $el.is('.report-pptx-multipage'),
-                    $group = $el.closest('.btn-group'),
+                    $group = $el.closest('.btn-group').removeClass('report-complete').data('json', ''),
                     labels = $group.find('.report-pptx-labels:checked').length,
                     padding = $group.find('.report-pptx-padding:checked').length;
 
@@ -71,6 +71,8 @@ define([
                         })
 
                         $form[0].multipage.value = multipage;
+
+                        $group.addClass('report-complete').data('json', $form[0].data.value)
 
                         $form.appendTo(document.body).submit().remove()
                     })
@@ -121,15 +123,17 @@ define([
 
             _.each(this.widgetViews, function(widget) {
                 const $div = this.generateWidgetDiv(widget.position);
-
-                // Need $.when() because not every widget has a savedSearchPromise.
-                // $.when(undefined) returns a resolved promise
-                $.when(widget.view.savedSearchPromise)
-                    .done(function() {
-                        this.$el.append($div);
-                        widget.view.setElement($div).render();
-                    }.bind(this));// TODO handle failure
+                this.$el.append($div);
+                widget.view.setElement($div).render();
             }.bind(this));
+
+            var $exportBtn = this.$('.report-pptx-group');
+
+            $.when.apply($, _.map(this.widgetViews, function(widget){
+                return widget.view.savedSearchPromise
+            })).done(function(){
+                $exportBtn.removeClass('hide');
+            })
 
             this.listenTo(vent, 'vent:resize', this.onResize);
             this.listenTo(this.sidebarModel, 'change:collapsed', this.onResize);

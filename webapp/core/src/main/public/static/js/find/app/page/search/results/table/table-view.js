@@ -1,22 +1,21 @@
 /*
- * Copyright 2016 Hewlett-Packard Enterprise Development Company, L.P.
+ * Copyright 2016-2017 Hewlett Packard Enterprise Development Company, L.P.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
  */
 
 define([
-    'jquery',
+    'underscore',
     'find/app/page/search/results/parametric-results-view',
     'find/app/page/search/results/table/table-collection',
     'find/app/util/generate-error-support-message',
     'i18n!find/nls/bundle',
     'text!find/templates/app/page/search/results/table/table-view.html',
-    'underscore',
     'datatables.net-bs',
     'datatables.net-fixedColumns'
-], function($, ParametricResultsView, TableCollection, generateErrorHtml, i18n, tableTemplate, _) {
+], function(_, ParametricResultsView, TableCollection, generateErrorHtml, i18n, tableTemplate) {
     'use strict';
 
-    var strings = {
+    const strings = {
         info: i18n['search.resultsView.table.info'],
         infoFiltered: i18n['search.resultsView.table.infoFiltered'],
         lengthMenu: i18n['search.resultsView.table.lengthMenu'],
@@ -36,32 +35,38 @@ define([
             'click .parametric-pptx': function(evt) {
                 evt.preventDefault();
 
-                var $form = $('<form class="hide" enctype="multipart/form-data" method="post" target="_blank" action="api/bi/export/ppt/table"><input name="title"><textarea name="data"></textarea><input type="submit"></form>');
-                $form[0].title.value = i18n['search.resultsView.table.breakdown.by'](this.fieldsCollection.at(0).get('displayValue'));
+                var data = this.exportPPTData();
 
-                var rows = this.$table.find('tr'), nCols = 0;
-
-                var cells = [];
-
-                rows.each(function(idx, el){
-                    var tds = $(el).find('th,td');
-                    nCols = tds.length;
-
-                    tds.each(function (idx, el) {
-                        cells.push($(el).text());
-                    })
-                });
-
-                $form[0].data.value = JSON.stringify({
-                    rows: rows.length,
-                    cols: nCols,
-                    cells: cells
-                });
-
-                $form.appendTo(document.body).submit().remove();
+                if (data) {
+                    var $form = $('<form class="hide" enctype="multipart/form-data" method="post" target="_blank" action="api/bi/export/ppt/table"><input name="title"><textarea name="data"></textarea><input type="submit"></form>');
+                    $form[0].title.value = i18n['search.resultsView.table.breakdown.by'](this.fieldsCollection.at(0).get('displayValue'));
+                    $form[0].data.value = JSON.stringify(data);
+                    $form.appendTo(document.body).submit().remove();
+                }
             },
 
         }, ParametricResultsView.prototype.events),
+
+        exportPPTData: function(){
+            var rows = this.$table.find('tr'), nCols = 0;
+
+            var cells = [];
+
+            rows.each(function(idx, el){
+                var tds = $(el).find('th,td');
+                nCols = tds.length;
+
+                tds.each(function (idx, el) {
+                    cells.push($(el).text());
+                })
+            });
+
+            return rows.length ? {
+                rows: rows.length,
+                cols: nCols,
+                cells: cells
+            } : null;
+        },
 
         initialize: function(options) {
             ParametricResultsView.prototype.initialize.call(this, _.defaults({
@@ -108,13 +113,14 @@ define([
                         ],
                         language: strings
                     });
-                }
-                else {
+                } else {
                     var columns = _.map(this.dependentParametricCollection.columnNames, function(name) {
                         return {
                             data: name,
                             defaultContent: 0,
-                            title: name === TableCollection.noneColumn ? i18n['search.resultsView.table.noneHeader'] : name
+                            title: name === TableCollection.noneColumn
+                                ? i18n['search.resultsView.table.noneHeader']
+                                : name
                         }
                     });
 
@@ -143,7 +149,7 @@ define([
                 this.dataTable.destroy();
             }
 
-            ParametricResultsView.prototype.remove.apply(this, arguments);
+            ParametricResultsView.prototype.remove.apply(this);
         }
     })
 });

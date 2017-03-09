@@ -49,7 +49,8 @@ define([
                     models: ['sidebarModel'],
                     title: i18n[dash.dashboardName] || dash.dashboardName,
                     order: index,
-                    constructorArguments: dash
+                    constructorArguments: dash,
+                    navigation: 'dashboards'
                 };
 
                 return acc;
@@ -71,13 +72,16 @@ define([
                             : []
                     ),
                     title: i18n['app.search'],
-                    order: dashboardCount
+                    order: dashboardCount,
+                    navigation: 'sidebar'
+
                 },
                 about: {
                     Constructor: AboutPage,
                     icon: 'hp-icon hp-fw hp-info',
                     title: i18n['app.about'],
-                    order: dashboardCount + 1
+                    order: dashboardCount + 1,
+                    navigation: 'dropdown'
                 }
             });
 
@@ -86,7 +90,8 @@ define([
                     Constructor: SettingsPage,
                     icon: 'hp-icon hp-fw hp-settings',
                     title: i18n['app.settings'],
-                    order: dashboardCount + 2
+                    order: dashboardCount + 2,
+                    navigation: 'dropdown'
                 };
             }
 

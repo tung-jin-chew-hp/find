@@ -88,7 +88,6 @@ define([
         },
 
         exportPPTData: function(){
-            // Depending on how complicated we need to make this parser, we could also handle font, italics, etc.
             return {
                 data: {
                     text: _.map([this.$lastRefresh, this.$nextRefresh], function($el){
