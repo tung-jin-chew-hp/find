@@ -20,9 +20,9 @@ import static org.openqa.selenium.By.cssSelector;
 public class DashboardPage extends AppElement {
     DashboardPage(final WebDriver driver) {
         super(new WebDriverWait(driver, 30)
-                .withMessage("loading Dashboard page")
-                .until(ExpectedConditions.visibilityOfElementLocated(
-                        By.className("dashboard"))), driver);
+                      .withMessage("loading Dashboard page")
+                      .until(ExpectedConditions.visibilityOfElementLocated(
+                              By.className("dashboard"))), driver);
     }
 
     public List<WebElement> getWidgets() {
