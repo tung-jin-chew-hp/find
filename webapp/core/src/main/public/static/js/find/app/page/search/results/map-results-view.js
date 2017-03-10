@@ -23,7 +23,7 @@ define([
         markers: [],
 
         events: {
-            'click .map-show-more': function() {
+            'click .map-show-more': function () {
                 this.fetchDocumentCollection()
             },
             'click .map-popup-title': function (e) {
@@ -31,7 +31,7 @@ define([
             },
             'click .map-pptx': function(e){
                 e.preventDefault();
-                this.mapResultsView.exportPPT('Showing field ' + this.fieldSelectionView.model.get('displayValue'))
+                this.mapResultsView.exportPPT('Showing field ' + this.fieldSelectionView.model.get('displayName'))
             }
         },
 
@@ -39,40 +39,45 @@ define([
             this.locationFields = configuration().map.locationFields;
             this.resultsStep = options.resultsStep;
             this.allowIncrement = options.allowIncrement;
-            
+
             this.queryModel = options.queryModel;
 
             this.documentsCollection = new DocumentsCollection();
             this.model = new Backbone.Model({
                 loading: false,
-                text:''
+                text: ''
             });
 
             this.fieldSelectionView = new FieldSelectionView({
                 model: this.model,
                 name: 'FieldSelectionView',
-                fields: _.pluck(this.locationFields, 'displayName'),
+                fields: this.locationFields.map(function (locationField) {
+                    return {
+                        id: locationField.displayName,
+                        displayName: locationField.displayName
+                    }
+                }),
                 allowEmpty: false
             });
-            
+
             this.mapResultsView = new MapView({addControl: false});
 
             this.listenTo(this.model, 'change:loading', this.toggleLoading);
 
             this.listenTo(this.documentsCollection, 'add', function (model) {
-                var locations = model.get('locations');
-                var location = _.findWhere(locations, {displayName: this.model.get('field')});
+                const locations = model.get('locations');
+                const location = _.findWhere(locations, {displayName: this.model.get('field')});
                 if (location) {
-                    var longitude = location.longitude;
-                    var latitude = location.latitude;
-                    var title = model.get('title');
-                    var popover = this.popoverTemplate({
+                    const longitude = location.longitude;
+                    const latitude = location.latitude;
+                    const title = model.get('title');
+                    const popover = this.popoverTemplate({
                         title: title,
                         i18n: i18n,
                         summary: addLinksToSummary(model.get('summary')),
                         cidForClickRouting: model.cid
                     });
-                    var marker = this.mapResultsView.getMarker(latitude, longitude, this.getIcon(), title, popover);
+                    const marker = this.mapResultsView.getMarker(latitude, longitude, this.getIcon(), title, popover);
                     this.markers.push(marker);
                 }
             });
@@ -133,7 +138,7 @@ define([
         },
 
         getIcon: function () {
-            var locationField = _.findWhere(this.locationFields, {displayName: this.model.get('field')});
+            const locationField = _.findWhere(this.locationFields, {displayName: this.model.get('field')});
             return this.mapResultsView.getIcon(locationField.iconName, locationField.iconColor, locationField.markerColor);
         },
 
@@ -145,17 +150,17 @@ define([
         },
 
         getFetchOptions: function (selectedField) {
-            var locationField = _.findWhere(this.locationFields, {displayName: selectedField});
+            const locationField = _.findWhere(this.locationFields, {displayName: selectedField});
 
-            var latitudeFieldsInfo = configuration().fieldsInfo[locationField.latitudeField];
-            var longitudeFieldsInfo = configuration().fieldsInfo[locationField.longitudeField];
+            const latitudeFieldsInfo = configuration().fieldsInfo[locationField.latitudeField];
+            const longitudeFieldsInfo = configuration().fieldsInfo[locationField.longitudeField];
 
-            var latitudesFieldsString = latitudeFieldsInfo.names.join(':');
-            var longitudeFieldsString = longitudeFieldsInfo.names.join(':');
+            const latitudesFieldsString = latitudeFieldsInfo.names.join(':');
+            const longitudeFieldsString = longitudeFieldsInfo.names.join(':');
 
-            var exists = 'EXISTS{}:' + latitudesFieldsString + ' AND EXISTS{}:' + longitudeFieldsString;
+            const exists = 'EXISTS{}:' + latitudesFieldsString + ' AND EXISTS{}:' + longitudeFieldsString;
 
-            var newFieldText = this.queryModel.get('fieldText') ? this.queryModel.get('fieldText') + ' AND ' + exists : exists;
+            const newFieldText = this.queryModel.get('fieldText') ? this.queryModel.get('fieldText') + ' AND ' + exists : exists;
 
             return {
                 data: {
@@ -176,7 +181,7 @@ define([
         },
 
         fetchDocumentCollection: function () {
-            var selectedField = this.model.get('field');
+            const selectedField = this.model.get('field');
 
             if (selectedField) {
                 this.model.set('loading', true);
@@ -186,7 +191,7 @@ define([
                 return;
             }
 
-            var options = this.getFetchOptions(selectedField);
+            const options = this.getFetchOptions(selectedField);
 
             if (options) {
                 this.documentsCollection.fetch(options)

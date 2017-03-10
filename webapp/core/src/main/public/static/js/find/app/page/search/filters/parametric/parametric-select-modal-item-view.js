@@ -24,6 +24,7 @@ define([
                 .html(this.template({
                     count: this.model.get('count') || 0,
                     value: this.model.get('value'),
+                    displayValue: this.model.get('displayValue'),
                     showGraphButtons: this.showGraphButtons
                 }))
                 .iCheck({checkboxClass: 'icheckbox-hp'});
