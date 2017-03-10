@@ -88,20 +88,24 @@ define([
         },
 
         exportPPTData: function(){
-            const categories = [];
-            const values = [];
-
-            this.legendColorCollection.each(function(model){
-                categories.push(model.get('text') || i18n['search.resultsView.sunburst.others']);
-                values.push(model.get('count'));
+            const data = this.legendColorCollection.map(function(model){
+                return {
+                    category: model.get('text') || i18n['search.resultsView.sunburst.others'],
+                    value: model.get('count'),
+                    color: model.get('color') || HIDDEN_COLOR
+                }
+            }).sort(function(a, b){
+                return d3.ascending(a.category, b.category)
             });
 
-            return values.length && categories.length ? {
+            return data.length ? {
                     type: 'sunburst',
                     data: {
-                        categories: categories,
-                        values: values,
-                        title: prettyOrNull(this.firstField)
+                        categories: _.pluck(data, 'category'),
+                        values: _.pluck(data, 'value'),
+                        title: prettyOrNull(this.firstField),
+                        colors: _.pluck(data, 'color'),
+                        strokeColors: ['#000000']
                     }
                 } : null
         },
