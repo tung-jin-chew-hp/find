@@ -64,6 +64,7 @@ public class IdolFindConfig extends AbstractConfig<IdolFindConfig> implements Us
     private final Integer topicMapMaxResults;
     private final PowerPointConfig powerPoint;
 
+    @JsonIgnore
     private volatile Map<String, Map<Integer, String>> productMap;
 
     @Override
