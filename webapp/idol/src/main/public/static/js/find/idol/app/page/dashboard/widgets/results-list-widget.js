@@ -96,7 +96,7 @@ define([
                         return {
                             title: model.get('title'),
                             summary: model.get('summary'),
-                            thumbnail: model.get('thumbnail')
+                            thumbnail: model.get('thumbnail') || model.get('thumbnailUrl')
                         }
                     })
                 },
