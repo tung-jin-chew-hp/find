@@ -8,6 +8,7 @@ import com.hp.autonomy.frontend.reports.powerpoint.PowerPointServiceImpl;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSettings;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSettingsSource;
 import com.hp.autonomy.frontend.reports.powerpoint.TemplateSource;
+import com.hp.autonomy.frontend.reports.powerpoint.WebAndDataUriImageSource;
 import com.hp.autonomy.frontend.reports.powerpoint.dto.Anchor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,7 @@ public class ExportConfiguration {
                 .map(this::getTemplateSettings)
                 .orElse(TemplateSettingsSource.DEFAULT.getSettings());
 
-        return new PowerPointServiceImpl(templateSource, templateSettingsSource);
+        return new PowerPointServiceImpl(templateSource, templateSettingsSource, new WebAndDataUriImageSource());
     }
 
     private Optional<PowerPointConfig> getConfig(final ConfigService<? extends FindConfig<?, ?>> configService) {
