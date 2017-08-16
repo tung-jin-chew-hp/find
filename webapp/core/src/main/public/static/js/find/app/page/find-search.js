@@ -350,7 +350,7 @@ define([
             return {
                 QUERY: {
                     cssClass: 'query',
-                    autoCorrect: !config().hasBiRole,
+                    autoCorrect: false,
                     collection: 'savedQueryCollection',
                     fetchStrategy: queryStrategy,
                     icon: 'hp-search',
